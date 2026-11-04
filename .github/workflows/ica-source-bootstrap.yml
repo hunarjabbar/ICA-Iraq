@@ -1,0 +1,53 @@
+name: ICA source provenance and bootstrap
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/ica-source-bootstrap.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: ica-source-bootstrap
+  cancel-in-progress: false
+jobs:
+  import-source:
+    if: github.repository == 'hunarjabbar/ICA-Iraq'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify initial import is required
+        id: source
+        run: |
+          if test -f app/package.json; then echo "needed=false" >> "$GITHUB_OUTPUT"; else echo "needed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Download and cryptographically verify original ICA source
+        if: steps.source.outputs.needed == 'true'
+        run: |
+          set -euo pipefail
+          curl -fLsS --retry 3 --max-time 120 'https://d2ol7oe51mr4n9.cloudfront.net/user_3BEIsDp9HPB5aM7u75JuKC8jpa3/6396d1af-bfae-4777-8dfd-acad8b010e3d.zip' -o /tmp/ica-source.zip
+          echo '2c731fb117012270a468085e9ad70febed5e5f39deeaa8032b0a51b0c06f97d8  /tmp/ica-source.zip' | sha256sum -c -
+          mkdir -p /tmp/ica-extracted
+          unzip -q /tmp/ica-source.zip -d /tmp/ica-extracted
+          test -f /tmp/ica-extracted/app/package.json
+          cp -a /tmp/ica-extracted/app ./app
+          rm -rf app/node_modules app/.vercel app/.output app/.nitro app/dist
+      - name: Commit source tree to ICA GitHub repository
+        if: steps.source.outputs.needed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app
+          git diff --cached --check
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(ica): import verified original international portal source"
+          git push origin HEAD:main
+      - name: Verify repository has full source
+        run: |
+          test -f app/package.json
+          test -f app/src/routes/__root.tsx
+          test -f app/src/components/ica/studio.tsx
+          echo "ICA source tree present"

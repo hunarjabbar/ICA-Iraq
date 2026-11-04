@@ -1,0 +1,63 @@
+name: ICA international production checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/ica-production-checks.yml"
+  pull_request:
+    paths:
+      - "app/**"
+      - ".github/workflows/ica-production-checks.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "23 6 * * *"
+permissions:
+  contents: read
+jobs:
+  verify-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source files
+        run: |
+          test -f app/package.json
+          test -f app/src/routes/__root.tsx
+          test -f app/src/components/ica/studio.tsx
+      - name: Verify live ICA routes and language shells
+        env:
+          ICA_URL: https://ica-international-portal.vercel.app
+          CCC_URL: https://ccc-iraq-cultural-centre.vercel.app
+        run: |
+          python3 - <<'PY'
+          import os,urllib.request,json
+          ica=os.environ['ICA_URL']
+          ccc=os.environ['CCC_URL']
+          cases=[
+            (ica+'/',b'IRAQI-CHINESE'),
+            (ica+'/?lang=ar',b'lang="ar"'),
+            (ica+'/?lang=ckb',b'lang="ckb"'),
+            (ica+'/?lang=zh',b'lang="zh"'),
+            (ica+'/desk/latest',b'<html'),
+            (ica+'/newsroom',b'<html'),
+            (ica+'/studio',b'<html'),
+            (ccc+'/ica',b'ICA'),
+          ]
+          for url,needle in cases:
+            with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'ICA-CI-Health/1.0'}),timeout=25) as r:
+              body=r.read()
+              assert r.status==200,(url,r.status)
+              assert needle in body,(url,'missing expected marker')
+              assert b'Unable to load' not in body,(url,'server error fallback')
+              print('PASS',url)
+          with urllib.request.urlopen(ica+'/api/ica-wire?desk=latest',timeout=25) as r:
+            j=json.load(r)
+            assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
+            print('PASS wire',len(j['items']))
+          with urllib.request.urlopen(ica+'/api/ica-studio',timeout=25) as r:
+            j=json.load(r)
+            assert r.status==200 and j.get('configured') is True
+            assert 'serviceRoleKey' not in j and 'blobToken' not in j
+            print('PASS editorial bootstrap')
+          PY
