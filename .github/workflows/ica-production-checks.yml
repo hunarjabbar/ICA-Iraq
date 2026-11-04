@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "app/**"
+      - "scripts/ica-browser-qa.cjs"
       - ".github/workflows/ica-production-checks.yml"
   pull_request:
     paths:
@@ -17,7 +18,7 @@ permissions:
 jobs:
   verify-production:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4
       - name: Verify source files
@@ -61,3 +62,10 @@ jobs:
             assert 'serviceRoleKey' not in j and 'blobToken' not in j
             print('PASS editorial bootstrap')
           PY
+
+      - name: Install browser test runtime
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Verify browser hydration, RTL layout and editorial login
+        run: node scripts/ica-browser-qa.cjs
