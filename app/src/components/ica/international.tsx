@@ -120,6 +120,13 @@ export function RegionNavigation(){
   {ICA_DESKS.filter(x=>x.slug!=='latest').map(x=><a key={x.slug} href={path('/desk/'+x.slug)}>{deskName(lang,x.slug)}</a>)}
  </div></nav>
 }
+const bilateralCopy={
+ en:{label:'IRAQ × CHINA / BILATERAL DESK',title:'The Bilateral Briefing',intro:'A dedicated editorial desk for verified Iraq–China reporting, interviews and explainers across commerce, education and culture. This is ICA reporting, not an official CCC event bulletin.',weekly:'Weekly briefing',awaiting:'No weekly briefing is published in this desk yet. Subscribe for editorial updates rather than treating a draft as current news.',topics:'Explore the context',topicsText:'Filter published articles and attributed source links. These themes are editorial directions, not claims of a current briefing.',topicNames:['Trade and sourcing','Education and learning','Culture and exchange'],keywords:['trade','education','culture'],official:'Official CCC Expo information',officialText:'For the Economic Summit & Bilateral Expo, CCC controls event status and the interest-enquiry process; ICA handles reporting and interviews. Read the story here, then use CCC to enquire.',officialLink:'View CCC Expo and register interest',policy:'How we report'},
+ zh:{label:'伊拉克 × 中国 / 双边新闻',title:'双边新闻简报',intro:'关于伊中贸易、教育和文化的核实报道、采访和背景解读。ICA 新闻不等于 CCC 官方活动公告。',weekly:'每周简报',awaiting:'尚无本栏已发表的每周简报；请订阅编辑动态，不应将草稿视为新闻。',topics:'理解背景',topicsText:'筛选已发表文章和注明来源的外部链接。主题仅为编辑方向。',topicNames:['贸易与采购','教育与学习','文化交流'],keywords:['trade','education','culture'],official:'CCC 博览会官方信息',officialText:'CCC 发布活动状态及意向申请，ICA 负责报道与采访。',officialLink:'了解博览会并登记意向',policy:'我们的报道原则'},
+ ar:{label:'العراق × الصين / المكتب الثنائي',title:'الموجز الثنائي',intro:'تقارير ومقابلات وشروح متحقّق منها حول التجارة والتعليم والثقافة بين العراق والصين. هذه الصحافة ليست إعلاناً رسمياً لفعالية CCC.',weekly:'الموجز الأسبوعي',awaiting:'لم يُنشر موجز أسبوعي بعد. اشترك للتحديثات ولا تتعامل مع المسودات كأخبار منشورة.',topics:'استكشف السياق',topicsText:'صفّ التقارير المنشورة وروابط المصادر المنسوبة. هذه موضوعات تحريرية وليست نشرات حالية.',topicNames:['التجارة والتوريد','التعليم واللغة','الثقافة والتبادل'],keywords:['trade','education','culture'],official:'المعلومات الرسمية لمعرض CCC',officialText:'تتولى CCC حالة المعرض وتسجيل الاهتمام، بينما تغطي ICA الأخبار والمقابلات.',officialLink:'استكشف المعرض وسجّل اهتمامك',policy:'كيف نعمل صحفياً'},
+ ckb:{label:'عێراق × چین / مێزی دوولایەنە',title:'پوختەی دوولایەنە',intro:'ڕاپۆرت و چاوپێکەوتن و ڕوونکردنەوەی پشتڕاستکراو دەربارەی بازرگانی و خوێندن و کەلتووری عێراق و چین.',weekly:'پوختەی هەفتانە',awaiting:'هێشتا هیچ پوختەی هەفتانەی بڵاوکراوە نییە. بۆ نوێکارییەکان بەشداربە، نەک وەرگرتنی ڕەشنووس وەک هەواڵ.',topics:'پاشبنەمای بابەتەکان',topicsText:'وتارە بڵاوکراوەکان و بەستەری سەرچاوە دیاریکراوەکان پاڵاوتن بکە.',topicNames:['بازرگانی و دابینکردن','خوێندن و زمان','کەلتوور و ئاڵوگۆڕ'],keywords:['trade','education','culture'],official:'زانیاری فەرمی پێشانگای CCC',officialText:'CCC دۆخی پێشانگا و پرسیارەکان بەڕێوە دەبات؛ ICA ڕووماڵی هەواڵ و چاوپێکەوتن دەکات.',officialLink:'پێشانگای CCC و تۆمارکردنی ئارەزوو',policy:'چۆن ڕاپۆرت دەکەین'}
+} as const
+
 export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:WireItem[];articles:ICAArticle[];refreshedAt:string|null}){
  const {path,L,lang}=useICA()
  const current=deskBySlug(desk)||ICA_DESKS[0]
@@ -129,6 +136,8 @@ export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:Wire
  const [date,setDate]=useState(refreshedAt)
  const [syncing,setSyncing]=useState(false)
  const [error,setError]=useState('')
+ const b=bilateralCopy[lang]
+ const weekly=desk==='bilateral'?articles.find(a=>a.type==='analysis'&&/weekly|أسبوعي|هەفتانە|每周/i.test(a.title)&&a.status==='published'&&a.published_at):undefined
  const all=useMemo(()=>splitStories(articles,items,path),[articles,items,path])
  const filtered=all.filter(s=>(active==='all'||s.kind===active)&&[s.title,s.summary,s.source,s.region,s.desk].join(' ').toLowerCase().includes(search.toLowerCase()))
  async function sync(){
@@ -144,6 +153,18 @@ export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:Wire
  return <Shell><main className="ica-page-content ica-desk-page">
   <div className="ica-desk-intro"><span className="ica-intl-kicker">{L('internationalNewsroom')}</span><h1>{deskName(lang,current.slug)}<span className="ica-intl-red-dot">.</span></h1><p>{deskDescription(lang,current.slug)}</p><div className="ica-desk-updated"><span>{L('attributedDisclaimer')}</span><span>{L('sourceSync')}: {date?formatLocalDate(date,lang):L('awaitingSync')}</span></div></div>
   <RegionNavigation/>
+  {desk==='bilateral'&&<section className="ica-desk-verify" aria-labelledby="ica-bilateral-briefing-title">
+   <span>{b.label}</span><h2 id="ica-bilateral-briefing-title">{b.title}</h2><p>{b.intro}</p>
+   <h3>{b.weekly}</h3>
+   {weekly?<p><a href={path('/news/'+weekly.slug)}>{weekly.title} · {formatLocalDate(weekly.published_at||'',lang)} ↗</a></p>:
+    <p>{b.awaiting} <a href={path('/newsroom')}>ICA Newsroom ↗</a></p>}
+   <h3>{b.topics}</h3><p>{b.topicsText}</p>
+   <div className="ica-desk-controls"><div role="group" aria-label={b.topics}>
+    {b.topicNames.map((name,i)=><button key={b.keywords[i]} type="button" onClick={()=>{setActive('all');setSearch(b.keywords[i])}}>{name}</button>)}
+   </div></div>
+   <h3>{b.official}</h3><p>{b.officialText}</p>
+   <p><a href="https://ccc-iraq-cultural-centre.vercel.app/summit" target="_blank" rel="noopener noreferrer">{b.officialLink} ↗</a> · <a href={path('/newsroom#how-we-report')}>{b.policy} ↗</a></p>
+  </section>}
   <div className="ica-desk-filter-header"><div><h2>{L('coverageSources')}</h2><p>{L('originalLinks')}</p></div><button type="button" onClick={()=>void sync()} disabled={syncing}>{syncing?L('checkingFeeds'):L('refreshHeadlines')+' ↻'}</button></div>
   {error&&<p className="ica-intl-error" role="status">{error}</p>}
   <div className="ica-desk-controls"><div role="group" aria-label={L('publishingOrigin')}>
