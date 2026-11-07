@@ -3,6 +3,13 @@ import {Shell,Intro,StoryCard,EmptyEditorial,MediaItems,ContactForm,Newsletter,u
 import {deskName} from '../../lib/ica-i18n'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 
+const howWeReport={
+ en:{title:'How We Report',intro:'A transparent distinction between ICA journalism, external-source links and official CCC programme information.',sections:[['Sourcing and verification','Original ICA reporting identifies its sources and checks claims against documents and direct testimony where possible. External-source headlines remain attributed and link to their publishers.'],['Corrections and updates','Readers can request a correction through the newsroom contact channel. Material corrections should be acknowledged on the relevant article.'],['Commercial and institutional labels','CCC programme notices are identified as official CCC information. Paid, sponsored or partner-produced material must be labelled distinctly; commercial support does not turn a notice into independent reporting.']],contact:'Request a correction'},
+ zh:{title:'我们如何报道',intro:'明确区分 ICA 原创新闻、外部来源链接和 CCC 官方项目公告。',sections:[['来源与核实','ICA 原创报道标明资料来源，尽可能核查文件和直接证言。外部标题注明发布机构并链接原文。'],['更正与更新','读者可以通过新闻中心联系渠道申请更正。重大更正应在相关文章中说明。'],['商业与机构标注','CCC 项目通知明确标识为 CCC 官方信息。付费、赞助或合作伙伴内容须明确标注，不作为独立新闻。']],contact:'申请更正'},
+ ar:{title:'كيف نعمل صحفياً',intro:'نميّز بوضوح بين صحافة ICA وروابط المصادر الخارجية وإعلانات برامج CCC الرسمية.',sections:[['المصادر والتحقق','توضح تقارير ICA الأصلية مصادرها وتراجع الوثائق والشهادات المباشرة متى أمكن. تُنسب العناوين الخارجية إلى ناشريها مع رابط المصدر.'],['التصحيحات والتحديثات','يمكن للقراء طلب تصحيح عبر التواصل مع غرفة الأخبار، مع توضيح التصحيحات الجوهرية على المقال المعني.'],['الإعلانات والرعاية','تُعرّف إعلانات برامج CCC بأنها معلومات رسمية من CCC. يجب تمييز المواد المدفوعة أو الممولة أو التي ينتجها الشركاء عن الصحافة المستقلة.']],contact:'طلب تصحيح'},
+ ckb:{title:'چۆن ڕاپۆرت دەکەین',intro:'جیاوازییەکی ڕوون لەنێوان ڕاپۆرتی ICA و سەرچاوەی دەرەکی و ڕاگەیاندنی فەرمیی CCC.',sections:[['سەرچاوە و پشتڕاستکردنەوە','ڕاپۆرتی ڕەسەنی ICA سەرچاوەکانی دیاری دەکات و تا دەتوانێت بەڵگە و گێڕانەوە ڕاست دەکاتەوە. هەواڵی دەرەکی بە ناوی بڵاوکەرەوەی خۆیەوە دێت.'],['ڕاستکردنەوە و نوێکردنەوە','خوێنەران دەتوانن داوای ڕاستکردنەوە بکەن و گۆڕانکاریی گرنگ لە وتارەکە ڕوون دەکرێتەوە.'],['ناساندنی سپۆنسەر و دامەزراوە','ئاگادارییەکانی CCC وەک زانیاری فەرمی CCC نیشان دەدرێن؛ ناوەڕۆکی پارەدراو یان سپۆنسەرکراو جیاواز دیاری دەکرێت.']],contact:'داوای ڕاستکردنەوە'}
+} as const
+
 export function CoveragePage({type,stories=[]}:{type:string;stories?:ICAArticle[]}){
  const {t,L,path,lang}=useICA()
  const [term,setTerm]=useState('')
@@ -21,6 +28,14 @@ export function CoveragePage({type,stories=[]}:{type:string;stories?:ICAArticle[
    <article><span>{L('sourcesFor')}</span><h2>{L('submitTip')}</h2><p>{L('tipText')}</p><a href={path('/contact')}>{L('contactNewsroom')} ↗</a></article>
    <article><span>{L('readersFor')}</span><h2>{L('correctionTitle')}</h2><p>{L('correctionText')}</p><a href={path('/contact')}>{L('requestCorrection')} ↗</a></article>
   </div>}
+  {type==='newsroom'&&<section id="how-we-report" className="ica-newsroom-policy" aria-labelledby="ica-reporting-principles-title">
+   <h2 id="ica-reporting-principles-title">{howWeReport[lang].title}</h2>
+   <p>{howWeReport[lang].intro}</p>
+   <div className="ica-newsroom-top">{howWeReport[lang].sections.map(([heading,body])=><article key={heading}>
+    <h3>{heading}</h3><p>{body}</p>
+   </article>)}</div>
+   <p><a href={path('/contact')}>{howWeReport[lang].contact} ↗</a></p>
+  </section>}
   <section className="ica-coverage-list"><div className="ica-coverage-header"><h2>{type==='culture'?L('culturalStories'):type==='entertainment'?L('artsScreen'):type==='newsroom'?L('pressReleases'):L('latestCoverage')}</h2>
    <div className="ica-coverage-filters">
     <label><span className="sr-only">{L('searchCoverage')}</span><input type="search" value={term} onChange={e=>setTerm(e.target.value)} placeholder={L('searchArchive')}/></label>
