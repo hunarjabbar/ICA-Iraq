@@ -52,6 +52,20 @@ function assessStaffRedirect(status,location){
  }catch{errors.push('Invalid staff redirect')}
  return errors;
 }
+function assessDiscoverRedirect(p,status,location){
+ const errors=[];
+ if(status!==307)errors.push('First-party discovery alias did not return HTTP 307');
+ try{
+  const u=new URL(location,canonical);
+  if(u.origin!==canonical)errors.push('Discovery alias leaks to an external provider');
+  if(p.id==='reader-support'){
+   if(u.pathname!=='/contact')errors.push('Reader support does not target native ICA contact');
+  }else if(u.pathname!=='/desk/latest'||u.searchParams.get('lang')!==p.language){
+   errors.push('Localized discovery does not target the correct native ICA desk');
+  }
+ }catch{errors.push('Invalid discovery redirect')}
+ return errors;
+}
 async function run(base=canonical,request=fetch){
  const baseUrl=new URL(base);
  if(!/^https:$/.test(baseUrl.protocol)||!(baseUrl.hostname==='ica-international-portal.vercel.app'||
@@ -70,6 +84,8 @@ async function run(base=canonical,request=fetch){
     });
     if(p.id==='staff-entry')
      return {id:p.id,errors:assessStaffRedirect(response.status,response.headers.get('location')||'')};
+    if(p.canonicalRoutingOnly)
+     return {id:p.id,errors:assessDiscoverRedirect(p,response.status,response.headers.get('location')||'')};
     const body=await response.text();
     return {id:p.id,errors:p.id==='monitor'?assessStatus(response.status,body):
      assessPage(p,response.status,body)};
@@ -79,7 +95,7 @@ async function run(base=canonical,request=fetch){
  }
  return results;
 }
-module.exports={canonical,central,pages,assessPage,assessStatus,assessStaffRedirect,run};
+module.exports={canonical,central,pages,assessPage,assessStatus,assessStaffRedirect,assessDiscoverRedirect,run};
 if(require.main===module){
  run(process.env.ICA_AUDIT_URL||canonical).then(results=>{
   for(const r of results)console.log((r.errors.length?'FAIL ':'PASS ')+r.id+
