@@ -102,7 +102,7 @@ export default defineConfig(({ command, mode }) => {
       tanstackStart({
         server: { entry: "server" },
       }),
-      ...(onVercel ? [nitro({ preset: "vercel" })] : []),
+      ...(onVercel ? [nitro()] : []),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
       react({
         babel: {
