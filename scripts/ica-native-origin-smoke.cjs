@@ -20,7 +20,7 @@ function assessPage(p,status,html){
  const errors=[];
  if(status!==200)errors.push('HTTP '+status+' instead of 200');
  if(!/^<!doctype html/i.test(html.trim()))errors.push('Not an HTML document');
- const shellLanguage=(html.match(/<html\\b[^>]*\\blang=["']([^"']+)["']/i)||[])[1];
+ const shellLanguage=(html.match(/<html\b[^>]*\blang=["']([^"']+)["']/i)||[])[1];
  if(shellLanguage!==p.language)errors.push('Language shell differs from '+p.language);
  if(hrefForRel(html,'canonical')!==p.canonical)errors.push('Wrong canonical URL');
  if(blocked.test(html))errors.push('Obsolete ICA publishing hostname leaked into SSR');
