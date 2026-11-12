@@ -11,7 +11,7 @@ function safeWebURL(raw:string):boolean{
 const isId=(s:string)=>/^[a-z0-9-]{15,100}$/i.test(s)
 export const Route=createFileRoute('/api/ica-studio')({
  server:{handlers:{
-  GET:async({request})=>{
+  GET:async({request}:{request:Request})=>{
    const active=await authenticate(request)
    if(!active)return Response.json({active:false,configured:secret().length>=24},{headers:{'Cache-Control':'no-store'}})
    const db=database()
@@ -22,7 +22,7 @@ export const Route=createFileRoute('/api/ica-studio')({
    ])
    return Response.json({active:true,configured:true,articles,media,messages:msgs?.results||[],wire},{headers:{'Cache-Control':'no-store'}})
   },
-  POST:async({request})=>{
+  POST:async({request}:{request:Request})=>{
    if((request.headers.get('content-type')||'').split(';')[0]!=='application/json')return Response.json({ok:false,error:'JSON required'},{status:415})
    if(Number(request.headers.get('content-length')||0)>45000)return Response.json({ok:false,error:'Request too large'},{status:413})
    const origin=request.headers.get('Origin')
@@ -128,4 +128,4 @@ export const Route=createFileRoute('/api/ica-studio')({
    }
    return Response.json({ok:false,error:'Unsupported action'},{status:400})
   }
- }}})
+ }}} as any)
