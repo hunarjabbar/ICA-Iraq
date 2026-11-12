@@ -13,4 +13,4 @@ export const Route=createFileRoute('/api/media/$id')({
   h.set('Cache-Control','public, max-age=86400')
   h.set('X-Content-Type-Options','nosniff')
   return new Response(await blob.arrayBuffer(),{headers:h})
- }}} as any)
+ }}}} as any)
