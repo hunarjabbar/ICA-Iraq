@@ -12,6 +12,21 @@ export const localeCodes:Record<Language,string>={en:'en-GB',ar:'ar-IQ',ckb:'ckb
 export function formatLocalDate(date:string|Date,language:Language,options:Intl.DateTimeFormatOptions={day:'numeric',month:'short',year:'numeric'}){
  const value=date instanceof Date?date:new Date(date)
  if(!Number.isFinite(value.getTime()))return ''
+ // Sorani ICU date formatting differs across Node and Chromium builds, which can
+ // cause React SSR text hydration mismatches. Use deterministic UTC month forms.
+ if(language==='ckb' && options.day && options.month && options.year){
+  const soraniMonths=['کانونی دووەمی','شوباتی','ئازاری','نیسانی','ئایاری','حوزەیرانی','تەممووزی','ئابی','ئەیلوولی','تشرینی یەکەمی','تشرینی دووەمی','کانونی یەکەمی']
+  const soraniDigits=(n:number|string)=>String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[Number(d)])
+  const day=value.getUTCDate()
+  const year=value.getUTCFullYear()
+  const month=value.getUTCMonth()
+  const monthText=options.month==='numeric'||options.month==='2-digit'
+   ?soraniDigits(options.month==='2-digit'?String(month+1).padStart(2,'0'):month+1)
+   :soraniMonths[month]
+  const dayText=soraniDigits(options.day==='2-digit'?String(day).padStart(2,'0'):day)
+  const yearText=soraniDigits(options.year==='2-digit'?String(year%100).padStart(2,'0'):year)
+  return `${dayText}ی ${monthText} ${yearText}`
+ }
  try{return new Intl.DateTimeFormat(localeCodes[language],{timeZone:'UTC',...options}).format(value)}
  catch{return new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',...options}).format(value)}
 }
