@@ -1,6 +1,6 @@
 // Apply a narrow Vercel Build Output API workaround for a recursive Nitro SSR fallback.
 // Preview validation must prove requests reach the function before production promotion.
-import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 const root = join(process.cwd(), '.vercel', 'output');
 const configPath = join(root, 'config.json');
@@ -22,3 +22,10 @@ renameSync(original, target);
 fallback[0].dest = '/ica-ssr';
 writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
 console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',function:'ica-ssr.func'}));
+
+// Preview-only sentinel function isolates filesystem routing from application SSR.
+const probe = join(root, 'functions', 'ica-health.func');
+mkdirSync(probe, { recursive: false });
+writeFileSync(join(probe, '.vc-config.json'), JSON.stringify(functionConfig));
+writeFileSync(join(probe, 'index.mjs'), "export default function handler(_req,res) { res.setHeader('Content-Type','text/plain');res.end('ICA_FUNCTION_HEALTH_OK'); }\\n");
+console.log('ICA_PROBE_ADDED=/ica-health');
