@@ -38,7 +38,7 @@ writeFileSync(join(target,'index.mjs'), [
   "  }",
   "}",
   ""
-].join('\\n'));
+].join('\n'));
 fallback[0].dest = '/ica-ssr';
 writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
 console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',function:'ica-ssr.func'}));
