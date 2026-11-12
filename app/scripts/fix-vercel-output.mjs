@@ -17,11 +17,28 @@ if (config.version !== 3 || !Array.isArray(fallback) || fallback.length !== 1 ||
 const functionConfigPath = join(original, '.vc-config.json');
 if (!existsSync(functionConfigPath)) throw new Error('Missing function configuration');
 const functionConfig = JSON.parse(readFileSync(functionConfigPath, 'utf8'));
-console.log('ICA_SSR_ENTRY_HEAD=' + readFileSync(join(original, 'index.mjs'), 'utf8').slice(0, 4000));
+const entrySource = readFileSync(join(original, 'index.mjs'), 'utf8');
+console.log('ICA_SSR_ENTRY_MIN=' + JSON.stringify(entrySource.slice(0, 700)));
 console.log('ICA_FUNCTION_DEBUG=' + JSON.stringify({runtime:functionConfig.runtime,handler:functionConfig.handler,launcherType:functionConfig.launcherType,route:config.routes}));
 renameSync(original, target);
-// Preview-only: isolate runtime selection by replacing the complex SSR entry with a minimal handler.
-writeFileSync(join(target, 'index.mjs'), "export default function handler(_req, res) { res.statusCode=200; res.setHeader('Content-Type','text/plain'); res.end('ICA_SSR_TARGET_WORKS'); }");
+// Trace the real Nitro entry without exposing credentials or user data.
+renameSync(join(target, 'index.mjs'), join(target, 'index-original.mjs'));
+writeFileSync(join(target,'index.mjs'), [
+  "export default async function handler(req, res) {",
+  "  console.log('ICA_SSR_WRAPPER_ENTER', String(req.method), String(req.url).slice(0,150));",
+  "  try {",
+  "    const module = await import('./index-original.mjs');",
+  "    console.log('ICA_SSR_WRAPPER_MODULE', Object.keys(module).join(','));",
+  "    const original = module.default ?? module.handler;",
+  "    if (typeof original !== 'function') throw new Error('SSR original module missing function export');",
+  "    return await original(req, res);",
+  "  } catch (error) {",
+  "    console.error('ICA_SSR_WRAPPER_ERROR', error);",
+  "    res.statusCode = 500; res.end('ICA_SSR_INTERNAL_ERROR');",
+  "  }",
+  "}",
+  ""
+].join('\\n'));
 fallback[0].dest = '/ica-ssr';
 writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
 console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',function:'ica-ssr.func'}));
