@@ -6,13 +6,13 @@ function UpdatePassword(){
  async function submit(e:React.FormEvent<HTMLFormElement>){e.preventDefault();setBusy(true);try{
  const url=import.meta.env.VITE_ICA_SUPABASE_URL;const key=import.meta.env.VITE_ICA_SUPABASE_PUBLISHABLE_KEY
  if(!url||!key)throw new Error('Account recovery is not configured')
- const hash=new URLSearchParams(location.hash.slice(1));const query=new URLSearchParams(location.search)
- const token=hash.get('access_token');const refresh=hash.get('refresh_token');const code=query.get('code')
- let access=token
- if(!access&&code){const verifier=sessionStorage.getItem('ica_auth_code_verifier');if(!verifier)throw new Error('Recovery session expired. Request a new link.')
- const exchanged=await fetch(url+'/auth/v1/token?grant_type=pkce',{method:'POST',headers:{apikey:key,'Content-Type':'application/json'},body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(!exchanged.ok)throw new Error('Invalid or expired recovery link');access=(await exchanged.json()).access_token}
- if(!access||(!refresh&&!code))throw new Error('Invalid or expired recovery link. Request another.')
- const response=await fetch(url+'/auth/v1/user',{method:'PUT',headers:{apikey:key,Authorization:'Bearer '+access,'Content-Type':'application/json'},body:JSON.stringify({password})})
+ const hash=new URLSearchParams(location.hash.slice(1))
+ const access=hash.get('access_token')
+ const refresh=hash.get('refresh_token')
+ if(hash.get('type')!=='recovery'||!access||!refresh)throw new Error('Invalid or expired recovery link. Request another.')
+ const verify=await fetch(url.replace(/\\/$/,'')+'/auth/v1/user',{headers:{apikey:key,Authorization:'Bearer '+access}})
+ if(!verify.ok)throw new Error('Recovery session has expired. Request another link.')
+ const response=await fetch(url.replace(/\/$/,'')+'/auth/v1/user',{method:'PUT',headers:{apikey:key,Authorization:'Bearer '+access,'Content-Type':'application/json'},body:JSON.stringify({password})})
  if(!response.ok)throw new Error('Password update failed. Request another recovery link.')
  history.replaceState({},'',location.pathname);setMessage('Password updated. You can now sign in.')
  }catch(err){setMessage(err instanceof Error?err.message:'Password update failed')}finally{setBusy(false)}}
