@@ -131,14 +131,14 @@ export function tr(language:Language,key:string){return dictionary[language][key
 export function getI18n(locale:Language){return (key:string)=>tr(locale,key)}
 
 export function languageFromHref(href:string):Language{
- try{const raw=new URL(href,'https://ica-iraqi-chinese-agency.higgsfield.app').searchParams.get('lang');return isLanguage(raw)?raw:'en'}
+ try{const raw=new URL(href,'https://ica-international-portal.vercel.app').searchParams.get('lang');return isLanguage(raw)?raw:'en'}
  catch{return 'en'}
 }
 
 /** SEO language alternates are for interface-localized index/desk pages.
  * Do not advertise untranslated article and research bodies as translated publications. */
 export function localizedAlternates(path:string){
- const root='https://ica-iraqi-chinese-agency.higgsfield.app'
+ const root='https://ica-international-portal.vercel.app'
  return [
   {rel:'alternate' as const,hrefLang:'x-default',href:root+path},
   {rel:'alternate' as const,hrefLang:'en',href:root+path},
