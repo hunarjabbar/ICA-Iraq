@@ -20,6 +20,8 @@ const functionConfig = JSON.parse(readFileSync(functionConfigPath, 'utf8'));
 console.log('ICA_SSR_ENTRY_HEAD=' + readFileSync(join(original, 'index.mjs'), 'utf8').slice(0, 4000));
 console.log('ICA_FUNCTION_DEBUG=' + JSON.stringify({runtime:functionConfig.runtime,handler:functionConfig.handler,launcherType:functionConfig.launcherType,route:config.routes}));
 renameSync(original, target);
+// Preview-only: isolate runtime selection by replacing the complex SSR entry with a minimal handler.
+writeFileSync(join(target, 'index.mjs'), "export default function handler(_req, res) { res.statusCode=200; res.setHeader('Content-Type','text/plain'); res.end('ICA_SSR_TARGET_WORKS'); }");
 fallback[0].dest = '/ica-ssr';
 writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
 console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',function:'ica-ssr.func'}));
