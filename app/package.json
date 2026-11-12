@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite dev",
     "dev:design": "HF_DESIGN_INSPECTOR=1 vite dev --mode design",
-    "build": "bun run check:ui && tsr generate && tsc --noEmit && vite build && node -e \"let c=require('./.vercel/output/config.json');console.log('VERCEL_ROUTE_DEBUG='+JSON.stringify({version:c.version,routes:c.routes,overrides:c.overrides}))\"",
+    "build": "bun run check:ui && tsr generate && tsc --noEmit && vite build && node scripts/fix-vercel-output.mjs && node -e \"let c=require('./.vercel/output/config.json');console.log('VERCEL_ROUTE_DEBUG='+JSON.stringify({version:c.version,routes:c.routes,overrides:c.overrides}))\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "postinstall": "node scripts/verify-install.mjs",
