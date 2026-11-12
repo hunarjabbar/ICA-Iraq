@@ -23,4 +23,4 @@ export const Route=createFileRoute('/api/ica-upload')({server:{handlers:{POST:as
  const id=crypto.randomUUID()+'.'+ext
  await storage.put('ica/'+id,bytes,{httpMetadata:{contentType:file.type,contentDisposition:'inline'}})
  return Response.json({ok:true,url:'/api/media/'+id,id})
-}}} as any)
+}}}} as any)
