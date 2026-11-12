@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs'
-const content = readFileSync('bun.lock').toString('base64')
-const chunk = 2400
-console.log('ICA_LOCK_META='+JSON.stringify({chunks:Math.ceil(content.length/chunk),base64Chars:content.length}))
-for(let i=0;i<content.length;i+=chunk) console.log('ICA_LOCK_CHUNK_'+Math.floor(i/chunk)+'='+content.slice(i,i+chunk))
+import { readFileSync, writeFileSync } from 'node:fs'
+const lock = readFileSync('bun.lock')
+writeFileSync('.vercel/output/static/ica-regenerated-bun-lock.txt', lock)
+console.log('ICA_REGENERATED_LOCK_ARTIFACT_SIZE='+lock.length)
