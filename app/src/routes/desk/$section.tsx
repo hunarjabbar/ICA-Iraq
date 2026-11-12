@@ -8,7 +8,7 @@ export const Route=createFileRoute('/desk/$section')({
  head:({params})=>{
   const desk=deskBySlug(params.section)
   return {meta:[{title:(desk?.label||'News')+' | ICA International Newsroom'},{name:'description',content:desk?.description||'Iraqi-Chinese Agency international and regional news'}],
-   links:[{rel:'canonical',href:'https://ica-iraqi-chinese-agency.higgsfield.app/desk/'+encodeURIComponent(params.section)},...localizedAlternates('/desk/'+encodeURIComponent(params.section))]}
+   links:[{rel:'canonical',href:'https://ica-international-portal.vercel.app/desk/'+encodeURIComponent(params.section)},...localizedAlternates('/desk/'+encodeURIComponent(params.section))]}
  },
  component:()=>{const r=Route.useLoaderData();return <DeskPage key={r.desk} desk={r.desk} wire={r.wire.items} articles={r.articles} refreshedAt={r.wire.refreshedAt}/>}
 })

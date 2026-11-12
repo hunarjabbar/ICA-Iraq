@@ -6,6 +6,8 @@ const root=path.resolve(__dirname,'..');
 const skip=new Set(['.git','node_modules','.vercel','dist','build','coverage','docs','operations','archive','archives','vendor']);
 const exts=new Set(['.js','.cjs','.mjs','.ts','.tsx','.jsx','.json','.html','.css','.yaml','.yml']);
 const retired=/github\.com[/:]hunarjabbar\/(?:ChinQ|odoo|ICA-new-|ica|Ica\.-Iq)(?=[\/#?\s"'\x60]|$)/gi;
+// Native ICA SEO and staff navigation must never reference deleted publishing origins.
+const retiredPublicHost=/ica-iraqi-chinese-agency\.higgsfield\.app|(?:ica-publishing-experience|ica-account-security|ica-executive-editorial-directory|ica-editorial-command)\.vercel\.app/i;
 let checked=0;const findings=[];
 function visit(dir){
  for(const ent of fs.readdirSync(dir,{withFileTypes:true})){
@@ -16,7 +18,9 @@ function visit(dir){
   const rel=path.relative(root,full).replaceAll(path.sep,'/');
   if(rel==='scripts/check-source-origins.cjs')continue;
   checked++;retired.lastIndex=0;
-  if(retired.test(fs.readFileSync(full,'utf8')))findings.push(rel);
+  const source=fs.readFileSync(full,'utf8');
+  if(retired.test(source))findings.push(rel);
+  if((rel.startsWith('app/src/routes/')||rel==='app/src/lib/ica-i18n.ts')&&retiredPublicHost.test(source))findings.push(rel+' (obsolete public origin)');
  }
 }
 visit(root);
