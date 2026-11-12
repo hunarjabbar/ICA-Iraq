@@ -9,7 +9,7 @@ const headers={
  'X-Content-Type-Options':'nosniff',
 }
 export const Route=createFileRoute('/api/ccc-editorial')({
- server:{handlers:{GET:async({request})=>{
+ server:{handlers:{GET:async({request}:{request:Request})=>{
   const u=new URL(request.url)
   const raw=u.searchParams.get('lang')||'en'
   const lang=isLanguage(raw)?raw:'en'
@@ -36,4 +36,4 @@ export const Route=createFileRoute('/api/ccc-editorial')({
   }catch{
    return Response.json({ok:false,items:[]},{status:503,headers:{...headers,'Cache-Control':'no-store'}})
   }
- }}}})
+ }}} as any)
