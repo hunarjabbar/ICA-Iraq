@@ -18,10 +18,13 @@ function ResetPassword() {
       const url = import.meta.env.VITE_ICA_SUPABASE_URL
       const key = import.meta.env.VITE_ICA_SUPABASE_PUBLISHABLE_KEY
       if (!url || !key) throw new Error('Account recovery is temporarily unavailable. Contact support.')
-      const response = await fetch(url.replace(/\/$/, '') + '/auth/v1/recover', {
+      const redirectTo = new URL('/auth/update-password', window.location.origin).toString()
+      const endpoint = new URL(url.replace(/\/$/, '') + '/auth/v1/recover')
+      endpoint.searchParams.set('redirect_to', redirectTo)
+      const response = await fetch(endpoint.toString(), {
         method: 'POST',
         headers: { apikey: key, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, gotrue_meta_security: {}, redirect_to: location.origin + '/auth/update-password' }),
+        body: JSON.stringify({ email }),
       })
       if (!response.ok && response.status !== 429) throw new Error('Recovery request could not be processed. Please try again.')
       setMessage('If an account exists for this address, recovery instructions will be sent.')
