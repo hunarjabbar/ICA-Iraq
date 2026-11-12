@@ -1,4 +1,5 @@
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import {
@@ -19,6 +20,7 @@ const QUANTA_ICONS_SHIM = fileURLToPath(
 );
 
 export default defineConfig(({ command, mode }) => {
+  const onVercel = Boolean(process.env.VERCEL);
   const designInspectorEnabled = process.env.HF_DESIGN_INSPECTOR === "1" || mode === "design";
 
   return {
@@ -47,7 +49,7 @@ export default defineConfig(({ command, mode }) => {
       // both variants bundle their edge build (react-dom's web-streams server,
       // etc.) instead of the Node variant leaning on nodejs_compat shims.
       // `vite dev` SSR runs in Node, where default node resolution is correct.
-      ...(command === "build"
+      ...(command === "build" && !onVercel
         ? {
             target: "webworker" as const,
             resolve: {
@@ -60,7 +62,7 @@ export default defineConfig(({ command, mode }) => {
             },
           }
         : {}),
-      noExternal: command === "build" ? true : undefined,
+      noExternal: command === "build" && !onVercel ? true : undefined,
       // `cloudflare:workers` is a workerd runtime built-in that exposes the Worker
       // env / bindings (D1 `DB`, R2 `STORAGE`). Like node: builtins it must NOT be
       // bundled; the runtime provides it. (`ssr.external` is typed string[].)
@@ -100,6 +102,7 @@ export default defineConfig(({ command, mode }) => {
       tanstackStart({
         server: { entry: "server" },
       }),
+      ...(onVercel ? [nitro({ preset: "vercel" })] : []),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
       react({
         babel: {
