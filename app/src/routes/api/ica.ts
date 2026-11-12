@@ -26,4 +26,4 @@ export const Route=createFileRoute('/api/ica')({
    return Response.json({ok:true,message:'Your message has been received'})
   }
   return Response.json({ok:false,error:'Unsupported action'},{status:400})
- }}} as any)
+ }}}} as any)
