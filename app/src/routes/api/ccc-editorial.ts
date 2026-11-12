@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {listArticles} from '../../lib/ica.server'
+import {createServerOnlyFn} from '@tanstack/react-start'
 import {isLanguage} from '../../lib/ica-i18n'
 
 /** Public-only, cross-portal feed: published ICA editorial reports, never a simulated newswire. */
@@ -8,8 +8,8 @@ const headers={
  'Access-Control-Allow-Origin':'*',
  'X-Content-Type-Options':'nosniff',
 }
-export const Route=createFileRoute('/api/ccc-editorial')({
- server:{handlers:{GET:async({request}:{request:Request})=>{
+const handleGet=createServerOnlyFn(async(request:Request)=>{
+ const {listArticles}=await import('../../lib/ica.server')
   const u=new URL(request.url)
   const raw=u.searchParams.get('lang')||'en'
   const lang=isLanguage(raw)?raw:'en'
@@ -36,4 +36,5 @@ export const Route=createFileRoute('/api/ccc-editorial')({
   }catch{
    return Response.json({ok:false,items:[]},{status:503,headers:{...headers,'Cache-Control':'no-store'}})
   }
- }}}} as any)
+})
+export const Route=createFileRoute('/api/ccc-editorial')({server:{handlers:{GET:({request}:{request:Request})=>handleGet(request)}}} as any)
