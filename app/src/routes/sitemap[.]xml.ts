@@ -5,7 +5,7 @@ import {ICA_DESKS} from '../lib/ica-desks'
 /** Robots and search crawlers must see the actual escaped-dot route. */
 const handleGet=createServerOnlyFn(async()=>{
  const {listArticles}=await import('../lib/ica.server')
-  const origin='https://ica-iraqi-chinese-agency.higgsfield.app'
+  const origin='https://ica-international-portal.vercel.app'
   const fixed=['/','/news','/topics','/newsroom','/culture','/entertainment','/video','/about','/contact']
   const articles=await listArticles(undefined,'all','',100).catch(()=>[])
   const locations=[...new Set([...fixed,...ICA_DESKS.map(x=>'/desk/'+x.slug),...topics.map(x=>'/topics/'+x.slug),...articles.map(x=>'/news/'+x.slug)])]
