@@ -28,5 +28,5 @@ console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',functio
 const probe = join(root, 'functions', 'ica-health.func');
 mkdirSync(probe, { recursive: false });
 writeFileSync(join(probe, '.vc-config.json'), JSON.stringify(functionConfig));
-writeFileSync(join(probe, 'index.mjs'), "export default function handler(_req, res) { res.statusCode=200; res.setHeader('Content-Type', 'text/plain'); res.end('ICA_FUNCTION_HEALTH_OK'); }" + '\\n');
+writeFileSync(join(probe, 'index.mjs'), "export default function handler(_req, res) { res.statusCode=200; res.setHeader('Content-Type', 'text/plain'); res.end('ICA_FUNCTION_HEALTH_OK'); }");
 console.log('ICA_PROBE_ADDED=/ica-health');
