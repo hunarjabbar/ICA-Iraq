@@ -17,6 +17,7 @@ if (config.version !== 3 || !Array.isArray(fallback) || fallback.length !== 1 ||
 const functionConfigPath = join(original, '.vc-config.json');
 if (!existsSync(functionConfigPath)) throw new Error('Missing function configuration');
 const functionConfig = JSON.parse(readFileSync(functionConfigPath, 'utf8'));
+console.log('ICA_SSR_ENTRY_HEAD=' + readFileSync(join(original, 'index.mjs'), 'utf8').slice(0, 4000));
 console.log('ICA_FUNCTION_DEBUG=' + JSON.stringify({runtime:functionConfig.runtime,handler:functionConfig.handler,launcherType:functionConfig.launcherType,route:config.routes}));
 renameSync(original, target);
 fallback[0].dest = '/ica-ssr';
@@ -27,5 +28,5 @@ console.log('ICA_NITRO_ROUTING_PATCH=' + JSON.stringify({dest:'/ica-ssr',functio
 const probe = join(root, 'functions', 'ica-health.func');
 mkdirSync(probe, { recursive: false });
 writeFileSync(join(probe, '.vc-config.json'), JSON.stringify(functionConfig));
-writeFileSync(join(probe, 'index.mjs'), "export default function handler(_req,res) { res.setHeader('Content-Type','text/plain');res.end('ICA_FUNCTION_HEALTH_OK'); }\\n");
+writeFileSync(join(probe, 'index.mjs'), "export default function handler(_req, res) { res.statusCode=200; res.setHeader('Content-Type', 'text/plain'); res.end('ICA_FUNCTION_HEALTH_OK'); }" + '\\n');
 console.log('ICA_PROBE_ADDED=/ica-health');
