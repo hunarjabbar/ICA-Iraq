@@ -9,13 +9,14 @@ const headers={
  'X-Content-Type-Options':'nosniff',
 }
 const handleGet=createServerOnlyFn(async(request:Request)=>{
- const {listArticles}=await import('../../lib/ica.server')
   const u=new URL(request.url)
   const raw=u.searchParams.get('lang')||'en'
   const lang=isLanguage(raw)?raw:'en'
   try{
    // listArticles applies status='published' and published_at IS NOT NULL.
-   const published=await listArticles(undefined,lang,'',100,true)
+   const published=process.env.VERCEL
+    ?await import('../../lib/ica-vercel-public.server').then(m=>m.readArticles('',lang,'',100))
+    :await import('../../lib/ica.server').then(m=>m.listArticles(undefined,lang,'',100,true))
    const items=published
     .filter(article=>(article.featured===1||article.region==='bilateral')&&
      article.status==='published'&&article.published_at&&

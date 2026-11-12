@@ -44,7 +44,10 @@ jobs:
             (ica+'/?lang=zh',b'lang="zh"'),
             (ica+'/desk/latest',b'<html'),
             (ica+'/newsroom',b'<html'),
-            (ica+'/studio',b'<html'),
+            (ica+'/auth/reset',b'Recover your ICA account'),
+            (ica+'/auth/verify',b'ICA email verification'),
+            (ica+'/auth/update-password',b'Set a new password'),
+            (ica+'/sitemap.xml',b'<urlset'),
             (ccc+'/ica',b'ICA'),
           ]
           for url,needle in cases:
@@ -54,15 +57,42 @@ jobs:
               assert needle in body,(url,'missing expected marker')
               assert b'Unable to load' not in body,(url,'server error fallback')
               print('PASS',url)
+          with urllib.request.urlopen(ica+'/studio',timeout=25) as r:
+            assert r.geturl().startswith('https://ccc-command-centre.vercel.app/'),r.geturl()
+            assert r.status==200
+            print('PASS legacy staff redirect -> Central Command Centre')
           with urllib.request.urlopen(ica+'/api/ica-wire?desk=latest',timeout=25) as r:
             j=json.load(r)
             assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
             print('PASS wire',len(j['items']))
           with urllib.request.urlopen(ica+'/api/ica-studio',timeout=25) as r:
             j=json.load(r)
-            assert r.status==200 and j.get('configured') is True
+            assert r.status==200 and j.get('retired') is True and j.get('configured') is False,j
+            assert j.get('commandCentre')=='https://ccc-command-centre.vercel.app/signin'
             assert 'serviceRoleKey' not in j and 'blobToken' not in j
-            print('PASS editorial bootstrap')
+            print('PASS retired legacy editorial login')
+          with urllib.request.urlopen(ica+'/api/ccc-editorial',timeout=25) as r:
+            j=json.load(r)
+            assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
+            print('PASS public ICA-to-CCC editorial feed')
+          from urllib.error import HTTPError
+          def post(path,payload):
+            req=urllib.request.Request(ica+path,data=json.dumps(payload).encode('utf-8'),headers={'Content-Type':'application/json','User-Agent':'ICA-CI-Health/1.0'},method='POST')
+            try:
+              with urllib.request.urlopen(req,timeout=25) as r: return r.status,json.load(r)
+            except HTTPError as e: return e.code,json.loads(e.read())
+          code,body=post('/api/ica',{'action':'contact','email':'not-an-email'})
+          assert code==400 and body.get('ok') is False,(code,body)
+          print('PASS contact validation rejects invalid email')
+          code,body=post('/api/ica',{'action':'subscribe','email':'qa-smoke@example.invalid','website':'honeypot-no-write'})
+          assert code==200 and body.get('ok') is True,(code,body)
+          print('PASS form submission dry-run without storing user data')
+          code,body=post('/api/ica-studio',{'action':'login','key':'legacy-test'})
+          assert code==410 and body.get('retired') is True,(code,body)
+          print('PASS legacy editor-key login retired')
+          code,body=post('/api/ica-upload',{'file':'not-uploaded'})
+          assert code==410 and body.get('retired') is True,(code,body)
+          print('PASS legacy upload endpoint retired')
           PY
 
       - name: Install browser test runtime

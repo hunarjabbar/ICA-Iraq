@@ -19,7 +19,7 @@ function config() {
   }
   return { url, key }
 }
-async function read(table: 'ica_news_articles' | 'ica_wire_items' | 'ica_wire_sources', params: Record<string,string>): Promise<Row[]> {
+async function read(table: 'ica_news_articles' | 'ica_wire_items' | 'ica_wire_sources' | 'ica_media_library', params: Record<string,string>): Promise<Row[]> {
   const env = config()
   if (!env) return []
   const target = new URL('/rest/v1/' + table, env.url)
@@ -66,7 +66,15 @@ export async function readArticle(slug:string):Promise<ICAArticle|null> {
   const rows=await read('ica_news_articles',{slug:'eq.'+slug,status:'eq.published',limit:'1'})
   return rows[0]?article(rows[0]):null
 }
-export async function readMedia():Promise<ICAMedia[]> { return [] }
+export async function readMedia():Promise<ICAMedia[]> {
+  const rows = await read('ica_media_library',{published:'eq.true',order:'created_at.desc',limit:'60'})
+  return rows.map(row=>({
+    id:value(row,'id'),title:value(row,'title'),kind:value(row,'kind'),
+    category:value(row,'category'),description:value(row,'description'),url:value(row,'url'),
+    poster_url:value(row,'poster_url')||null,published:bool(row.published)?1:0,
+    created_at:value(row,'created_at')
+  }))
+}
 export async function readWire(desk='latest',limit=90):Promise<{items:WireItem[],refreshedAt:string|null}> {
   const params:Record<string,string>={status:'eq.linked',order:desk==='trending'?'pinned.desc,published_at.desc':'published_at.desc',limit:String(Math.max(1,Math.min(limit,200)))}
   const matched=deskBySlug(desk)
