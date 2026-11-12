@@ -75,6 +75,24 @@ jobs:
             j=json.load(r)
             assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
             print('PASS public ICA-to-CCC editorial feed')
+          from urllib.error import HTTPError
+          def post(path,payload):
+            req=urllib.request.Request(ica+path,data=json.dumps(payload).encode('utf-8'),headers={'Content-Type':'application/json','User-Agent':'ICA-CI-Health/1.0'},method='POST')
+            try:
+              with urllib.request.urlopen(req,timeout=25) as r: return r.status,json.load(r)
+            except HTTPError as e: return e.code,json.loads(e.read())
+          code,body=post('/api/ica',{'action':'contact','email':'not-an-email'})
+          assert code==400 and body.get('ok') is False,(code,body)
+          print('PASS contact validation rejects invalid email')
+          code,body=post('/api/ica',{'action':'subscribe','email':'qa-smoke@example.invalid','website':'honeypot-no-write'})
+          assert code==200 and body.get('ok') is True,(code,body)
+          print('PASS form submission dry-run without storing user data')
+          code,body=post('/api/ica-studio',{'action':'login','key':'legacy-test'})
+          assert code==410 and body.get('retired') is True,(code,body)
+          print('PASS legacy editor-key login retired')
+          code,body=post('/api/ica-upload',{'file':'not-uploaded'})
+          assert code==410 and body.get('retired') is True,(code,body)
+          print('PASS legacy upload endpoint retired')
           PY
 
       - name: Install browser test runtime
