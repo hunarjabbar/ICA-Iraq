@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {getWireBoard} from '../../lib/ica-wire.server'
 import {deskBySlug} from '../../lib/ica-desks'
-export const Route=createFileRoute('/api/ica-wire')({server:{handlers:{GET:async({request})=>{
+export const Route=createFileRoute('/api/ica-wire')({server:{handlers:{GET:async({request}:{request:Request})=>{
  const u=new URL(request.url)
  const raw=u.searchParams.get('desk')||'latest'
  const desk=deskBySlug(raw)?raw:'latest'
@@ -11,4 +11,4 @@ export const Route=createFileRoute('/api/ica-wire')({server:{handlers:{GET:async
  }catch{
   return Response.json({ok:false,desk,items:[],refreshedAt:null},{status:503,headers:{'Cache-Control':'no-store'}})
  }
-}}}})
+}}} as any)
