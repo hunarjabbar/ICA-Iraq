@@ -277,7 +277,7 @@ img{max-width:100%;display:block}
 .ica-newsletter-entry input{flex:1;min-width:0;border:0;background:#fff;color:var(--ica-ink);font-size:14px;padding:0 15px;outline:none}
 .ica-newsletter-entry button{border:0;background:var(--ica-wine);color:white;padding:0 18px;white-space:nowrap;font-size:12px;font-weight:800}
 .ica-newsletter-form>p{font-size:11px;opacity:.85;margin:10px 0 0}
-.ica-trap{position:absolute!important;left:-99999px;opacity:0;pointer-events:none}
+.ica-trap{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none}
 .ica-footer{background:#24191F;color:#fff}
 .ica-footer-upper{display:grid;grid-template-columns:1.8fr .8fr .8fr 1.1fr;gap:48px;max-width:1400px;margin:auto;padding:84px 28px 76px}
 .ica-brand-inverse .ica-brand-name strong{color:white}
