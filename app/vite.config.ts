@@ -1,4 +1,5 @@
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import {
@@ -99,6 +100,7 @@ export default defineConfig(({ command, mode }) => {
       // localStorage, navigator) during render or at module top level — only
       // inside effects/handlers, or guarded with `typeof window !== "undefined"`.
       tanstackStart(),
+      ...(onVercel ? [nitro()] : []),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
       react({
         babel: {
