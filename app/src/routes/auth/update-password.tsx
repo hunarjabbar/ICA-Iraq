@@ -10,7 +10,7 @@ function UpdatePassword(){
  const access=hash.get('access_token')
  const refresh=hash.get('refresh_token')
  if(hash.get('type')!=='recovery'||!access||!refresh)throw new Error('Invalid or expired recovery link. Request another.')
- const verify=await fetch(url.replace(/\\/$/,'')+'/auth/v1/user',{headers:{apikey:key,Authorization:'Bearer '+access}})
+ const verify=await fetch(url.replace(/\/$/,'')+'/auth/v1/user',{headers:{apikey:key,Authorization:'Bearer '+access}})
  if(!verify.ok)throw new Error('Recovery session has expired. Request another link.')
  const response=await fetch(url.replace(/\/$/,'')+'/auth/v1/user',{method:'PUT',headers:{apikey:key,Authorization:'Bearer '+access,'Content-Type':'application/json'},body:JSON.stringify({password})})
  if(!response.ok)throw new Error('Password update failed. Request another recovery link.')
