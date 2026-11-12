@@ -36,4 +36,4 @@ export const Route=createFileRoute('/api/ccc-editorial')({
   }catch{
    return Response.json({ok:false,items:[]},{status:503,headers:{...headers,'Cache-Control':'no-store'}})
   }
- }}} as any)
+ }}}} as any)
