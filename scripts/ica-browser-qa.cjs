@@ -14,7 +14,10 @@ const assert = require('node:assert/strict');
     { name: 'Sorani Kurdish', url: base + '/?lang=ckb', width: 390, height: 844, lang: 'ckb', dir: 'rtl' },
     { name: 'Arabic newsroom', url: base + '/desk/latest?lang=ar', width: 390, height: 844, lang: 'ar', dir: 'rtl' },
     { name: 'Simplified Chinese', url: base + '/?lang=zh', width: 1280, height: 800, lang: 'zh', dir: 'ltr' },
-    { name: 'editorial sign-in', url: base + '/studio', width: 1024, height: 768, lang: 'en', dir: 'ltr' },
+    { name: 'ICA password recovery', url: base + '/auth/reset', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Recover your ICA account' },
+    { name: 'ICA email verification', url: base + '/auth/verify', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'ICA email verification' },
+    { name: 'ICA password update', url: base + '/auth/update-password', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Set a new password' },
+    { name: 'Central Command Centre sign-in', url: 'https://ccc-command-centre.vercel.app/signin', width: 1024, height: 768, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Sign in' },
     { name: 'CCC gateway', url: 'https://ccc-iraq-cultural-centre.vercel.app/ica', width: 390, height: 844, lang: 'en', dir: 'ltr', ccc: true }
   ];
   try {
@@ -39,14 +42,15 @@ const assert = require('node:assert/strict');
       assert.equal(response.status(), 200, test.name + ' status');
       assert.equal(state.lang, test.lang, test.name + ' lang');
       assert.equal(state.dir, test.dir, test.name + ' direction');
-      assert.ok(state.linkCount >= (test.name === 'editorial sign-in' ? 1 : 11), test.name + ' links');
+      assert.ok(state.linkCount >= (test.minLinks ?? 11), test.name + ' links');
+      if (test.marker) assert.ok(state.bodyText.includes(test.marker), test.name + ' expected UI content');
       assert.ok(!state.bodyText.startsWith('Unable to load'), test.name + ' app crash');
       assert.ok(state.horizontalOverflow <= 2, test.name + ' horizontal overflow: ' + state.horizontalOverflow);
       assert.deepEqual(errors, [], test.name + ' console/hydration errors');
       const actionableFailures = failures.filter(f => !(/net::ERR_ABORTED$/.test(f) && /\/rest\/v1\/ica_reader_events(?:[?:]|$)/.test(f))); 
       if (actionableFailures.length !== failures.length) console.warn('Navigation-aborted optional reader telemetry:', failures.filter(f => !actionableFailures.includes(f))); 
       assert.deepEqual(actionableFailures, [], test.name + ' failed requests');
-      if (test.name === 'editorial sign-in') assert.ok(/staff|editorial|studio|not configured|access/i.test(state.bodyText), 'editorial access page');
+
       console.log('PASS', test.name);
       await page.close();
     }
