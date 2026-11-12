@@ -6,7 +6,7 @@ import {languageFromHref,localizedAlternates} from '@/lib/ica-i18n'
 import {Shell,NewsSection,Newsletter,useICA,MediaItems} from '@/components/ica/site'
 import {TopicsHomePreview} from '@/components/ica/topics'
 import {LiveTicker,PortalLead,TrendingDesk,SectionMosaic,MarketSourceStrip} from '@/components/ica/international'
-export const Route=createFileRoute('/')({loader:({location})=>getHomeFeed({data:{lang:languageFromHref(location.href)}}),head:()=>({links:[{rel:'canonical',href:'https://ica-iraqi-chinese-agency.higgsfield.app/'},...localizedAlternates('/')]}),component:Index})
+export const Route=createFileRoute('/')({loader:({location})=>getHomeFeed({data:{lang:languageFromHref(location.href)}}),head:()=>({links:[{rel:'canonical',href:'https://ica-international-portal.vercel.app/'},...localizedAlternates('/')]}),component:Index})
 function Index(){
  const {articles,media,wire}=Route.useLoaderData()
  const {t,L,path}=useICA()

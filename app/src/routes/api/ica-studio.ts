@@ -1,7 +1,6 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {authenticate,makeEditorCookie,secret,timingEqual,cleanStr,validLang,validType,validURL,database,listArticles,listAdminMedia} from '../../lib/ica.server'
+import {createServerOnlyFn} from '@tanstack/react-start'
 import {isRegion,isEditorDesk} from '../../lib/ica-desks'
-import {listAdminWire,refreshWireNow} from '../../lib/ica-wire.server'
 function safeWebURL(raw:string):boolean{
  try{
   const url=new URL(raw)
@@ -9,9 +8,9 @@ function safeWebURL(raw:string):boolean{
  }catch{return false}
 }
 const isId=(s:string)=>/^[a-z0-9-]{15,100}$/i.test(s)
-export const Route=createFileRoute('/api/ica-studio')({
- server:{handlers:{
-  GET:async({request})=>{
+const handleGet=createServerOnlyFn(async(request:Request)=>{
+ const {authenticate,secret,database,listArticles,listAdminMedia}=await import('../../lib/ica.server')
+ const {listAdminWire}=await import('../../lib/ica-wire.server')
    const active=await authenticate(request)
    if(!active)return Response.json({active:false,configured:secret().length>=24},{headers:{'Cache-Control':'no-store'}})
    const db=database()
@@ -21,8 +20,10 @@ export const Route=createFileRoute('/api/ica-studio')({
     listAdminWire()
    ])
    return Response.json({active:true,configured:true,articles,media,messages:msgs?.results||[],wire},{headers:{'Cache-Control':'no-store'}})
-  },
-  POST:async({request})=>{
+})
+const handlePost=createServerOnlyFn(async(request:Request)=>{
+ const {authenticate,makeEditorCookie,secret,timingEqual,cleanStr,validLang,validType,validURL,database}=await import('../../lib/ica.server')
+ const {refreshWireNow}=await import('../../lib/ica-wire.server')
    if((request.headers.get('content-type')||'').split(';')[0]!=='application/json')return Response.json({ok:false,error:'JSON required'},{status:415})
    if(Number(request.headers.get('content-length')||0)>45000)return Response.json({ok:false,error:'Request too large'},{status:413})
    const origin=request.headers.get('Origin')
@@ -127,5 +128,5 @@ export const Route=createFileRoute('/api/ica-studio')({
     return Response.json({ok:true})
    }
    return Response.json({ok:false,error:'Unsupported action'},{status:400})
-  }
- }}})
+})
+export const Route=createFileRoute('/api/ica-studio')({server:{handlers:{GET:({request}:{request:Request})=>handleGet(request),POST:({request}:{request:Request})=>handlePost(request)}}} as any)

@@ -1,7 +1,8 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {authenticate} from '../../lib/ica.server'
-import {bindings} from '../../lib/bindings.server'
-export const Route=createFileRoute('/api/ica-upload')({server:{handlers:{POST:async({request})=>{
+import {createServerOnlyFn} from '@tanstack/react-start'
+const handleRequest=createServerOnlyFn(async(request:Request)=>{
+ const {authenticate}=await import('../../lib/ica.server')
+ const {bindings}=await import('../../lib/bindings.server')
  if(!await authenticate(request))return Response.json({ok:false,error:'Unauthorized'},{status:401})
  const origin=request.headers.get('Origin')
  if(origin&&new URL(origin).origin!==new URL(request.url).origin)return Response.json({ok:false,error:'Cross-origin'},{status:403})
@@ -23,4 +24,5 @@ export const Route=createFileRoute('/api/ica-upload')({server:{handlers:{POST:as
  const id=crypto.randomUUID()+'.'+ext
  await storage.put('ica/'+id,bytes,{httpMetadata:{contentType:file.type,contentDisposition:'inline'}})
  return Response.json({ok:true,url:'/api/media/'+id,id})
-}}}})
+})
+export const Route=createFileRoute('/api/ica-upload')({server:{handlers:{POST:({request}:{request:Request})=>handleRequest(request)}}} as any)

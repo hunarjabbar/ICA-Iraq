@@ -30,8 +30,8 @@
     "@shadcn/react": "^0.2.1",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/react-query": "^5.101.2",
-    "@tanstack/react-router": "^1.170.17",
-    "@tanstack/react-start": "1.168.60",
+    "@tanstack/react-router": "1.170.46",
+    "@tanstack/react-start": "1.169.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -66,7 +66,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
-    "nitro": "3.0.260429-beta",
+    "nitro": "3.0.261103-rc",
     "prettier": "^3.9.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.63.0",
@@ -75,6 +75,6 @@
   },
   "overrides": {
     "@types/react": "19.2.15",
-    "@tanstack/start-server-core": "1.169.39"
+    "@tanstack/start-server-core": "1.169.45"
   }
 }
