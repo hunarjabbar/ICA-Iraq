@@ -1,6 +1,4 @@
-import { defineConfig } from 'nitro'
-
-// Use Nitro's native Node handler interface for Vercel SSR functions.
-export default defineConfig({
+// Vercel-specific Nitro 3 runtime entry format: emit Node handler instead of Fetch object.
+export default {
   vercel: { entryFormat: 'node' },
-})
+}
