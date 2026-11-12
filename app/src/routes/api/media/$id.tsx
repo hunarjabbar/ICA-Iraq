@@ -1,7 +1,6 @@
 import {createFileRoute} from '@tanstack/react-router'
-export const Route=createFileRoute('/api/media/$id')({
- server:{handlers:{GET:async({params}:{params:{id:string}})=>{
-  const id=params.id
+import {createServerOnlyFn} from '@tanstack/react-start'
+const readMedia=createServerOnlyFn(async (id:string):Promise<Response>=>{
   if(!/^[0-9a-f-]{36}\.(png|jpg|jpeg|webp|mp4|pdf)$/i.test(id))return new Response('Invalid media',{status:400})
   const {bindings}=await import('../../../lib/bindings.server')
   const r2=bindings().STORAGE
@@ -13,4 +12,7 @@ export const Route=createFileRoute('/api/media/$id')({
   h.set('Cache-Control','public, max-age=86400')
   h.set('X-Content-Type-Options','nosniff')
   return new Response(await blob.arrayBuffer(),{headers:h})
- }}}} as any)
+})
+export const Route=createFileRoute('/api/media/$id')({
+ server:{handlers:{GET:async({params}:{params:{id:string}})=>readMedia(params.id)}}
+} as any)
