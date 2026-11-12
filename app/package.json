@@ -74,7 +74,6 @@
     "vite-plugin-svgr": "^5.2.0"
   },
   "overrides": {
-    "@types/react": "19.2.15",
-    "@tanstack/start-server-core": "1.169.39"
+    "@types/react": "19.2.15"
   }
 }
