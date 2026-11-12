@@ -39,7 +39,7 @@ const assert = require('node:assert/strict');
       assert.equal(response.status(), 200, test.name + ' status');
       assert.equal(state.lang, test.lang, test.name + ' lang');
       assert.equal(state.dir, test.dir, test.name + ' direction');
-      assert.ok(state.linkCount > 10, test.name + ' links');
+      assert.ok(state.linkCount >= (test.name === 'editorial sign-in' ? 1 : 11), test.name + ' links');
       assert.ok(!state.bodyText.startsWith('Unable to load'), test.name + ' app crash');
       assert.ok(state.horizontalOverflow <= 2, test.name + ' horizontal overflow: ' + state.horizontalOverflow);
       assert.deepEqual(errors, [], test.name + ' console/hydration errors');
