@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 // Credential-free ICA release audit. No cookies, user sessions, POSTs, mutation or body logging.
-const {pathToFileURL}=require('node:url');
 const canonical='https://ica-international-portal.vercel.app';
 const central='https://ccc-command-centre.vercel.app';
 const blocked=/(?:ica-iraqi-chinese-agency\.higgsfield\.app|(?:ica-publishing-experience|ica-account-security|ica-editorial-command|ica-executive-editorial-directory)\.vercel\.app)/i;
@@ -14,15 +13,15 @@ const pages=[
 ];
 const hrefForRel=(html,rel)=>{
  const links=html.match(/<link\b[^>]*>/gi)||[];
- const item=links.find(tag=>new RegExp('\\brel\\s*=\\s*["\\']'+rel+'["\\']','i').test(tag));
+ const item=links.find(tag=>tag.includes('rel="'+rel+'"')||tag.includes("rel='"+rel+"'"));
  return item&&(item.match(/\bhref\s*=\s*["']([^"']+)["']/i)||[])[1]||'';
 };
 function assessPage(p,status,html){
  const errors=[];
  if(status!==200)errors.push('HTTP '+status+' instead of 200');
  if(!/^<!doctype html/i.test(html.trim()))errors.push('Not an HTML document');
- if(!new RegExp('<html\\b[^>]*\\blang=["\\']'+p.language+'["\\']','i').test(html))
-  errors.push('Language shell differs from '+p.language);
+ const shellLanguage=(html.match(/<html\\b[^>]*\\blang=["']([^"']+)["']/i)||[])[1];
+ if(shellLanguage!==p.language)errors.push('Language shell differs from '+p.language);
  if(hrefForRel(html,'canonical')!==p.canonical)errors.push('Wrong canonical URL');
  if(blocked.test(html))errors.push('Obsolete ICA publishing hostname leaked into SSR');
  if(/\b(?:service_role|SUPABASE_SERVICE_ROLE_KEY)\b/i.test(html))
