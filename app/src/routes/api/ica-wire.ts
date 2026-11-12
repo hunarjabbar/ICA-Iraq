@@ -11,4 +11,4 @@ export const Route=createFileRoute('/api/ica-wire')({server:{handlers:{GET:async
  }catch{
   return Response.json({ok:false,desk,items:[],refreshedAt:null},{status:503,headers:{'Cache-Control':'no-store'}})
  }
-}}} as any)
+}}}} as any)
