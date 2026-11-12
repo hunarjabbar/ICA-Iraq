@@ -128,4 +128,4 @@ export const Route=createFileRoute('/api/ica-studio')({
    }
    return Response.json({ok:false,error:'Unsupported action'},{status:400})
   }
- }}} as any)
+ }}}} as any)
