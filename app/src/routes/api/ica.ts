@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {database,cleanStr,validLang,consumeRateLimit,hmac} from '../../lib/ica.server'
-export const Route=createFileRoute('/api/ica')({
- server:{handlers:{POST:async({request}:{request:Request})=>{
+import {createServerOnlyFn} from '@tanstack/react-start'
+const handlePost=createServerOnlyFn(async(request:Request)=>{
+ const {database,cleanStr,validLang,consumeRateLimit,hmac}=await import('../../lib/ica.server')
   if((request.headers.get('content-type')||'').split(';')[0]!=='application/json')return Response.json({ok:false,error:'JSON required'},{status:415})
   if(Number(request.headers.get('content-length')||0)>14000)return Response.json({ok:false,error:'Request too large'},{status:413})
   let body:Record<string,unknown>
@@ -26,4 +26,5 @@ export const Route=createFileRoute('/api/ica')({
    return Response.json({ok:true,message:'Your message has been received'})
   }
   return Response.json({ok:false,error:'Unsupported action'},{status:400})
- }}}} as any)
+})
+export const Route=createFileRoute('/api/ica')({server:{handlers:{POST:({request}:{request:Request})=>handlePost(request)}}} as any)
