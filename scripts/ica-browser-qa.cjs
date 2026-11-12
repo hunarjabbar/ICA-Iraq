@@ -7,7 +7,7 @@ const assert = require('node:assert/strict');
 
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
-  const base = 'https://ica-international-portal.vercel.app';
+  const base = process.env.ICA_TEST_URL || 'https://ica-international-portal.vercel.app';
   const cases = [
     { name: 'desktop English', url: base + '/', width: 1365, height: 850, lang: 'en', dir: 'ltr' },
     { name: 'mobile English', url: base + '/', width: 375, height: 812, lang: 'en', dir: 'ltr' },
