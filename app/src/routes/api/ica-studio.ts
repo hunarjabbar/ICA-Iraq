@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
+import {icaStaffHandoff} from '../../lib/central-workspace'
 
 /** Legacy ICA editor-key login is permanently retired. Staff sign in only through the
  * independent CCC Central Command Centre with real Supabase staff authorization. */
-const commandCentre = 'https://ccc-command-centre.vercel.app/signin'
+const commandCentre = icaStaffHandoff('editorial')
 const headers = { 'Cache-Control':'no-store', 'X-Content-Type-Options':'nosniff' }
 const get = async () => Response.json({
  active:false,
