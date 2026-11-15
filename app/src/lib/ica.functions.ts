@@ -39,3 +39,17 @@ export const getPortalDesk = createServerFn({method:'GET'}).validator((data:{des
  const articles=desk==='latest'?allArticles:desk==='trending'?allArticles.filter(x=>x.trending||x.featured):allArticles.filter(a=>(!!matched?.region&&a.region===matched.region)||(!!matched?.desk&&a.desk===matched.desk))
  return {desk,wire,articles}
 })
+
+
+export const getManagedPageBlocks=createServerFn({method:'GET'})
+ .validator((input:{page:string;lang?:string})=>({
+  page:String(input?.page||'').slice(0,55),
+  lang:isLanguage(input?.lang)?input.lang:'en'
+ }))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readManagedBlocks}=await import('./ica-managed-content.server')
+   return readManagedBlocks(data.page,data.lang)
+  }
+  return []
+ })
