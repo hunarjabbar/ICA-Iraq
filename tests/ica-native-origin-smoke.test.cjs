@@ -59,6 +59,11 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
   assert(!Object.hasOwn(options,'body'));
   const path=new URL(_url).pathname;
   if(path==='/studio')return {status:307,headers:new Headers({location:central+'/?workspace=ica-editorial'})};
+  if(path.startsWith('/discover/')){
+    const language=path.slice('/discover/'.length);
+    const destination=language==='account'?canonical+'/contact':canonical+'/desk/latest?lang='+language;
+    return {status:307,headers:new Headers({location:destination})};
+  }
   if(path==='/monitor/status')return {status:200,text:async()=>JSON.stringify({
    ok:true,service:'ica-international',check:'public-http-liveness'})};
   const p=pages.find(x=>x.path===path+(new URL(_url).search||''))||pages.find(x=>x.path===path);
