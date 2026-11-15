@@ -42,14 +42,10 @@ function assessStatus(status,body){
  }catch{errors.push('Monitoring response is not JSON')}
  return errors;
 }
-function assessStaffRedirect(status,location){
+function assessStaffUnavailable(status,location){
  const errors=[];
- if(![301,302,307,308].includes(status))errors.push('Staff entry not redirected');
- try{
-  const url=new URL(location,canonical);
-  if(url.origin!==central||url.searchParams.get('workspace')!=='ica-editorial')
-   errors.push('Staff entry does not target ICA editorial workspace in the sole Command Centre');
- }catch{errors.push('Invalid staff redirect')}
+ if(status!==404)errors.push('Public ICA staff or template endpoint must be HTTP 404');
+ if(location)errors.push('Public ICA staff endpoint must never redirect or advertise a login URL');
  return errors;
 }
 function assessDiscoverRedirect(p,status,location){
@@ -73,7 +69,7 @@ async function run(base=canonical,request=fetch){
   throw Error('Audit origin must be canonical ICA or an ICA preview deployment');
  const isCanonical=baseUrl.origin===canonical;
  const selected=pages.filter(p=>isCanonical||!p.canonicalRoutingOnly);
- const jobs=[...selected,{id:'monitor',path:'/monitor/status'},{id:'staff-entry',path:'/studio'}];
+ const jobs=[...selected,{id:'monitor',path:'/monitor/status'},...['/studio','/app','/api/ica-studio','/api/ica-upload','/auth/reset','/auth/verify','/auth/update-password'].map(path=>({id:'retired:'+path,path}))];
  const results=[];
  for(let i=0;i<jobs.length;i+=3){
   const batch=await Promise.all(jobs.slice(i,i+3).map(async p=>{
@@ -82,8 +78,8 @@ async function run(base=canonical,request=fetch){
      method:'GET',redirect:'manual',cache:'no-store',credentials:'omit',
      signal:AbortSignal.timeout(15000),headers:{accept:'text/html,application/json','user-agent':'ICA-Native-Origin-Audit/1.0'}
     });
-    if(p.id==='staff-entry')
-     return {id:p.id,errors:assessStaffRedirect(response.status,response.headers.get('location')||'')};
+    if(p.id.startsWith('retired:'))
+     return {id:p.id,errors:assessStaffUnavailable(response.status,response.headers.get('location')||'')};
     if(p.canonicalRoutingOnly)
      return {id:p.id,errors:assessDiscoverRedirect(p,response.status,response.headers.get('location')||'')};
     const body=await response.text();
@@ -95,7 +91,7 @@ async function run(base=canonical,request=fetch){
  }
  return results;
 }
-module.exports={canonical,central,pages,assessPage,assessStatus,assessStaffRedirect,assessDiscoverRedirect,run};
+module.exports={canonical,central,pages,assessPage,assessStatus,assessStaffUnavailable,assessDiscoverRedirect,run};
 if(require.main===module){
  run(process.env.ICA_AUDIT_URL||canonical).then(results=>{
   for(const r of results)console.log((r.errors.length?'FAIL ':'PASS ')+r.id+

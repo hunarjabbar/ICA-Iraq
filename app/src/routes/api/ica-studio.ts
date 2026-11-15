@@ -1,22 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import {createFileRoute} from '@tanstack/react-router'
 
-/** Legacy ICA editor-key login is permanently retired. Staff sign in only through the
- * independent CCC Central Command Centre with real Supabase staff authorization. */
-const commandCentre = 'https://ccc-command-centre.vercel.app/signin'
-const headers = { 'Cache-Control':'no-store', 'X-Content-Type-Options':'nosniff' }
-const get = async () => Response.json({
- active:false,
- configured:false,
- retired:true,
- commandCentre,
- message:'The ICA legacy editorial console has been retired. Use the CCC Central Command Centre.'
-}, {headers})
-const post = async () => Response.json({
- ok:false,
- retired:true,
- commandCentre,
- error:'Legacy editorial authentication and mutations are no longer available here.'
-}, {status:410,headers})
-export const Route = createFileRoute('/api/ica-studio')({
- server:{ handlers:{ GET:get, POST:post, PUT:post, PATCH:post, DELETE:post }}
+// Historical editor-key API is absent from the public ICA operating surface.
+const retired=async()=>new Response(null,{status:404,headers:{
+ 'Cache-Control':'no-store','X-Robots-Tag':'noindex,nofollow','X-Content-Type-Options':'nosniff'
+}})
+export const Route=createFileRoute('/api/ica-studio')({
+ server:{handlers:{GET:retired,POST:retired,PUT:retired,PATCH:retired,DELETE:retired}}
 } as any)

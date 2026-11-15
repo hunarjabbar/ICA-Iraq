@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {canonical,central,pages,assessPage,assessStatus,assessStaffRedirect,run}=
+const {canonical,central,pages,assessPage,assessStatus,assessStaffUnavailable,run}=
  require('../scripts/ica-native-origin-smoke.cjs');
 
 function html(p){
@@ -41,11 +41,11 @@ test('anonymous status is a public liveness contract, not internal governance te
  assert(assessStatus(200,valid.slice(0,-1)+',"staff":"hidden"}').length);
 });
 
-test('ICA staff entry is constrained to the sole central editor workspace',()=>{
- assert.deepEqual(assessStaffRedirect(307,central+'/?workspace=ica-editorial'),[]);
- assert(assessStaffRedirect(307,central+'/?workspace=currency').length);
- assert(assessStaffRedirect(307,'https://example.invalid/?workspace=ica-editorial').length);
- assert(assessStaffRedirect(200,central+'/?workspace=ica-editorial').length);
+test('ICA public staff routes are unavailable without any redirect',()=>{
+ assert.deepEqual(assessStaffUnavailable(404,''),[]);
+ assert(assessStaffUnavailable(307,central+'/?workspace=ica-editorial').length);
+ assert(assessStaffUnavailable(200,'').length);
+ assert(assessStaffUnavailable(404,central+'/signin').length);
 });
 
 test('all probes remain credential-free GET and do not log fetched content',async()=>{
@@ -58,7 +58,7 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
   assert.equal(options.credentials,'omit');
   assert(!Object.hasOwn(options,'body'));
   const path=new URL(_url).pathname;
-  if(path==='/studio')return {status:307,headers:new Headers({location:central+'/?workspace=ica-editorial'})};
+  if(['/studio','/app','/api/ica-studio','/api/ica-upload','/auth/reset','/auth/verify','/auth/update-password'].includes(path))return {status:404,headers:new Headers()};
   if(path.startsWith('/discover/')){
     const language=path.slice('/discover/'.length);
     const destination=language==='account'?canonical+'/contact':canonical+'/desk/latest?lang='+language;
@@ -70,7 +70,7 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
   assert(p,'Unexpected route '+path);
   return {status:200,text:async()=>html(p)};
  });
- assert.equal(results.length,pages.length+2);
+ assert.equal(results.length,pages.length+8);
  assert.equal(count,results.length);
  assert(results.every(x=>x.errors.length===0),JSON.stringify(results.filter(x=>x.errors.length)));
 });

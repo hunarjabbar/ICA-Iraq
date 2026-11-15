@@ -1,14 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import {createFileRoute} from '@tanstack/react-router'
 
-// Old standalone ICA media-upload endpoint is retired. Central Command Centre
-// handles authenticated files and staff permissions. Never fall back to a
-// Cloudflare Worker secret or unscoped object-storage credentials.
-const response = async () => Response.json({
-  ok:false,
-  retired:true,
-  error:'Legacy ICA editorial uploads are retired. Use protected Central Command Centre document workflows.',
-  commandCentre:'https://ccc-command-centre.vercel.app/signin'
-},{ status:410, headers:{ 'Cache-Control':'no-store','X-Content-Type-Options':'nosniff' }})
-export const Route = createFileRoute('/api/ica-upload')({
-  server:{ handlers:{ POST:response,PUT:response,PATCH:response,DELETE:response } }
+// No public-origin endpoint for editorial staff uploads or staff login handoffs.
+const retired=async()=>new Response(null,{status:404,headers:{
+ 'Cache-Control':'no-store','X-Robots-Tag':'noindex,nofollow','X-Content-Type-Options':'nosniff'
+}})
+export const Route=createFileRoute('/api/ica-upload')({
+ server:{handlers:{GET:retired,POST:retired,PUT:retired,PATCH:retired,DELETE:retired}}
 } as any)
