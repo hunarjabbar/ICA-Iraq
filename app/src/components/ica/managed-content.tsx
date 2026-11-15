@@ -1,7 +1,7 @@
 import {useEffect,useMemo,useState} from 'react'
 import {useLocation} from '@tanstack/react-router'
 import {getManagedPageBlocks} from '@/lib/ica.functions'
-import {useICA} from './site'
+import {isLanguage} from '@/lib/ica-i18n'
 import './managed-content.css'
 
 type Block={
@@ -24,7 +24,10 @@ function pageFromRoute(pathname:string):string|null{
 /** A public render surface for published content only. No authoring API or staff links. */
 export function ManagedICAContent(){
  const location=useLocation()
- const {lang,path}=useICA()
+ const query=location.href.split('?')[1]?.split('#')[0]||''
+ const raw=new URLSearchParams(query).get('lang')
+ const lang=isLanguage(raw)?raw:'en'
+ const path=(target:string)=>lang==='en'?target:target+(target.includes('?')?'&':'?')+'lang='+lang
  const page=useMemo(()=>pageFromRoute(location.pathname),[location.pathname])
  const [blocks,setBlocks]=useState<Block[]>([])
  useEffect(()=>{
