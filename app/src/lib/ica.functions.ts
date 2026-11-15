@@ -53,3 +53,11 @@ export const getManagedPageBlocks=createServerFn({method:'GET'})
   }
   return []
  })
+
+export const getLiveResearchAtlas=createServerFn({method:'GET'}).handler(async()=>{
+ if(typeof process!=='undefined'&&process.env.VERCEL){
+  const {readResearchAtlas}=await import('./ica-research-public.server')
+  return readResearchAtlas()
+ }
+ return {available:false,items:[]}
+})
