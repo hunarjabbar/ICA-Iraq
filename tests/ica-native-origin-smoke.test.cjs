@@ -69,3 +69,20 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
  assert.equal(count,results.length);
  assert(results.every(x=>x.errors.length===0),JSON.stringify(results.filter(x=>x.errors.length)));
 });
+
+test('native discovery aliases are server-side 307 only and do not leak to legacy providers',()=>{
+ const fs=require('node:fs');
+ const path=require('node:path');
+ const locale=fs.readFileSync(path.join(__dirname,'../app/src/routes/discover/$language.ts'),'utf8');
+ const account=fs.readFileSync(path.join(__dirname,'../app/src/routes/discover/account.ts'),'utf8');
+ assert.match(locale,/createFileRoute\('\/discover\/\$language'\)/);
+ assert.match(locale,/server:\{handlers:\{GET:/);
+ assert.match(locale,/en\|ar\|ckb\|zh/);
+ assert.match(locale,/status:307/);
+ assert.match(locale,/desk\/latest\?lang=/);
+ assert.match(locale,/status:404/);
+ assert.match(account,/createFileRoute\('\/discover\/account'\)/);
+ assert.match(account,/status:307/);
+ assert.match(account,/https:\/\/ica-international-portal\.vercel\.app\/contact/);
+ assert.doesNotMatch(locale+account,/higgsfield\.app|ica-publishing-experience\.vercel\.app/i);
+});
