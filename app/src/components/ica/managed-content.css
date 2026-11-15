@@ -1,0 +1,25 @@
+
+/* Independently reviewed managed ICA public content; follows existing ICA visual language. */
+.ica-managed-sections{width:min(100% - 2rem,1320px);margin:2.5rem auto 4rem;display:grid;gap:1.4rem;direction:inherit}
+.ica-managed-feature-list{display:grid;gap:1.2rem}
+.ica-managed-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+.ica-managed-card{background:var(--ica-surface,#fff);color:var(--ica-text,#18202a);border:1px solid rgba(110,109,114,.2);border-radius:1rem;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 5px 25px rgba(0,0,0,.035)}
+.ica-managed-card.ica-managed-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);min-height:340px}
+.ica-managed-card.ica-managed-hero .ica-managed-image{order:2}
+.ica-managed-card.ica-managed-feature{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.ica-managed-image{overflow:hidden;aspect-ratio:16 / 9;background:#f3f3f3}
+.ica-managed-image img{display:block;width:100%;height:100%;object-fit:cover}
+.ica-managed-copy{padding:clamp(1rem,2.4vw,2.2rem);display:flex;flex-direction:column;align-items:flex-start;gap:.65rem;min-width:0}
+.ica-managed-eyebrow{font-size:.72rem;font-weight:760;text-transform:uppercase;letter-spacing:.14em;color:#c22137}
+.ica-managed-copy h2{font-size:clamp(1.6rem,3.3vw,3.1rem);line-height:1.1;letter-spacing:-.035em;margin:0}
+.ica-managed-copy h3{font-size:clamp(1.05rem,1.8vw,1.4rem);line-height:1.27;letter-spacing:-.012em;margin:0}
+.ica-managed-copy p{margin:0}
+.ica-managed-summary{font-size:.96rem;line-height:1.65;opacity:.8}
+.ica-managed-body{white-space:pre-wrap;line-height:1.7;max-width:74ch;opacity:.85}
+.ica-managed-body p+p{margin-top:.7rem}
+.ica-managed-cta{margin-top:.6rem;display:inline-flex;align-items:center;gap:.3rem;color:#ad1930;font-weight:750;text-decoration:underline;text-underline-offset:4px}
+.ica-managed-cta:hover{text-decoration-thickness:2px}
+.ica-managed-cta:focus-visible{outline:3px solid #df3752;outline-offset:4px}
+@media(max-width:850px){.ica-managed-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ica-managed-card.ica-managed-hero,.ica-managed-card.ica-managed-feature{grid-template-columns:1fr}.ica-managed-card.ica-managed-hero .ica-managed-image{order:-1}}
+@media(max-width:560px){.ica-managed-sections{width:calc(100% - 1.3rem);margin:1.5rem auto 2.5rem}.ica-managed-card-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:no-preference){.ica-managed-card{transition:box-shadow .2s ease,transform .2s ease}.ica-managed-card:hover{box-shadow:0 9px 30px rgba(0,0,0,.06);transform:translateY(-2px)}}
