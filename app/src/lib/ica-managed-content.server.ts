@@ -43,7 +43,6 @@ export async function readManagedBlocks(page:string,lang:string):Promise<ICAMana
  url.searchParams.set('page','eq.'+page);
  url.searchParams.set('lang',requested==='en'?'eq.en':'in.(en,'+requested+')');
  url.searchParams.set('published_document','not.is.null');
- url.searchParams.set('archived_at','is.null');
  url.searchParams.set('order','sort_order.asc');
  url.searchParams.set('limit','160');
  try{
