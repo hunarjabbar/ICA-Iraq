@@ -2,33 +2,25 @@ import {useEffect,useMemo,useState} from 'react'
 import {useLocation} from '@tanstack/react-router'
 import {getManagedPageBlocks} from '@/lib/ica.functions'
 import {isLanguage} from '@/lib/ica-i18n'
+import {managedPageForPathname,localizedManagedHref} from '@/lib/ica-managed-routes'
 import './managed-content.css'
 
 type Block={
  id:string;page:string;section:string;block_key:string;lang:string;sort_order:number;
  published_document:Record<string,string>;published_at:string|null;
 }
-const SINGLE=new Set(['news','topics','newsroom','culture','video','entertainment','about','contact'])
-const PAGE=/^\/desk\/([a-z0-9-]{2,40})(?:\/|$)/
 const isSafeLink=(href:string)=>href.startsWith('/')&&!href.startsWith('//')||
  /^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(href)
 const isSafeImage=(href:string)=>href.startsWith('/assets/')||
  /^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(href)
-function pageFromRoute(pathname:string):string|null{
- if(pathname==='/'||pathname==='')return 'home'
- const m=PAGE.exec(pathname)
- if(m)return 'desk-'+m[1]
- const first=pathname.replace(/^\/+/,'').split('/')[0]
- return SINGLE.has(first)?first:null
-}
 /** A public render surface for published content only. No authoring API or staff links. */
 export function ManagedICAContent(){
  const location=useLocation()
  const query=location.href.split('?')[1]?.split('#')[0]||''
  const raw=new URLSearchParams(query).get('lang')
  const lang=isLanguage(raw)?raw:'en'
- const path=(target:string)=>lang==='en'?target:target+(target.includes('?')?'&':'?')+'lang='+lang
- const page=useMemo(()=>pageFromRoute(location.pathname),[location.pathname])
+ const path=(target:string)=>localizedManagedHref(target,lang)
+ const page=useMemo(()=>managedPageForPathname(location.pathname),[location.pathname])
  const [blocks,setBlocks]=useState<Block[]>([])
  useEffect(()=>{
   let active=true
