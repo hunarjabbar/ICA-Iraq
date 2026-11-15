@@ -18,7 +18,7 @@ test('ICA public footer has no editorial, staff or console link in any language'
  assert.doesNotMatch(site,/path\('\/studio'\)|ccc-command-centre\.vercel\.app|editor:'/,);
 });
 test('obsolete editor-key login and wire-studio source components are physically deleted',()=>{
- for(const file of ['app/src/components/ica/studio.tsx','app/src/components/ica/wire-studio.tsx','app/src/lib/ica-studio-i18n.ts'])assert.equal(fs.existsSync(path.join(root,file)),false,file);
+ for(const file of ['app/src/components/ica/studio.tsx','app/src/components/ica/wire-studio.tsx','app/src/lib/ica-studio-i18n.ts','app/src/routes/auth/reset.tsx','app/src/routes/auth/verify.tsx','app/src/routes/auth/update-password.tsx'])assert.equal(fs.existsSync(path.join(root,file)),false,file);
 });
 test('native read-only release checks enforce absent staff routes, not 307 forwarding',()=>{
  const gate=read('scripts/ica-native-origin-smoke.cjs');
