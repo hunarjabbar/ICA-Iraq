@@ -69,7 +69,7 @@ async function run(base=canonical,request=fetch){
   throw Error('Audit origin must be canonical ICA or an ICA preview deployment');
  const isCanonical=baseUrl.origin===canonical;
  const selected=pages.filter(p=>isCanonical||!p.canonicalRoutingOnly);
- const jobs=[...selected,{id:'monitor',path:'/monitor/status'},...['/studio','/app','/api/ica-studio','/api/ica-upload'].map(path=>({id:'retired:'+path,path}))];
+ const jobs=[...selected,{id:'monitor',path:'/monitor/status'},...['/studio','/app','/api/ica-studio','/api/ica-upload','/auth/reset','/auth/verify','/auth/update-password'].map(path=>({id:'retired:'+path,path}))];
  const results=[];
  for(let i=0;i<jobs.length;i+=3){
   const batch=await Promise.all(jobs.slice(i,i+3).map(async p=>{
