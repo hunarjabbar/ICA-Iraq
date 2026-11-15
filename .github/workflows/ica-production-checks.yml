@@ -27,7 +27,9 @@ jobs:
         run: |
           test -f app/package.json
           test -f app/src/routes/__root.tsx
-          test -f app/src/components/ica/studio.tsx
+          test ! -e app/src/components/ica/studio.tsx
+          test ! -e app/src/components/ica/wire-studio.tsx
+          test ! -e app/src/lib/ica-studio-i18n.ts
       - name: Verify live ICA routes and language shells
         env:
           ICA_URL: https://ica-international-portal.vercel.app
@@ -72,20 +74,20 @@ jobs:
               for deleted in ('ica-iraqi-chinese-agency.higgsfield.app','ica-publishing-experience.vercel.app','ica-account-security.vercel.app'):
                 assert deleted not in html,(path,'deleted hosting provider leaked')
               print('PASS native canonical and deleted provider guard',path)
-          with urllib.request.urlopen(ica+'/studio',timeout=25) as r:
-            assert r.geturl().startswith('https://ccc-command-centre.vercel.app/'),r.geturl()
-            assert r.status==200
-            print('PASS legacy staff redirect -> Central Command Centre')
+          from urllib.error import HTTPError
+          for endpoint in ['/studio','/app','/api/ica-studio','/api/ica-upload']:
+            req=urllib.request.Request(ica+endpoint,headers={'User-Agent':'ICA-CI-StaffIsolation/1.0'})
+            try:
+              with urllib.request.urlopen(req,timeout=25) as r:
+                raise AssertionError((endpoint,'Staff route exposed',r.status))
+            except HTTPError as e:
+              assert e.code==404,(endpoint,e.code)
+              assert not e.headers.get('Location'),(endpoint,'Staff login forwarding is forbidden')
+              print('PASS public staff entry absent',endpoint)
           with urllib.request.urlopen(ica+'/api/ica-wire?desk=latest',timeout=25) as r:
             j=json.load(r)
             assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
             print('PASS wire',len(j['items']))
-          with urllib.request.urlopen(ica+'/api/ica-studio',timeout=25) as r:
-            j=json.load(r)
-            assert r.status==200 and j.get('retired') is True and j.get('configured') is False,j
-            assert j.get('commandCentre')=='https://ccc-command-centre.vercel.app/signin'
-            assert 'serviceRoleKey' not in j and 'blobToken' not in j
-            print('PASS retired legacy editorial login')
           with urllib.request.urlopen(ica+'/api/ccc-editorial',timeout=25) as r:
             j=json.load(r)
             assert r.status==200 and j.get('ok') and isinstance(j.get('items'),list),j
@@ -102,17 +104,20 @@ jobs:
           code,body=post('/api/ica',{'action':'subscribe','email':'qa-smoke@example.invalid','website':'honeypot-no-write'})
           assert code==200 and body.get('ok') is True,(code,body)
           print('PASS form submission dry-run without storing user data')
-          code,body=post('/api/ica-studio',{'action':'login','key':'legacy-test'})
-          assert code==410 and body.get('retired') is True,(code,body)
-          print('PASS legacy editor-key login retired')
-          code,body=post('/api/ica-upload',{'file':'not-uploaded'})
-          assert code==410 and body.get('retired') is True,(code,body)
-          print('PASS legacy upload endpoint retired')
+          for ep in ['/api/ica-studio','/api/ica-upload']:
+            payload={'action':'login','key':'synthetic-rejected'}
+            req=urllib.request.Request(ica+ep,data=json.dumps(payload).encode('utf-8'),headers={'Content-Type':'application/json','User-Agent':'ICA-CI-StaffIsolation/1.0'},method='POST')
+            try:
+              with urllib.request.urlopen(req,timeout=25) as resp: raise AssertionError((ep,'Legacy staff POST route exposed',resp.status))
+            except HTTPError as e:
+              assert e.code==404,(ep,e.code)
+              assert not e.headers.get('Location'),(ep,'No staff login redirect allowed')
+              print('PASS public staff mutation unavailable',ep)
           PY
 
       - name: Install browser test runtime
         run: |
           npm install --no-save playwright@1.58.2
           node --version
-      - name: Verify browser hydration, RTL layout and editorial login
+      - name: Verify browser hydration, RTL layout and independent central login
         run: node scripts/ica-browser-qa.cjs
