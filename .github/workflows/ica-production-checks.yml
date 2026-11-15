@@ -30,6 +30,9 @@ jobs:
           test ! -e app/src/components/ica/studio.tsx
           test ! -e app/src/components/ica/wire-studio.tsx
           test ! -e app/src/lib/ica-studio-i18n.ts
+          test ! -e app/src/routes/auth/reset.tsx
+          test ! -e app/src/routes/auth/verify.tsx
+          test ! -e app/src/routes/auth/update-password.tsx
       - name: Verify live ICA routes and language shells
         env:
           ICA_URL: https://ica-international-portal.vercel.app
@@ -46,9 +49,6 @@ jobs:
             (ica+'/?lang=zh',b'lang="zh"'),
             (ica+'/desk/latest',b'<html'),
             (ica+'/newsroom',b'<html'),
-            (ica+'/auth/reset',b'Recover your ICA account'),
-            (ica+'/auth/verify',b'ICA email verification'),
-            (ica+'/auth/update-password',b'Set a new password'),
             (ica+'/sitemap.xml',b'<urlset'),
             (ica+'/discover',b'<html'),
             (ica+'/discover/en',b'<html'),
@@ -75,7 +75,7 @@ jobs:
                 assert deleted not in html,(path,'deleted hosting provider leaked')
               print('PASS native canonical and deleted provider guard',path)
           from urllib.error import HTTPError
-          for endpoint in ['/studio','/app','/api/ica-studio','/api/ica-upload']:
+          for endpoint in ['/studio','/app','/api/ica-studio','/api/ica-upload','/auth/reset','/auth/verify','/auth/update-password']:
             req=urllib.request.Request(ica+endpoint,headers={'User-Agent':'ICA-CI-StaffIsolation/1.0'})
             try:
               with urllib.request.urlopen(req,timeout=25) as r:
