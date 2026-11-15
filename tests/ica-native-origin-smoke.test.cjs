@@ -58,7 +58,7 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
   assert.equal(options.credentials,'omit');
   assert(!Object.hasOwn(options,'body'));
   const path=new URL(_url).pathname;
-  if(['/studio','/app','/api/ica-studio','/api/ica-upload'].includes(path))return {status:404,headers:new Headers()};
+  if(['/studio','/app','/api/ica-studio','/api/ica-upload','/auth/reset','/auth/verify','/auth/update-password'].includes(path))return {status:404,headers:new Headers()};
   if(path.startsWith('/discover/')){
     const language=path.slice('/discover/'.length);
     const destination=language==='account'?canonical+'/contact':canonical+'/desk/latest?lang='+language;
@@ -70,7 +70,7 @@ test('all probes remain credential-free GET and do not log fetched content',asyn
   assert(p,'Unexpected route '+path);
   return {status:200,text:async()=>html(p)};
  });
- assert.equal(results.length,pages.length+5);
+ assert.equal(results.length,pages.length+8);
  assert.equal(count,results.length);
  assert(results.every(x=>x.errors.length===0),JSON.stringify(results.filter(x=>x.errors.length)));
 });
