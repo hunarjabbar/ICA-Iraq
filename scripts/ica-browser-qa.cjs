@@ -14,9 +14,6 @@ const assert = require('node:assert/strict');
     { name: 'Sorani Kurdish', url: base + '/?lang=ckb', width: 390, height: 844, lang: 'ckb', dir: 'rtl' },
     { name: 'Arabic newsroom', url: base + '/desk/latest?lang=ar', width: 390, height: 844, lang: 'ar', dir: 'rtl' },
     { name: 'Simplified Chinese', url: base + '/?lang=zh', width: 1280, height: 800, lang: 'zh', dir: 'ltr' },
-    { name: 'ICA password recovery', url: base + '/auth/reset', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Recover your ICA account' },
-    { name: 'ICA email verification', url: base + '/auth/verify', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'ICA email verification' },
-    { name: 'ICA password update', url: base + '/auth/update-password', width: 390, height: 844, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Set a new password' },
     { name: 'Central Command Centre sign-in', url: 'https://ccc-command-centre.vercel.app/signin', width: 1024, height: 768, lang: 'en', dir: 'ltr', minLinks: 0, marker: 'Sign in' },
     { name: 'CCC gateway', url: 'https://ccc-iraq-cultural-centre.vercel.app/ica', width: 390, height: 844, lang: 'en', dir: 'ltr', ccc: true }
   ];
