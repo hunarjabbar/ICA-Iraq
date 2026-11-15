@@ -3,26 +3,25 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
-const editorial=read('app/src/routes/studio.tsx');
-const template=read('app/src/routes/app.tsx');
-const guard=read('scripts/ica-native-origin-smoke.cjs');
-test('native ICA editorial staff route cannot mount the retired in-app studio',()=>{
- assert.match(editorial,/createFileRoute\('\/studio'\)/);
- assert.match(editorial,/server:\{handlers:\{GET:/);
- assert.match(editorial,/status:307/);
- assert.match(editorial,/https:\/\/ccc-command-centre\.vercel\.app\/\?workspace=ica-editorial/);
- assert.doesNotMatch(editorial,/EditorialStudio|component:/);
- assert.match(editorial,/no-store/);
+const root=path.join(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const routeFiles=['app/src/routes/studio.tsx','app/src/routes/app.tsx','app/src/routes/api/ica-studio.ts','app/src/routes/api/ica-upload.ts'];
+test('all four public ICA staff and template entry points return non-redirecting HTTP 404',()=>{
+ for(const file of routeFiles){
+  const source=read(file);
+  assert.match(source,/status:404/,file);
+  assert.match(source,/no-store/,file);
+  assert.doesNotMatch(source,/Location:|ccc-command-centre\.vercel\.app|status:307|EditorialStudio|CustomTemplate|component:/,file);
+ }
 });
-test('old ICA template console can only hand off to sole Command Centre',()=>{
- assert.match(template,/createFileRoute\('\/app'\)/);
- assert.match(template,/server:\{handlers:\{GET:/);
- assert.match(template,/status:307/);
- assert.match(template,/https:\/\/ccc-command-centre\.vercel\.app\/\?workspace=ica/);
- assert.doesNotMatch(template,/CustomTemplate|previewMode|component:/);
+test('ICA public footer has no editorial, staff or console link in any language',()=>{
+ const site=read('app/src/components/ica/site.tsx');
+ assert.doesNotMatch(site,/path\('\/studio'\)|ccc-command-centre\.vercel\.app|editor:'/,);
 });
-test('public ICA origin regression still checks staff delegation',()=>{
- assert.match(guard,/assessStaffRedirect/);
- assert.match(guard,/ica-editorial/);
+test('obsolete editor-key login and wire-studio source components are physically deleted',()=>{
+ for(const file of ['app/src/components/ica/studio.tsx','app/src/components/ica/wire-studio.tsx','app/src/lib/ica-studio-i18n.ts'])assert.equal(fs.existsSync(path.join(root,file)),false,file);
+});
+test('native read-only release checks enforce absent staff routes, not 307 forwarding',()=>{
+ const gate=read('scripts/ica-native-origin-smoke.cjs');
+ assert.match(gate,/assessStaffUnavailable/);
+ assert.doesNotMatch(gate,/assessStaffRedirect|Staff entry not redirected/);
 });
