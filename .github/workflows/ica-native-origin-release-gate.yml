@@ -4,6 +4,9 @@ on:
     paths:
       - 'scripts/ica-native-origin-smoke.cjs'
       - 'tests/ica-native-origin-smoke.test.cjs'
+      - 'tests/ica-native-staff-retirement-v34.test.cjs'
+      - 'app/src/routes/studio.tsx'
+      - 'app/src/routes/app.tsx'
       - '.github/workflows/ica-native-origin-release-gate.yml'
   push:
     branches: [main]
@@ -30,7 +33,7 @@ jobs:
         with:
           node-version: '24'
       - name: Verify no-credential source and origin test
-        run: node --test tests/ica-native-origin-smoke.test.cjs
+        run: node --test tests/ica-native-origin-smoke.test.cjs tests/ica-native-staff-retirement-v34.test.cjs
   live-production:
     if: github.event_name != 'pull_request'
     needs: offline-contract
