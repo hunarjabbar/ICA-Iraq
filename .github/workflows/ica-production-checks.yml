@@ -33,6 +33,9 @@ jobs:
       - name: Run all ICA application regression tests
         working-directory: app
         run: bun run test
+      - name: Generate ICA route types and validate edited components
+        working-directory: app
+        run: bun run typecheck
 
   verify-production:
     runs-on: ubuntu-latest
