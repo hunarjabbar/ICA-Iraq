@@ -67,6 +67,28 @@ export async function readArticle(slug:string):Promise<ICAArticle|null> {
   const rows=await read('ica_news_articles',{slug:'eq.'+slug,status:'eq.published',limit:'1'})
   return rows[0]?article(rows[0]):null
 }
+/** Only publicly published members of the SAME canonical translation group.
+ * No drafts or editorial notes. Each language has its own crawlable story URL.
+ */
+export async function readPublishedStoryEditions(slug:string):Promise<Array<{lang:string;slug:string}>>{
+ if(!/^[a-z0-9-]{3,110}$/.test(slug))return []
+ const source=(await read('ica_news_articles',{
+  select:'id,slug,lang,translation_group',slug:'eq.'+slug,status:'eq.published',limit:'1'
+ }))[0]
+ if(!source)return []
+ const group=value(source,'translation_group')||value(source,'id')
+ if(!/^[a-f0-9-]{36}$/i.test(group))return []
+ const rows=await read('ica_news_articles',{
+  select:'id,slug,lang,translation_group',status:'eq.published',
+  or:'(id.eq.'+group+',translation_group.eq.'+group+')',limit:'10'
+ })
+ const seen=new Set<string>()
+ return rows.filter(row=>validLangs.includes(value(row,'lang'))&&/^[a-z0-9-]{3,110}$/.test(value(row,'slug')))
+  .sort((a,b)=>validLangs.indexOf(value(a,'lang'))-validLangs.indexOf(value(b,'lang')))
+  .filter(row=>{const lang=value(row,'lang');if(seen.has(lang))return false;seen.add(lang);return true})
+  .map(row=>({lang:value(row,'lang'),slug:value(row,'slug')}))
+}
+
 export async function readMedia():Promise<ICAMedia[]> {
   const rows = await read('ica_media_library',{published:'eq.true',order:'created_at.desc',limit:'60'})
   return rows.map(row=>({
