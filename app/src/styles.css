@@ -1069,3 +1069,13 @@ html:has(.ica-site){color-scheme:light}
 @keyframes ica-live-dot{50%{opacity:.35}}
 @media(prefers-reduced-motion:reduce){.ica-live-indicator{animation:none}}
 @media(max-width:620px){.ica-live-timeline{margin-block:1rem}.ica-live-item{padding:1rem 0 1.25rem 1rem}.ica-live-heading small{margin-inline-start:0}}
+
+/* CEO-released ICA DAM story images — private originals are never embedded. */
+.ica-article-dam-cover,.ica-dam-story-gallery figure{margin:1.1rem 0 2rem;min-width:0}
+.ica-article-dam-cover img{width:100%;height:auto;max-height:660px;aspect-ratio:16/10;object-fit:cover;display:block;background:#f5f2f3;border-radius:5px}
+.ica-article-dam-cover figcaption,.ica-dam-story-gallery figcaption{font-size:.78rem;line-height:1.65;padding:.65rem .15rem;color:#66646d;overflow-wrap:anywhere;white-space:normal}
+.ica-article-dam-cover cite,.ica-dam-story-gallery cite{font-size:.72rem;font-style:normal;font-weight:700;unicode-bidi:plaintext}
+.ica-dam-story-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:1rem;margin:1.25rem 0 2.25rem}
+.ica-dam-story-gallery img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:#f5f1f2;border-radius:4px}
+.ica-article-dam-cover[dir=auto],.ica-dam-story-gallery figure[dir=auto]{unicode-bidi:plaintext}
+@media(max-width:640px){.ica-article-dam-cover img{aspect-ratio:4/3;max-height:360px}.ica-dam-story-gallery{grid-template-columns:minmax(0,1fr)}}
