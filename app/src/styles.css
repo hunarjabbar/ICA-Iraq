@@ -213,7 +213,6 @@ img{max-width:100%;display:block}
 .ica-language select{background:transparent;color:var(--ica-ink);border:0;font-weight:800;font-size:12px;max-width:76px}
 .ica-nav-contact{font-size:12px;font-weight:800;background:var(--ica-red);color:#fff;padding:12px 16px;transition:transform .2s}
 .ica-nav-contact:hover{transform:translateY(-2px)}
-.ica-mobile-nav{display:none}
 .ica-film-intro{position:relative;background:#190e12;isolation:isolate}
 .ica-film-intro .ica-film-cta{position:absolute;z-index:12;top:min(72vh,690px);left:clamp(20px,6vw,90px);background:var(--ica-red);color:white;font-weight:800;padding:17px 23px;display:flex;align-items:center;justify-content:space-between;gap:42px;letter-spacing:.02em;box-shadow:0 14px 40px #0b000966;transition:transform .3s}
 .ica-film-cta:hover{transform:translateX(4px)}
@@ -405,11 +404,6 @@ img{max-width:100%;display:block}
  .ica-contact-layout{gap:55px}
 }
 @media (max-width:900px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:#fff;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:#fff;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine);letter-spacing:.05em}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;left:0;right:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 28px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
- .ica-mobile-nav nav a{padding:14px 5px;border-bottom:1px solid #F2EEEE;font-size:14px;font-weight:750}
  .ica-feature-strip{grid-template-columns:1fr;gap:12px;text-align:center}
  .ica-feature-strip>span{text-align:center}
  .ica-footer-upper{grid-template-columns:2fr 1fr 1fr}
@@ -565,13 +559,6 @@ img{max-width:100%;display:block}
 [dir=rtl] .ica-topic-source a span,[dir=rtl] .ica-topic-pitch span{display:inline-block;transform:scaleX(-1)}
 @media(max-width:1110px){
  .ica-topics-home-grid,.ica-topic-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media (min-width:901px) and (max-width:1060px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:#fff;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:#fff;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine)}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;left:0;right:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 28px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
- .ica-mobile-nav nav a{padding:14px 5px;border-bottom:1px solid #F2EEEE;font-size:14px;font-weight:750}
 }
 @media(max-width:700px){
  .ica-topics-home{padding:45px 0 25px;margin-bottom:55px}
@@ -972,7 +959,6 @@ html:has(.ica-site){color-scheme:light}
 .ica-site :where(h1,h2,h3,p,strong,a){overflow-wrap:break-word}
 .ica-nav-links{min-width:0}
 .ica-header-topicline>div,.ica-desk-nav>div{min-width:0}
-.ica-mobile-nav nav{max-height:min(70dvh,540px);overflow-y:auto;overscroll-behavior:contain}
 .ica-intl-desk-list strong,.ica-wire-story h3,.ica-trending-tile h3{overflow-wrap:anywhere}
 .ica-intl-source-directory>div:last-child>a{padding-inline-end:28px}
 .ica-intl-source-directory>div:last-child>a span:last-child{inset-inline-end:10px;right:auto;left:auto}
@@ -981,16 +967,8 @@ html:has(.ica-site){color-scheme:light}
 .ica-site[dir="rtl"] .ica-intl-hero-grid :is(.ica-wire-story h3,.ica-wire-story p)[lang="en"]{direction:ltr;text-align:left}
 .ica-site[dir="rtl"] .ica-wire-story [dir="auto"]:not([lang="en"]){unicode-bidi:plaintext}
 .ica-site[lang="ar"] .ica-nav-links a,.ica-site[lang="ckb"] .ica-nav-links a{letter-spacing:normal}
-.ica-site[dir="rtl"] .ica-mobile-nav nav{direction:rtl}
 .ica-site[lang="ar"] .ica-desk-filter-header button,.ica-site[lang="ckb"] .ica-desk-filter-header button{white-space:normal;line-height:1.5}
 .ica-site[lang="ar"] .ica-trending-tile h3,.ica-site[lang="ckb"] .ica-trending-tile h3{letter-spacing:normal}
-@media(max-width:1180px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:white;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:white;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine)}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;inset-inline:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}
- .ica-mobile-nav nav a{padding:12px 6px;border-bottom:1px solid #F2EEEE;font-size:13px;font-weight:750;line-height:1.5}
-}
 @media(max-width:700px){
  .ica-film-intro .ica-film-cta{inset-inline-start:18px;left:auto;right:auto}
  .ica-intl-hero-title,.ica-intl-hero-title>div,.ica-intl-market-strip,.ica-desk-intro,.ica-desk-controls{min-width:0}
@@ -998,7 +976,6 @@ html:has(.ica-site){color-scheme:light}
  .ica-intl-hero h1,.ica-desk-intro h1{overflow-wrap:anywhere}
 }
 @media(max-width:410px){
- .ica-mobile-nav nav{grid-template-columns:1fr}
  .ica-header-topicline a{font-size:10px}
  .ica-desk-filter-header>button{width:100%;white-space:normal}
  .ica-intl-market-resources{grid-template-columns:1fr}
@@ -1083,7 +1060,7 @@ html:has(.ica-site){color-scheme:light}
 
 /* ICA International v20 · unified brand/navigation system.
    One responsive breakpoint (1360px), script-safe RTL and keyboard-controlled drawer.
-   Legacy .ica-mobile-nav rules above are inert: no legacy drawer is rendered. */
+   The former duplicate legacy navigation selectors have been removed. */
 .ica-header-v20{
  position:relative;z-index:100;isolation:isolate;background:#fff;
  border-bottom:1px solid #e9e5e4;box-shadow:0 1px 0 rgb(25 20 25 / 3%);
