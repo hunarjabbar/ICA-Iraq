@@ -7,7 +7,7 @@ const managed=read('../src/components/ica/managed-content.css')
 const home=read('../src/routes/index.tsx')
 const site=read('../src/components/ica/site.tsx')
 const browser=read('../../scripts/ica-browser-qa.cjs')
-const compact=css.split('ICA International v21 — compact, editorial-responsive proportional system.')[1]
+const compact=css.split('ICA International v21 — compact, editorial-responsive proportional system.')[1]?.split('/* ICA v22 —')[0]
 
 describe('ICA public compact editorial design v21',()=>{
  test('scope custom scale to ICA public, preserving shared Quanta/Tailwind rem primitives',()=>{
