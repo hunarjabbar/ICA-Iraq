@@ -22,7 +22,9 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.58.2-noble
     timeout-minutes: 16
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Verify source files
         run: |
           test -f app/package.json
@@ -33,6 +35,17 @@ jobs:
           test ! -e app/src/routes/auth/reset.tsx
           test ! -e app/src/routes/auth/verify.tsx
           test ! -e app/src/routes/auth/update-password.tsx
+      - name: Install pinned Bun for source-level tests
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.4'
+      - name: Install exact feature-branch dependencies
+        working-directory: app
+        run: bun install --frozen-lockfile
+      - name: Test all ICA application regressions on checked-out commit
+        working-directory: app
+        run: bun run test
+
       - name: Verify live ICA routes and language shells
         env:
           ICA_URL: https://ica-international-portal.vercel.app
