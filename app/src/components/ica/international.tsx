@@ -1,4 +1,5 @@
 import {useEffect,useMemo,useState} from 'react'
+import {ArrowRight,ArrowUpRight} from 'lucide-react'
 import {Shell,Newsletter,useICA} from './site'
 import {useManagedICAZone,ICA_NATIVE_HOME_ZONES,safeManagedHref} from './managed-content'
 import {EditorialBody} from './editorial-body'
@@ -50,7 +51,7 @@ export function WireHeadline({story,variation='regular',number=0}:{story:Story;v
     <h3 lang={story.language} dir="auto">{number>0&&variation==='compact'&&<span className="ica-wire-index">{String(number).padStart(2,'0')}</span>}{story.title}</h3>
     {story.kind==='external'&&lang!=='en'&&<span className="ica-source-language">{L('sourceLanguage')}</span>}
     {variation!=='compact'&&<p lang={story.summary?story.language:lang} dir="auto">{story.summary||L('originalNotice')}</p>}
-    <div className="ica-wire-story-foot"><span>{story.source}</span><strong>{story.kind==='external'?L('readOriginal')+' ↗':L('fullStory')+' ↗'}</strong></div>
+    <div className="ica-wire-story-foot"><span>{story.source}</span><strong>{story.kind==='external'?L('readOriginal'):L('fullStory')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></strong></div>
    </div>
   </a>
  </article>
@@ -117,12 +118,12 @@ export function PortalLead({articles,wire}:{articles:ICAArticle[];wire:WireItem[
  const stories=splitStories(articles,wire,path)
  const picks=[...stories.filter(s=>s.featured),...stories.filter(s=>!s.featured)].filter((s,i,a)=>a.findIndex(x=>x.id===s.id)===i).slice(0,5)
  return <section className="ica-intl-hero" aria-labelledby="ica-global-headlines">
-  <div className="ica-intl-hero-title"><div><span className="ica-intl-kicker" >{content?.eyebrow||L('globalEdition')}</span><h1 id="ica-global-headlines">{content?.title||L('worldPerspective')}<span className="ica-intl-red-dot">.</span></h1><p>{content?.summary||L('heroDescription')}</p>{content?.body&&<EditorialBody body={content.body} className="ica-native-body"/>}{heroHref&&content?.cta_label&&<a className="ica-native-cta" href={heroHref}>{content.cta_label} ↗</a>}</div><div className="ica-intl-edition"><span>{L('dailyEdition')}</span><strong>{L('globalDesk')}</strong><small>{formatLocalDate(new Date(),lang,{day:'numeric',month:'long',year:'numeric'})}</small></div></div>
+  <div className="ica-intl-hero-title"><div><span className="ica-intl-kicker" >{content?.eyebrow||L('globalEdition')}</span><h1 id="ica-global-headlines">{content?.title||L('worldPerspective')}<span className="ica-intl-red-dot">.</span></h1><p>{content?.summary||L('heroDescription')}</p>{content?.body&&<EditorialBody body={content.body} className="ica-native-body"/>}{heroHref&&content?.cta_label&&<a className="ica-native-cta" href={heroHref}>{content.cta_label} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a>}</div><div className="ica-intl-edition"><span>{L('dailyEdition')}</span><strong>{L('globalDesk')}</strong><small>{formatLocalDate(new Date(),lang,{day:'numeric',month:'long',year:'numeric'})}</small></div></div>
   {picks.length? <div className="ica-intl-hero-grid">
    <WireHeadline story={picks[0]} variation="lead"/>
    <div className="ica-intl-hero-secondary">{picks.slice(1,3).map(x=><WireHeadline story={x} key={x.id}/>)}</div>
-   <aside className="ica-intl-hero-side"><div className="ica-intl-side-title"><span>{L('newsList')}</span><a href={path('/desk/latest')}>{L('allLatest')} ↗</a></div>{picks.slice(3).map((s,i)=><WireHeadline key={s.id} story={s} variation="compact" number={i+1}/>)}<div className="ica-intl-hero-source-note">{L('sourceNote')}</div></aside>
-  </div> : <div className="ica-intl-empty"><div><strong>{L('connecting')}</strong><p>{L('connectingDetails')}</p></div><a href={path('/desk/latest')}>{L('viewWire')} ↗</a></div>}
+   <aside className="ica-intl-hero-side"><div className="ica-intl-side-title"><span>{L('newsList')}</span><a href={path('/desk/latest')}>{L('allLatest')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>{picks.slice(3).map((s,i)=><WireHeadline key={s.id} story={s} variation="compact" number={i+1}/>)}<div className="ica-intl-hero-source-note">{L('sourceNote')}</div></aside>
+  </div> : <div className="ica-intl-empty"><div><strong>{L('connecting')}</strong><p>{L('connectingDetails')}</p></div><a href={path('/desk/latest')}>{L('viewWire')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>}
  </section>
 }
 export function TrendingDesk({articles,wire}:{articles:ICAArticle[];wire:WireItem[]}){
@@ -131,7 +132,7 @@ export function TrendingDesk({articles,wire}:{articles:ICAArticle[];wire:WireIte
  const editorPicks=all.filter(x=>x.trending)
  const cards=[...editorPicks,...all.filter(x=>!x.trending)].slice(0,7)
  return <section className="ica-intl-trending" aria-labelledby="ica-trending-title">
-  <div className="ica-intl-trending-top"><div><span className="ica-intl-kicker">{L('curated')}</span><h2 id="ica-trending-title">{L('trendingFocus')}<span className="ica-intl-red-dot">.</span></h2></div><a href={path('/desk/trending')}>{L('exploreTrending')} ↗</a></div>
+  <div className="ica-intl-trending-top"><div><span className="ica-intl-kicker">{L('curated')}</span><h2 id="ica-trending-title">{L('trendingFocus')}<span className="ica-intl-red-dot">.</span></h2></div><a href={path('/desk/trending')}>{L('exploreTrending')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>
   <p className="ica-intl-explain">{L('trendingDisclaimer')}</p>
   {cards.length?<div className="ica-intl-trending-rail">{cards.map((s,i)=><a key={s.id} href={s.url} target={s.kind==='external'?'_blank':undefined} rel={s.kind==='external'?'noopener noreferrer':undefined} className="ica-trending-tile"><span className="ica-trending-number">{String(i+1).padStart(2,'0')}</span><span className="ica-trending-topic">{deskName(lang,s.region)} / {deskName(lang,s.desk)}</span><h3 lang={s.language} dir="auto">{s.title}</h3><div><span>{s.source}</span><span>{formatLocalDate(s.date,lang)}</span></div></a>)}</div>:<p className="ica-intl-placeholder">{L('noSourceYet')}</p>}
  </section>
@@ -140,15 +141,15 @@ export function SectionMosaic({articles,wire}:{articles:ICAArticle[];wire:WireIt
  const {path,L,lang}=useICA()
  const all=splitStories(articles,wire,path)
  return <section className="ica-intl-mosaic" aria-labelledby="ica-desks-title">
-  <div className="ica-intl-section-heading"><div><span className="ica-intl-kicker">{L('internationalRegional')}</span><h2 id="ica-desks-title">{L('acrossDesks')}<span className="ica-intl-red-dot">.</span></h2></div><a href={path('/desk/latest')}>{L('allCoverage')} ↗</a></div>
+  <div className="ica-intl-section-heading"><div><span className="ica-intl-kicker">{L('internationalRegional')}</span><h2 id="ica-desks-title">{L('acrossDesks')}<span className="ica-intl-red-dot">.</span></h2></div><a href={path('/desk/latest')}>{L('allCoverage')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>
   <div className="ica-intl-mosaic-grid">{primaryDeskKeys.map((key,index)=>{
    const desk=deskBySlug(key)
    const hits=all.filter(x=>desk?.region?x.region===desk.region:x.desk===desk?.desk).slice(0,4)
    return <section key={key} className={'ica-intl-desk-card ica-intl-desk-card-'+key}>
-    <div className="ica-intl-desk-header"><div><span>{String(index+1).padStart(2,'0')} / {L('deskLabel')}</span><h3>{deskName(lang,key)}</h3></div><a href={path('/desk/'+key)} aria-label={L('expand')+' '+deskName(lang,key)}>↗</a></div>
+    <div className="ica-intl-desk-header"><div><span>{String(index+1).padStart(2,'0')} / {L('deskLabel')}</span><h3>{deskName(lang,key)}</h3></div><a href={path('/desk/'+key)} aria-label={L('expand')+' '+deskName(lang,key)}><ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>
     <p>{deskDescription(lang,key)}</p>
-    <div className="ica-intl-desk-list">{hits.length?hits.map(x=><a key={x.id} href={x.url} target={x.kind==='external'?'_blank':undefined} rel={x.kind==='external'?'noopener noreferrer':undefined}><strong lang={x.language} dir="auto">{x.title}</strong><span>{x.source} · {formatLocalDate(x.date,lang)} ↗</span></a>):<span className="ica-intl-desk-empty">{L('noDeskCoverage')}</span>}</div>
-    <a className="ica-intl-desk-footer" href={path('/desk/'+key)}>{L('openDesk')} {deskName(lang,key)} <span aria-hidden="true">→</span></a>
+    <div className="ica-intl-desk-list">{hits.length?hits.map(x=><a key={x.id} href={x.url} target={x.kind==='external'?'_blank':undefined} rel={x.kind==='external'?'noopener noreferrer':undefined}><strong lang={x.language} dir="auto">{x.title}</strong><span>{x.source} · {formatLocalDate(x.date,lang)} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></span></a>):<span className="ica-intl-desk-empty">{L('noDeskCoverage')}</span>}</div>
+    <a className="ica-intl-desk-footer" href={path('/desk/'+key)}>{L('openDesk')} {deskName(lang,key)} <ArrowRight className="ica-action-icon ica-action-icon--forward" aria-hidden="true"/></a>
    </section>
   })}</div>
  </section>
@@ -156,9 +157,9 @@ export function SectionMosaic({articles,wire}:{articles:ICAArticle[];wire:WireIt
 export function MarketSourceStrip(){
  const {path,L,lang}=useICA()
  return <section className="ica-intl-market-strip" aria-label={L('economicIntelligence')}>
-  <div><span>{L('economicIntelligence')}</span><h2>{L('marketsContext')}</h2><p>{L('marketsDetails')}</p><a href={path('/desk/markets')}>{L('visitMarkets')} ↗</a></div>
+  <div><span>{L('economicIntelligence')}</span><h2>{L('marketsContext')}</h2><p>{L('marketsDetails')}</p><a href={path('/desk/markets')}>{L('visitMarkets')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>
   <div className="ica-intl-market-resources">
-   {[sourceCatalog[1],sourceCatalog[2],sourceCatalog[3],sourceCatalog[6]].map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><small>{L('officialData')} ↗</small></a>)}
+   {[sourceCatalog[1],sourceCatalog[2],sourceCatalog[3],sourceCatalog[6]].map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><small>{L('officialData')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></small></a>)}
   </div>
  </section>
 }
@@ -184,7 +185,7 @@ function ManagedDeskIntro({slug,date}:{slug:string;date:string|null}){
   <h1>{content?.title||deskName(lang,slug)}<span className="ica-intl-red-dot">.</span></h1>
   <p>{content?.summary||deskDescription(lang,slug)}</p>
   {content?.body&&<EditorialBody body={content.body} className="ica-native-body"/>}
-  {contentHref&&content?.cta_label&&<a href={contentHref} className="ica-native-cta">{content.cta_label} ↗</a>}
+  {contentHref&&content?.cta_label&&<a href={contentHref} className="ica-native-cta">{content.cta_label} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a>}
   <div className="ica-desk-updated"><span>{L('attributedDisclaimer')}</span>
    <span>{L('sourceSync')}: {date?formatLocalDate(date,lang):L('awaitingSync')}</span>
   </div>
@@ -236,9 +237,9 @@ export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:Wire
    </div><label><span className="sr-only">{L('searchDesk')}</span><input type="search" placeholder={L('searchDesk')} value={search} onChange={e=>setSearch(e.target.value)}/></label>
   </div>
   <p className="ica-desk-results-count" role="status">{filtered.length} {filtered.length===1?L('result'):L('results')} · {deskName(lang,current.slug)}</p>
-  {filtered.length?<div className="ica-desk-story-grid">{filtered.map(x=><WireHeadline story={x} key={x.id}/>)}</div>:<div className="ica-intl-empty"><div><strong>{L('noMatching')}</strong><p>{L('noMatchingDescription')}</p></div><a href={path('/topics')}>{L('browseTopics')} ↗</a></div>}
+  {filtered.length?<div className="ica-desk-story-grid">{filtered.map(x=><WireHeadline story={x} key={x.id}/>)}</div>:<div className="ica-intl-empty"><div><strong>{L('noMatching')}</strong><p>{L('noMatchingDescription')}</p></div><a href={path('/topics')}>{L('browseTopics')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>}
   <div className="ica-desk-verify"><span>{L('editorialPolicy')}</span><p>{L('policyDetails')}</p></div>
-  <section className="ica-intl-source-directory"><div><h2>{L('sourceDirectory')}</h2><p>{L('sourceDirectoryDetails')}</p></div><div>{sourceCatalog.map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
+  <section className="ica-intl-source-directory"><div><h2>{L('sourceDirectory')}</h2><p>{L('sourceDirectoryDetails')}</p></div><div>{sourceCatalog.map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a>)}</div></section>
   <Newsletter/>
  </main></Shell>
 }
