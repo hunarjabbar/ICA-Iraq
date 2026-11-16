@@ -23,20 +23,38 @@ function inline(content:string,key:string):ReactNode[]{
  if(cursor<content.length)nodes.push(content.slice(cursor))
  return nodes.length?nodes:[content]
 }
-type Block={kind:'p'|'h2'|'h3'|'h4'|'quote'|'ul'|'ol'|'hr';text?:string;items?:string[]}
+type Block={kind:'p'|'h2'|'h3'|'h4'|'quote'|'ul'|'ol'|'hr'|'table';text?:string;items?:string[];rows?:string[][]}
 export function parseEditorialBlocks(source:string):Block[]{
  const result:Block[]=[],lines=(source||'').replace(/\r\n?/g,'\n').split('\n')
- let pending:string[]=[],list:string[]=[],listKind:'ul'|'ol'|null=null
- const flush=()=>{if(listKind&&list.length)result.push({kind:listKind,items:[...list]});list=[];listKind=null;
-  if(pending.length)result.push({kind:'p',text:pending.join('\n')});pending=[]}
+ let pending:string[]=[],list:string[]=[],listKind:'ul'|'ol'|null=null,table:string[][]=[]
+ const flushText=()=>{
+  if(listKind&&list.length)result.push({kind:listKind,items:[...list]})
+  list=[];listKind=null
+  if(pending.length)result.push({kind:'p',text:pending.join('\n')})
+  pending=[]
+ }
+ const flushTable=()=>{
+  if(table.length){
+   const rows=table.filter(row=>!row.every(cell=>/^:?-{3,}:?$/.test(cell)))
+   if(rows.length)result.push({kind:'table',rows})
+   table=[]
+  }
+ }
+ const flush=()=>{flushText();flushTable()}
  for(const raw of lines){const line=raw.trim();let hit:RegExpExecArray|null
   if(!line){flush();continue}
-  if((hit=/^(#{1,3})\s+(.+)$/.exec(line))){flush();result.push({kind:('h'+Math.max(2,Math.min(4,hit[1].length))) as 'h2'|'h3'|'h4',text:hit[2]});continue}
-  if((hit=/^[-*]\s+(.+)$/.exec(line))){if(listKind!=='ul'||pending.length)flush();listKind='ul';list.push(hit[1]);continue}
-  if((hit=/^\d+\.\s+(.+)$/.exec(line))){if(listKind!=='ol'||pending.length)flush();listKind='ol';list.push(hit[1]);continue}
-  if((hit=/^>\s+(.+)$/.exec(line))){flush();result.push({kind:'quote',text:hit[1]});continue}
-  if(/^---+$/.test(line)){flush();result.push({kind:'hr'});continue}
-  if(list.length)flush()
+  if(line.startsWith('|')&&line.endsWith('|')){
+   flushText()
+   table.push(line.slice(1,-1).split('|').slice(0,12).map(cell=>cell.trim()))
+   continue
+  }
+  if(table.length)flushTable()
+  if((hit=/^(#{1,3})\s+(.+)$/.exec(line))){flushText();result.push({kind:('h'+Math.max(2,Math.min(4,hit[1].length))) as 'h2'|'h3'|'h4',text:hit[2]});continue}
+  if((hit=/^[-*]\s+(.+)$/.exec(line))){if(listKind!=='ul'||pending.length)flushText();listKind='ul';list.push(hit[1]);continue}
+  if((hit=/^\d+\.\s+(.+)$/.exec(line))){if(listKind!=='ol'||pending.length)flushText();listKind='ol';list.push(hit[1]);continue}
+  if((hit=/^>\s+(.+)$/.exec(line))){flushText();result.push({kind:'quote',text:hit[1]});continue}
+  if(/^---+$/.test(line)){flushText();result.push({kind:'hr'});continue}
+  if(list.length)flushText()
   pending.push(line)
  }
  flush();return result
@@ -46,6 +64,13 @@ export function EditorialBody({body,className=''}:{body:string;className?:string
   {parseEditorialBlocks(body).map((block,i)=>{
    const key=String(i)
    if(block.kind==='hr')return <hr key={key}/>
+   if(block.kind==='table'){
+    const rows=block.rows||[],head=rows[0]||[],bodyRows=rows.slice(1)
+    return <table key={key} className="ica-editorial-table">
+     <thead><tr>{head.map((value,j)=><th key={j} scope="col">{inline(value,key+'-head-'+j)}</th>)}</tr></thead>
+     <tbody>{bodyRows.map((cells,j)=><tr key={j}>{head.map((_,k)=><td key={k}>{inline(cells[k]||'',key+'-'+j+'-'+k)}</td>)}</tr>)}</tbody>
+    </table>
+   }
    if(block.kind==='ul')return <ul key={key}>{block.items?.map((v,j)=><li key={j}>{inline(v,key+'-'+j)}</li>)}</ul>
    if(block.kind==='ol')return <ol key={key}>{block.items?.map((v,j)=><li key={j}>{inline(v,key+'-'+j)}</li>)}</ol>
    const text=inline(block.text||'',key)
