@@ -99,6 +99,8 @@ async function verifyCompactScale(page,test){
    const el=document.querySelector(selector)
    return el?Number.parseFloat(getComputedStyle(el).minHeight):null
   }
+  const trap=document.querySelector('.ica-trap');
+  const honeypotWidth=trap?Math.round(trap.getBoundingClientRect().width):null;
   const horizontalOverflow=document.documentElement.scrollWidth-document.documentElement.clientWidth
   const header=height('.ica-header-v20')
   const mainTitle=px('.ica-intl-hero h1, .ica-desk-intro h1, .ica-page-intro h1, .ica-topic-detail-hero h1')
@@ -111,6 +113,7 @@ async function verifyCompactScale(page,test){
    rootFont:px('.ica-site'),
    container:width('.ica-content,.ica-page-content'),
    header,mainTitle,deskMin,topicMin,cardOverflows,horizontalOverflow,
+   honeypotWidth,
    cardTitle: px('.ica-story-text h3,.ica-wire-story h3,.ica-topic-card h3')
   }
  })
@@ -127,6 +130,8 @@ async function verifyCompactScale(page,test){
  if(report.cardTitle!==null)assert.ok(report.cardTitle<=38,test.name+' oversized card heading '+report.cardTitle)
  if(report.deskMin!==null)assert.ok(report.deskMin<=270,test.name+' excessive desk card minimum '+report.deskMin)
  if(report.topicMin!==null)assert.ok(report.topicMin<=195,test.name+' excessive atlas card minimum '+report.topicMin)
+ if(report.honeypotWidth!==null)assert.ok(report.honeypotWidth<=2,
+  test.name+' hidden anti-bot form input expanded to '+report.honeypotWidth+'px')
  assert.deepEqual(report.cardOverflows,[],test.name+' cards overflow')
  assert.ok(report.horizontalOverflow<=2,test.name+' horizontal overflow '+report.horizontalOverflow)
  console.log('PASS ICA compact visual metrics '+test.name+' '+JSON.stringify(report))
