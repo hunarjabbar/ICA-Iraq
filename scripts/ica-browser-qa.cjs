@@ -162,7 +162,8 @@ async function verifyEmilNative(page,test){
  assert.ok(data.viewport.includes('viewport-fit=cover'),test.name+' not safe-area enabled')
  assert.ok(data.viewport.includes('interactive-widget=resizes-content'),test.name+' keyboard resizing disabled')
  assert.ok(!/maximum-scale|user-scalable=no/.test(data.viewport),test.name+' accessibility zoom restricted')
- assert.equal(data.theme.length,2,test.name+' color-scheme browser chrome coverage')
+ // ICA is light-only: a single chrome color matches the dark editorial masthead.
+ assert.equal(data.theme.length,1,test.name+' duplicated theme-color conflicts')
  assert.ok(data.theme.every(m=>m.color.toUpperCase()==='#2B171D'),test.name+' chrome color differs from masthead')
  assert.equal(data.scrollBehavior,'auto',test.name+' global smooth scrolling delays navigation')
  if(test.name==='wide desktop English'){
