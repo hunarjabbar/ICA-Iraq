@@ -54,6 +54,15 @@ describe('ICA International header v20 canonical navigation',()=>{
    "test.lang!=='en'","no duplicate navigation targets"
   ])expect(chromiumQA).toContain(contract)
  })
+ test('legacy duplicate mobile bars and breakpoint overrides are fully retired',()=>{
+  expect(site).not.toContain('MobileNavigation')
+  expect(site).not.toContain('ica-mobile-nav')
+  expect(css).not.toContain('.ica-mobile-nav')
+  expect(css).not.toContain('@media(max-width:1180px)')
+  expect(css).not.toContain('@media (min-width:901px) and (max-width:1060px)')
+  expect(css).toContain('.ica-header-v20 .ica-menu-toggle')
+  expect(css).toContain('The former duplicate legacy navigation selectors have been removed.')
+ })
  test('header supports desktop, tablet, compact mobile, RTL, reduced-motion and safe clipping',()=>{
   for(const rule of [
    'ICA International v20', '@media(max-width:1360px)',
