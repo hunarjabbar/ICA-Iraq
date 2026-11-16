@@ -20,10 +20,11 @@ function config() {
   }
   return { url, key }
 }
-type PublicTable='ica_news_articles'|'ica_wire_items'|'ica_wire_sources'|'ica_media_library'|'ica_live_updates_v42'
+type PublicTable='ica_news_articles'|'ica_wire_items'|'ica_wire_sources'|'ica_media_library'|'ica_live_updates_v42'|'rpc/ica_public_story_assets_v44'
 const PUBLIC_CACHE_TTL:Record<PublicTable,number>={
  'ica_news_articles':10000,'ica_wire_items':3000,'ica_wire_sources':0,
- 'ica_media_library':15000,'ica_live_updates_v42':2000
+ 'ica_media_library':15000,'ica_live_updates_v42':2000,
+ 'rpc/ica_public_story_assets_v44':15000
 }
 // Bounded in-isolate cache: public RLS projections only, no staff JWT or drafts.
 // Publisher switches always re-read the original register; breaking updates expire in 2s.
@@ -139,6 +140,31 @@ export async function readPublicLiveUpdates(articleId:string):Promise<PublicIcaL
   map(x=>({id:value(x,'id'),article_id:value(x,'article_id'),lang:value(x,'lang'),
    headline:value(x,'headline'),body:value(x,'body'),source_url:value(x,'source_url'),
    urgency:value(x,'urgency'),published_at:value(x,'published_at')}))
+}
+
+export type PublicIcaStoryAsset={
+ asset_id:string;article_id:string;placement:string;sort_order:number;
+ lang:string;title:string;alt_text:string;caption:string;credit:string;
+ focal_x:number;focal_y:number
+}
+/** Published-only DAM metadata. The private Storage path is never returned. */
+export async function readPublicStoryAssets(articleId:string):Promise<PublicIcaStoryAsset[]>{
+ if(!/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId))return []
+ const rows=await read('rpc/ica_public_story_assets_v44',{p_article:articleId})
+ return rows.filter(x=>
+  value(x,'article_id')===articleId&&
+  /^[0-9a-f-]{36}$/i.test(value(x,'asset_id'))&&
+  ['hero','inline','gallery','thumbnail','social'].includes(value(x,'placement'))&&
+  validLangs.includes(value(x,'lang'))&&
+  value(x,'alt_text').length>0
+ ).slice(0,40).map(x=>({
+  asset_id:value(x,'asset_id'),article_id:value(x,'article_id'),
+  placement:value(x,'placement'),sort_order:number(x.sort_order),
+  lang:value(x,'lang'),title:value(x,'title'),alt_text:value(x,'alt_text'),
+  caption:value(x,'caption'),credit:value(x,'credit'),
+  focal_x:Math.min(1,Math.max(0,number(x.focal_x))),
+  focal_y:Math.min(1,Math.max(0,number(x.focal_y)))
+ }))
 }
 
 export async function readMedia():Promise<ICAMedia[]> {
