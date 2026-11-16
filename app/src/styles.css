@@ -1339,3 +1339,13 @@ html:has(.ica-site){color-scheme:light}
  .ica-header-v20 .ica-nav-contact{transition:none}
  .ica-header-v20 .ica-topicline-scroll{scroll-behavior:auto}
 }
+
+
+/* The same ICA monogram stays consistent in the global footer. */
+.ica-footer .ica-brand{direction:ltr;text-align:left;gap:12px}
+.ica-footer .ica-brand .ica-symbol{clip-path:none;border-radius:11px;width:53px;height:53px}
+.ica-footer .ica-brand .ica-symbol b{font-size:20px;letter-spacing:-.08em;margin:0 3px 4px 0}
+.ica-footer .ica-brand .ica-symbol i{width:21px;height:3px;inset:auto auto 11px 16px;transform:none;border-radius:2px}
+.ica-footer .ica-brand-name strong{font-size:14px;letter-spacing:.04em;line-height:1.12}
+.ica-footer .ica-brand-name strong span{display:block}
+.ica-footer .ica-brand-name small{font-family:Tahoma,Arial,sans-serif;direction:rtl;font-size:9px}
