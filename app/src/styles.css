@@ -2139,7 +2139,6 @@ html:has(.ica-site){-webkit-tap-highlight-color:transparent;-webkit-text-size-ad
  color:var(--ica-ink);
  font-family:var(--ica-body);
  font-optical-sizing:auto;
- font-synthesis:none;
 }
 html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
 .ica-site :is(.ica-page-content,.ica-content,.ica-global-content){min-width:0}
@@ -2208,6 +2207,9 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
 }
 .ica-site .ica-wire-story-foot strong{white-space:normal;text-align:end}
 .ica-site .ica-intl-desk-header>a .ica-action-icon{inline-size:18px;block-size:18px;flex-basis:18px}
+.ica-site .ica-intl-source-directory>div:last-child>a .ica-action-icon{
+ position:absolute;inset-inline-end:10px;inset-block-start:10px;
+}
 .ica-site :is(.ica-intl-desk-footer,.ica-intl-desk-header>a,
  .ica-native-cta,.ica-section-action,.ica-intl-trending-top>a,
  .ica-intl-section-heading>a) .ica-action-icon{transition:transform var(--ica-ui-fast) var(--ica-ui-ease)}
@@ -2236,7 +2238,7 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
  outline:2px solid var(--ica-red);outline-offset:3px;
 }
 .ica-site :is(button:disabled,[aria-disabled="true"]){cursor:not-allowed;opacity:.6}
-.ica-site :is([lang="ar"],[lang="ckb"]) :is(h1,h2,h3,p,li,button,a){
+.ica-site:is([lang="ar"],[lang="ckb"]) :is(h1,h2,h3,p,li,button,a){
  font-family:"Noto Sans Arabic","Rabar-004","Geeza Pro",Tahoma,Arial,sans-serif;
  letter-spacing:normal;
 }
