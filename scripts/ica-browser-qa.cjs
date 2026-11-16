@@ -143,7 +143,11 @@ async function verifyEmilNative(page,test){
   const site=document.querySelector('.ica-site')
   if(!site)return null
   const tokens=getComputedStyle(site)
-  if(tokens.getPropertyValue('--ica-press-time').trim()!=='120ms')
+  // The CSS optimizer canonicalizes 120ms to .12s: compare actual time, not syntax.
+  const rawTime=tokens.getPropertyValue('--ica-press-time').trim()
+  const pressMs=rawTime.endsWith('ms')?Number.parseFloat(rawTime):
+   rawTime.endsWith('s')?Number.parseFloat(rawTime)*1000:NaN
+  if(!Number.isFinite(pressMs)||Math.abs(pressMs-120)>1)
    return {deferred:true}
   return {
    viewport:document.querySelector('meta[name="viewport"]')?.getAttribute('content'),
