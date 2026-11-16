@@ -1,13 +1,17 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {getArticleDetails,getPublishedStoryEditions} from '@/lib/ica.functions'
+import {getArticleDetails,getPublishedStoryEditions,getPublicIcaLiveUpdates} from '@/lib/ica.functions'
+import {useEffect,useState} from 'react'
 import {Shell,useICA} from '@/components/ica/site'
 import {formatLocalDate,localeCodes,languageNames,isLanguage} from '@/lib/ica-i18n'
 import {EditorialBody} from '@/components/ica/editorial-body'
 export const Route=createFileRoute('/news/$slug')({
  loader:async({params})=>{
   const article=await getArticleDetails({data:{slug:params.slug}})
-  const editions=article?await getPublishedStoryEditions({data:{slug:article.slug}}):[]
-  return {article,editions}
+  const [editions,live]=article?await Promise.all([
+   getPublishedStoryEditions({data:{slug:article.slug}}),
+   getPublicIcaLiveUpdates({data:{articleId:article.id}})
+  ]):[[],[]]
+  return {article,editions,live}
  },
  head:({loaderData})=>{
   const article=loaderData?.article
@@ -47,12 +51,39 @@ function relatedCCCForArticle(article:{title:string;excerpt:string;type:string;r
 }
 
 function ArticleView(){
- const {article,editions}=Route.useLoaderData();const {path,L,lang}=useICA()
+ const {article,editions,live}=Route.useLoaderData();const {path,L,lang}=useICA()
+ const [updates,setUpdates]=useState(live)
+ useEffect(()=>{setUpdates(live)},[live])
+ useEffect(()=>{
+  if(!article?.id)return
+  let active=true
+  const update=async()=>{
+   if(document.hidden)return
+   try{
+    const fresh=await getPublicIcaLiveUpdates({data:{articleId:article.id}})
+    if(active&&Array.isArray(fresh))setUpdates(fresh)
+   }catch{/* Keep the last server-verified updates if connectivity is interrupted. */}
+  }
+  const visible=()=>{if(!document.hidden)void update()}
+  const interval=window.setInterval(()=>{void update()},30000)
+  document.addEventListener('visibilitychange',visible)
+  return ()=>{active=false;window.clearInterval(interval);document.removeEventListener('visibilitychange',visible)}
+ },[article?.id])
  const related=article?relatedCCCForArticle(article):null
  const cccCopy=cccRelatedLabels[lang]
  if(!article)return <Shell><main className="ica-article-notfound"><h1>{L('articleNotAvailable')}</h1><p>{L('articleUnavailableDetail')}</p><a href={path('/news')}>{L('backNewsroom')} ↗</a></main></Shell>
  return <Shell><main className="ica-article"><a href={path('/news')} className="ica-article-back">← {L('backNews')}</a><div className="ica-article-head"><span>{article.type.toUpperCase()} / ICA</span><h1 lang={article.lang} dir="auto">{article.title}</h1><p lang={article.lang} dir="auto">{article.excerpt}</p>
- {article.lang!==lang&&<p className="ica-translation-note">{L('englishContent')}</p>}<div className="ica-byline"><span>{L('by')} {article.author}</span><time dateTime={article.published_at||undefined}>{article.published_at?formatLocalDate(article.published_at,lang):''}</time></div>{editions.length>1&&<nav className="ica-story-editions" aria-label="Published language editions">{editions.filter(e=>e.slug!==article.slug&&isLanguage(e.lang)).map(e=><a key={e.lang} href={'/news/'+encodeURIComponent(e.slug)+(e.lang==='en'?'':'?lang='+e.lang)} lang={e.lang} hrefLang={localeCodes[e.lang as keyof typeof localeCodes]}>{languageNames[e.lang as keyof typeof languageNames]}</a>)}</nav>}</div>{article.image_url&&<img className="ica-article-cover" src={article.image_url} alt="" />}<div className="ica-article-content" lang={article.lang} dir={article.lang==='ar'||article.lang==='ckb'?'rtl':'ltr'}><EditorialBody body={article.body}/></div>{related&&<aside className="ica-article-related" aria-label={cccCopy.title}>
+ {article.lang!==lang&&<p className="ica-translation-note">{L('englishContent')}</p>}<div className="ica-byline"><span>{L('by')} {article.author}</span><time dateTime={article.published_at||undefined}>{article.published_at?formatLocalDate(article.published_at,lang):''}</time></div>{editions.length>1&&<nav className="ica-story-editions" aria-label="Published language editions">{editions.filter(e=>e.slug!==article.slug&&isLanguage(e.lang)).map(e=><a key={e.lang} href={'/news/'+encodeURIComponent(e.slug)+(e.lang==='en'?'':'?lang='+e.lang)} lang={e.lang} hrefLang={localeCodes[e.lang as keyof typeof localeCodes]}>{languageNames[e.lang as keyof typeof languageNames]}</a>)}</nav>}</div>{article.image_url&&<img className="ica-article-cover" src={article.image_url} alt="" />}<div className="ica-article-content" lang={article.lang} dir={article.lang==='ar'||article.lang==='ckb'?'rtl':'ltr'}><EditorialBody body={article.body}/></div>{updates.length>0&&<section className="ica-live-timeline" aria-labelledby="ica-breaking-timeline" lang={article.lang} dir={article.lang==='ar'||article.lang==='ckb'?'rtl':'ltr'}>
+ <div className="ica-live-heading"><span className="ica-live-indicator" aria-hidden="true">●</span><h2 id="ica-breaking-timeline">{({en:'Live updates',ar:'تحديثات مباشرة',ckb:'نوێکارییە ڕاستەوخۆکان',zh:'实时更新'} as const)[lang]}</h2>
+ <small>{({en:'Verified ICA reporting only',ar:'تقارير ICA المُتحقق منها فقط',ckb:'تەنها ڕاپۆرتی پشتڕاستکراوەی ICA',zh:'仅限经核实的 ICA 报道'} as const)[lang]}</small></div>
+ <ol className="ica-live-items">{updates.map(update=><li key={update.id} className={'ica-live-item ica-live-'+update.urgency}>
+  <div><span className="ica-live-urgency">{update.urgency}</span><time dateTime={update.published_at}>{formatLocalDate(update.published_at,lang,{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}</time></div>
+  <h3 lang={update.lang} dir="auto">{update.headline}</h3>
+  <EditorialBody body={update.body} className="ica-live-copy"/>
+  <a href={update.source_url} target="_blank" rel="noopener noreferrer">{({en:'Verified source',ar:'المصدر',ckb:'سەرچاوەی پشتڕاستکراوە',zh:'已核实来源'} as const)[lang]} ↗</a>
+ </li>)}</ol>
+ </section>}
+ {related&&<aside className="ica-article-related" aria-label={cccCopy.title}>
  <strong>{cccCopy.title}</strong><p>{cccCopy.message}</p>
  <a href={'https://ccc-iraq-cultural-centre.vercel.app'+related+'?lang='+encodeURIComponent(lang)} target="_blank" rel="noopener noreferrer">{cccCopy.action} ↗</a>
  </aside>}<div className="ica-article-end"><p>{L('corrections')}</p><a href={path('/contact')}>{L('contactEditors')} ↗</a></div></main></Shell>
