@@ -1884,7 +1884,7 @@ html:has(.ica-site){-webkit-tap-highlight-color:transparent;-webkit-text-size-ad
 .ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button,
  .ica-nav-contact,.ica-contact-form>button,.ica-newsletter-form button,
  .ica-desk-controls button,.ica-topic-more button,.ica-topic-desk-filter button,
- .scroll-scrub__route-button):active{
+ .scroll-scrub__route-button):active:not(:focus-visible){
  transform:scale(.97);
 }
 .ica-site :is(.ica-topic-card,.ica-trending-tile,.ica-managed-card){
