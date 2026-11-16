@@ -3,7 +3,7 @@ import {useState,useEffect,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 import {ICA_DESKS} from '../../lib/ica-desks'
 import {isLanguage,rtlLanguage,deskName,formatLocalDate,getI18n,type Language} from '../../lib/ica-i18n'
-import {ManagedICAContent} from './managed-content'
+import {ManagedICAContent,ICAContentProvider} from './managed-content'
 
 export type {Language} from '../../lib/ica-i18n'
 const labels={
@@ -70,7 +70,7 @@ export function Shell({children,mainClass=''}:{children:ReactNode;mainClass?:str
    if(isLanguage(saved)&&saved!=='en'){u.searchParams.set('lang',saved);window.location.replace(u.toString())}
   }catch{}
  },[lang])
- return <div dir={rtl?'rtl':'ltr'} lang={lang} className={'ica-site '+mainClass}><Header/>{children}<ManagedICAContent/><Footer/></div>
+ return <div dir={rtl?'rtl':'ltr'} lang={lang} className={'ica-site '+mainClass}><ICAContentProvider><Header/>{children}<ManagedICAContent/><Footer/></ICAContentProvider></div>
 }
 export function StoryCard({story,feature=false}:{story:ICAArticle;feature?:boolean}){
  const {t,L,lang,path}=useICA()
