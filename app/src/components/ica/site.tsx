@@ -3,7 +3,8 @@ import {useState,useEffect,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 import {ICA_DESKS} from '../../lib/ica-desks'
 import {isLanguage,rtlLanguage,deskName,formatLocalDate,getI18n,type Language} from '../../lib/ica-i18n'
-import {ManagedICAContent,ICAContentProvider,useManagedICAZone,safeManagedImage} from './managed-content'
+import {ManagedICAContent,ICAContentProvider,useManagedICAZone,safeManagedImage,safeManagedHref} from './managed-content'
+import {EditorialBody} from './editorial-body'
 
 export type {Language} from '../../lib/ica-i18n'
 const labels={
@@ -100,11 +101,16 @@ export function Newsletter(){
  return <section className="ica-newsletter" aria-labelledby="ica-subscribe-title"><div className="ica-newsletter-art" aria-hidden="true"><span>ICA</span><i/></div><div className="ica-newsletter-copy"><h2 id="ica-subscribe-title">{t.subscribe}</h2><p>{t.subHelp}</p></div><form onSubmit={send} className="ica-newsletter-form"><label htmlFor="ica-email">{t.email}</label><div className="ica-newsletter-entry"><input type="email" name="email" id="ica-email" placeholder="reader@example.com" required maxLength={240}/><button type="submit" disabled={state==='pending'}>{state==='pending'?'…':t.join} <span aria-hidden="true">↗</span></button></div><input className="ica-trap" type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true"/><p aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('newsletterPrivacy')}</p></form></section>
 }
 export function Intro({label,title,description,image}:{label:string;title:string;description:string;image?:string}){
+ const {lang}=useICA()
  const managed=useManagedICAZone('hero','page-headline')
  const photo=managed?.image_url&&safeManagedImage(managed.image_url)?managed.image_url:image
+ const cta=managed?.cta_href?safeManagedHref(managed.cta_href,lang):null
  return <div className={'ica-page-intro '+(photo?'ica-page-intro-image':'')}>
   <div><span className="ica-intro-label">{managed?.eyebrow||label}</span>
-   <h1>{managed?.title||title}</h1><p>{managed?.summary||description}</p></div>
+   <h1>{managed?.title||title}</h1><p>{managed?.summary||description}</p>
+   {managed?.body&&<EditorialBody body={managed.body} className="ica-native-body"/>}
+   {cta&&managed?.cta_label&&<a className="ica-native-cta" href={cta}>{managed.cta_label} ↗</a>}
+  </div>
   {photo&&<img src={photo} alt={managed?.image_alt||''}/>}
  </div>
 }
