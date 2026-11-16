@@ -1355,10 +1355,10 @@ html:has(.ica-site){color-scheme:light}
 }
 .ica-site :is(h1,h2,h3,h4){text-wrap:balance;overflow-wrap:break-word;}
 .ica-site :is(p,li){text-wrap:pretty;overflow-wrap:break-word;}
-.ica-site :is(a,button,input,select,textarea){font:inherit;}
+.ica-site :is(button,input,select,textarea){font-family:inherit;}
 .ica-site :is(button,[type=submit],select){cursor:pointer;}
 .ica-site :is(input,select,textarea){max-width:100%;min-width:0;}
-.ica-site :is(img,video){max-width:100%;height:auto;}
+/* Media heights remain owned by their aspect-ratio/video components. */
 .ica-site .ica-content,.ica-site .ica-page-content,.ica-site .ica-admin,
 .ica-site .ica-footer-upper,.ica-site .ica-footer-lower{
  width:100%;max-width:var(--ica-container);margin-inline:auto;
@@ -1801,6 +1801,17 @@ html:has(.ica-site){color-scheme:light}
  .ica-home .scroll-scrub__title{font-size:clamp(30px,8.5vw,43px);}
  .ica-home .scroll-scrub__body{font-size:13px;line-height:1.5;}
  .ica-home .ica-film-intro .ica-film-cta{inset-inline-start:14px;top:min(76vh,550px);padding:10px 12px;}
+}
+@media(max-width:640px){
+ /* iOS Safari otherwise zooms the viewport on focus when native input text <16px. */
+ .ica-site :is(input,textarea,select){font-size:16px;}
+ .ica-site .ica-contact-form :is(input,textarea,select),
+ .ica-site .ica-topic-search-row :is(input,select),
+ .ica-site .ica-desk-controls input{font-size:16px;}
+ .ica-site .ica-header-v20 .ica-language select{font-size:16px;}
+ .ica-site .ica-contact-layout,.ica-site .ica-contact-layout>*{min-width:0;}
+ .ica-site .ica-form-row{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-form-row>label{min-width:0;}
 }
 @media(max-width:365px){
  .ica-site{--ica-gutter:12px;--ica-card-pad:12px;}
