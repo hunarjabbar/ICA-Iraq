@@ -20,22 +20,52 @@ function config() {
   }
   return { url, key }
 }
-async function read(table: 'ica_news_articles' | 'ica_wire_items' | 'ica_wire_sources' | 'ica_media_library' | 'ica_live_updates_v42', params: Record<string,string>): Promise<Row[]> {
-  const env = config()
-  if (!env) return []
-  const target = new URL('/rest/v1/' + table, env.url)
-  target.searchParams.set('select','*')
-  for (const [k,v] of Object.entries(params)) target.searchParams.set(k,v)
-  try {
-    const response = await fetch(target.toString(), {
-      headers: { apikey: env.key, accept: 'application/json' },
-      signal: AbortSignal.timeout(8000),
-      cache: 'no-store',
-    })
-    if (!response.ok) { console.error('ICA public read failed', table, response.status); return [] }
-    const result: unknown = await response.json()
-    return Array.isArray(result) ? result.filter((r): r is Row => !!r && typeof r === 'object' && !Array.isArray(r)) : []
-  } catch (error) { console.error('ICA public read unavailable', table, error instanceof Error ? error.name : 'unknown'); return [] }
+type PublicTable='ica_news_articles'|'ica_wire_items'|'ica_wire_sources'|'ica_media_library'|'ica_live_updates_v42'
+const PUBLIC_CACHE_TTL:Record<PublicTable,number>={
+ 'ica_news_articles':10000,'ica_wire_items':3000,'ica_wire_sources':0,
+ 'ica_media_library':15000,'ica_live_updates_v42':2000
+}
+// Bounded in-isolate cache: public RLS projections only, no staff JWT or drafts.
+// Publisher switches always re-read the original register; breaking updates expire in 2s.
+// TTL is not cross-region invalidation and is not used as a publication receipt.
+const publicCache=new Map<string,{until:number;rows:Row[]}>()
+const inFlightReads=new Map<string,Promise<Row[]>>()
+const PUBLIC_CACHE_MAX=96
+async function read(table:PublicTable, params:Record<string,string>):Promise<Row[]>{
+ const env=config()
+ if(!env)return []
+ const target=new URL('/rest/v1/'+table,env.url)
+ target.searchParams.set('select','*')
+ for(const [k,v] of Object.entries(params))target.searchParams.set(k,v)
+ const uri=target.toString(),ttl=PUBLIC_CACHE_TTL[table]
+ if(ttl>0){
+  const saved=publicCache.get(uri)
+  if(saved&&saved.until>Date.now())return saved.rows
+  const busy=inFlightReads.get(uri)
+  if(busy)return busy
+ }
+ const work=(async():Promise<Row[]>=>{
+  try{
+   const response=await fetch(uri,{
+    headers:{apikey:env.key,accept:'application/json'},
+    signal:AbortSignal.timeout(8000),cache:'no-store'
+   })
+   if(!response.ok){console.error('ICA public read failed',table,response.status);return []}
+   const data:unknown=await response.json()
+   const rows=Array.isArray(data)?data.filter((r):r is Row=>!!r&&typeof r==='object'&&!Array.isArray(r)):[]
+   if(ttl>0){
+    publicCache.delete(uri)
+    publicCache.set(uri,{until:Date.now()+ttl,rows})
+    while(publicCache.size>PUBLIC_CACHE_MAX)publicCache.delete(publicCache.keys().next().value!)
+   }
+   return rows
+  }catch(error){
+   console.error('ICA public read unavailable',table,error instanceof Error?error.name:'unknown')
+   return []
+  }finally{if(ttl>0)inFlightReads.delete(uri)}
+ })()
+ if(ttl>0)inFlightReads.set(uri,work)
+ return work
 }
 function article(row:Row): ICAArticle {
   return {
