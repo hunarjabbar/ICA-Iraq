@@ -6,6 +6,11 @@ describe('ICA published editorial documents',()=>{
   expect(blocks.map(x=>x.kind)).toEqual(['p','h2','ul','quote'])
   expect(blocks[2].items).toEqual(['Point one','Point two'])
  })
+ test('renders spreadsheet-like editorial tables in source order without HTML injection',()=>{
+  const rows=parseEditorialBlocks('Summary paragraph\n\n| Market | Source |\n| --- | --- |\n| Iraq | <script>unsafe</script> |')
+  expect(rows.map(x=>x.kind)).toEqual(['p','table'])
+  expect(rows[1].rows).toEqual([['Market','Source'],['Iraq','<script>unsafe</script>']])
+ })
  test('refuses unsafe publisher links and protocol-relative URLs',()=>{
   expect(safeEditorialLink('https://news.un.org/en/')).toBe(true)
   expect(safeEditorialLink('/desk/latest')).toBe(true)
