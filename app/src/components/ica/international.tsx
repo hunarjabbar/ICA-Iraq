@@ -79,8 +79,8 @@ export function LiveTicker({wire}:{wire:WireItem[]}){
     if(!res.ok)return
     const data=await res.json() as {ok?:boolean;items?:WireItem[]}
     if(alive&&data.ok&&Array.isArray(data.items)){
-     const recent=latestTickerItems(data.items)
-     if(recent.length)setItems(recent)
+     // Empty is an authoritative state: paused publishers must disappear immediately.
+     setItems(latestTickerItems(data.items))
     }
    }catch{/* Preserve last verified headlines while the wire is unreachable. */}
   }
