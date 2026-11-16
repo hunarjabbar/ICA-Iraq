@@ -23,3 +23,15 @@
 @media(max-width:850px){.ica-managed-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ica-managed-card.ica-managed-hero,.ica-managed-card.ica-managed-feature{grid-template-columns:1fr}.ica-managed-card.ica-managed-hero .ica-managed-image{order:-1}}
 @media(max-width:560px){.ica-managed-sections{width:calc(100% - 1.3rem);margin:1.5rem auto 2.5rem}.ica-managed-card-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:no-preference){.ica-managed-card{transition:box-shadow .2s ease,transform .2s ease}.ica-managed-card:hover{box-shadow:0 9px 30px rgba(0,0,0,.06);transform:translateY(-2px)}}
+
+
+/* Native page and desk copy remain in original positions, with approved rich text. */
+.ica-native-body{max-width:74ch;line-height:1.7;font-size:.94rem;overflow-wrap:anywhere;margin:.6rem 0}
+.ica-native-body p{margin:.55rem 0;white-space:pre-line}
+.ica-native-body h2,.ica-native-body h3,.ica-native-body h4{line-height:1.32;margin:1rem 0 .4rem}
+.ica-native-body ul,.ica-native-body ol{padding-inline-start:1.5rem;margin:.65rem 0}
+.ica-native-body li+li{margin:.3rem 0}
+.ica-native-body blockquote{margin:.8rem 0;padding:.4rem 1rem;border-inline-start:3px solid var(--ica-red,#e3001b)}
+.ica-native-body a{color:var(--ica-red,#bf1b39);text-decoration:underline}
+.ica-native-cta{display:inline-flex;margin:.65rem 0;align-items:center;gap:.35rem;font-size:.9rem;font-weight:750;color:var(--ica-red,#c11b35);text-decoration:underline;text-underline-offset:.22em}
+.ica-native-cta:focus-visible{outline:3px solid var(--ica-red,#e3001b);outline-offset:4px}
