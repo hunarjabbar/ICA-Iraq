@@ -35,3 +35,45 @@
 .ica-native-body a{color:var(--ica-red,#bf1b39);text-decoration:underline}
 .ica-native-cta{display:inline-flex;margin:.65rem 0;align-items:center;gap:.35rem;font-size:.9rem;font-weight:750;color:var(--ica-red,#c11b35);text-decoration:underline;text-underline-offset:.22em}
 .ica-native-cta:focus-visible{outline:3px solid var(--ica-red,#e3001b);outline-offset:4px}
+
+
+/* ICA compact-system v21: independently published CMS blocks match native cards. */
+.ica-site .ica-managed-sections{
+ width:min(calc(100% - 2 * var(--ica-gutter,18px)),var(--ica-container,1200px));
+ margin:clamp(20px,3vw,35px) auto clamp(28px,4vw,48px);
+ gap:var(--ica-grid-gap,16px);
+}
+.ica-site .ica-managed-feature-list{gap:var(--ica-grid-gap,16px);}
+.ica-site .ica-managed-card-grid{gap:var(--ica-grid-gap,16px);}
+.ica-site .ica-managed-card{
+ border-radius:var(--ica-radius,7px);
+ box-shadow:0 2px 12px rgba(0,0,0,.025);
+}
+.ica-site .ica-managed-card.ica-managed-hero{
+ min-height:230px;
+}
+.ica-site .ica-managed-image{aspect-ratio:16/10;}
+.ica-site .ica-managed-copy{
+ padding:var(--ica-card-pad,17px);gap:7px;
+}
+.ica-site .ica-managed-copy h2{
+ font-size:clamp(25px,2.9vw,40px);line-height:1.18;
+}
+.ica-site .ica-managed-copy h3{
+ font-size:clamp(17px,1.6vw,22px);line-height:1.3;
+}
+.ica-site .ica-managed-summary{font-size:13px;line-height:1.6;}
+.ica-site .ica-managed-body{font-size:13px;line-height:1.65;max-width:66ch;}
+.ica-site .ica-managed-cta{font-size:12px;margin-top:4px;min-height:40px;}
+.ica-site .ica-native-body{font-size:13px;max-width:66ch;}
+@media(max-width:850px){
+ .ica-site .ica-managed-card.ica-managed-hero,
+ .ica-site .ica-managed-card.ica-managed-feature{
+  grid-template-columns:minmax(0,1fr);min-height:0;
+ }
+}
+@media(max-width:560px){
+ .ica-site .ica-managed-card-grid{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-managed-copy h2{font-size:clamp(22px,6vw,29px);}
+ .ica-site .ica-managed-sections{margin-block:18px 29px;}
+}
