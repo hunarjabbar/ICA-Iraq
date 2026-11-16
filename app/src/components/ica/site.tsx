@@ -2,6 +2,7 @@ import {useLocation} from '@tanstack/react-router'
 import {useState,useEffect,useRef,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 import {ICA_DESKS} from '../../lib/ica-desks'
+import {localizedIcaRoute,isActiveIcaHeaderRoute} from '../../lib/ica-navigation'
 import {isLanguage,rtlLanguage,deskName,formatLocalDate,getI18n,type Language} from '../../lib/ica-i18n'
 import {ManagedICAContent,ICAContentProvider,useManagedICAZone,safeManagedImage,safeManagedHref} from './managed-content'
 import {EditorialBody} from './editorial-body'
@@ -19,12 +20,7 @@ export function useICA(){
  const p=new URLSearchParams(query)
  const raw=p.get('lang')
  const lang:Language=isLanguage(raw)?raw:'en'
- const path=(target:string)=>{
-  if(lang==='en')return target
-  const [base,hash]=target.split('#',2)
-  const sep=base.includes('?')?'&':'?'
-  return base+sep+'lang='+encodeURIComponent(lang)+(hash===undefined?'':'#'+hash)
- }
+ const path=(target:string)=>localizedIcaRoute(target,lang)
  return {lang,t:labels[lang],L:getI18n(lang),rtl:rtlLanguage(lang),path}
 }
 export function Brand({inverse=false}:{inverse?:boolean}){
@@ -38,8 +34,6 @@ export function Brand({inverse=false}:{inverse?:boolean}){
   </span>
  </a>
 }
-const activeRoute=(pathname:string,href:string)=>pathname===href||
- (href==='/news'&&pathname.startsWith('/news/'))
 export function Header(){
  const {lang,t,L,rtl,path}=useICA()
  const location=useLocation()
@@ -99,7 +93,7 @@ export function Header(){
  },[menuOpen])
  const links=(entries:string[][],className='')=>entries.map(([href,name])=>
   <a className={className} href={path(href)} key={href}
-   aria-current={activeRoute(current,href)?'page':undefined}
+   aria-current={isActiveIcaHeaderRoute(current,href)?'page':undefined}
    onClick={()=>closeMenu()}>{name}</a>)
  return <header className={'ica-header ica-header-v20'+(menuOpen?' ica-header-menu-open':'')}>
   <div className="ica-topline"><span>ICA <span aria-hidden="true">/</span> IRAQ × CHINA</span>
@@ -139,7 +133,7 @@ export function Header(){
     aria-label={L('globalDesks')}>
     {ICA_DESKS.filter(x=>!['latest','trending'].includes(x.slug)).map(x=>
      <a key={x.slug} href={path('/desk/'+x.slug)}
-      aria-current={activeRoute(current,'/desk/'+x.slug)?'page':undefined}>
+      aria-current={isActiveIcaHeaderRoute(current,'/desk/'+x.slug)?'page':undefined}>
       {deskName(lang,x.slug)}</a>)}
    </div>
   </nav>
