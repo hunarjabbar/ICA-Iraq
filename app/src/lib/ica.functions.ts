@@ -43,6 +43,20 @@ export const getPublicIcaLiveUpdates=createServerFn({method:'GET'})
    source_url:string;urgency:string;published_at:string}>
  })
 
+/** Public media references contain no Storage paths or unreviewed rights details. */
+export const getPublishedStoryAssets=createServerFn({method:'GET'})
+ .validator((input:{articleId:string})=>({articleId:String(input?.articleId||'').slice(0,40)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublicStoryAssets}=await import('./ica-vercel-public.server')
+   return readPublicStoryAssets(data.articleId)
+  }
+  return [] as Array<{
+   asset_id:string;article_id:string;placement:string;sort_order:number;lang:string;
+   title:string;alt_text:string;caption:string;credit:string;focal_x:number;focal_y:number
+  }>
+ })
+ 
 export const getMediaFeed = createServerFn({method:'GET'}).handler(async()=>{
  if(typeof process!=='undefined' && process.env.VERCEL){const {readMedia}=await import('./ica-vercel-public.server');return readMedia()}
  const {listMedia}=await import('./ica.server');return listMedia()
