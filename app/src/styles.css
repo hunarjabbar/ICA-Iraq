@@ -1844,3 +1844,18 @@ html:has(.ica-site){color-scheme:light}
  inset-inline-start:0;inset-block-start:0;
  opacity:0;clip-path:inset(50%);overflow:hidden;pointer-events:none;
 }
+
+
+/* ICA v21 honeypot regression: the contact-form input 100% width must never
+   override the invisible anti-bot input, especially under RTL direction. */
+.ica-site .ica-contact-form,.ica-site .ica-newsletter-form{position:relative;}
+.ica-site .ica-trap{
+ position:absolute!important;
+ inset-block-start:0;
+ inset-inline-start:0;
+ width:1px!important;max-width:1px!important;min-width:0!important;
+ height:1px!important;max-height:1px!important;min-height:0!important;
+ margin:0!important;padding:0!important;border:0!important;
+ overflow:hidden!important;clip-path:inset(50%);
+ opacity:0;pointer-events:none;
+}
