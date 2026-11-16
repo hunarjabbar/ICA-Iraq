@@ -22,6 +22,16 @@ export const getArticleDetails = createServerFn({method:'GET'}).validator((data:
  const {getArticle}=await import('./ica.server')
  return getArticle(data.slug)
 })
+export const getPublishedStoryEditions=createServerFn({method:'GET'})
+ .validator((data:{slug:string})=>({slug:String(data?.slug||'').slice(0,110)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublishedStoryEditions}=await import('./ica-vercel-public.server')
+   return readPublishedStoryEditions(data.slug)
+  }
+  return [] as Array<{lang:string;slug:string}>
+ })
+
 export const getMediaFeed = createServerFn({method:'GET'}).handler(async()=>{
  if(typeof process!=='undefined' && process.env.VERCEL){const {readMedia}=await import('./ica-vercel-public.server');return readMedia()}
  const {listMedia}=await import('./ica.server');return listMedia()
