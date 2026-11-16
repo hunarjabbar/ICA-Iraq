@@ -4,12 +4,18 @@ import { landingContentSchema } from "@higgsfield/app-landing";
 import { landingContent } from "../src/landing-content";
 
 describe("scroll-scrub website landing contract", () => {
-  test("uses a safe full-app route preview", () => {
+  test("uses a public newsroom route instead of the retired staff template", () => {
     expect(() => landingContentSchema.parse(landingContent)).not.toThrow();
     expect(landingContent.preview).toMatchObject({
       kind: "route",
-      src: "/app?preview=1",
-      openHref: "/app",
+      src: "/newsroom",
+      openHref: "/newsroom",
+    });
+    expect(landingContent.hero).toMatchObject({
+      primaryCta: { href: "/newsroom" },
+    });
+    expect(landingContent.finalCta).toMatchObject({
+      action: { href: "/newsroom" },
     });
     expect(landingContent.steps.items).toHaveLength(3);
     expect(landingContent.steps.items.map((item) => item.preview.kind)).toEqual([
@@ -20,15 +26,15 @@ describe("scroll-scrub website landing contract", () => {
     expect(landingContent.features.items).toHaveLength(3);
   });
 
-  test("keeps public landing and full app routes separate", () => {
+  test("keeps the public homepage and retired /app console isolated", () => {
     const landingRoute = readFileSync(new URL("../src/routes/index.tsx", import.meta.url), "utf8");
     const appRoute = readFileSync(new URL("../src/routes/app.tsx", import.meta.url), "utf8");
 
-    // scroll-scrub's home IS the site: "/" renders the journey instead of the
-    // stock LandingPage. Everything else about the split is unchanged.
     expect(landingRoute).toContain("ScrollScrub");
-    expect(appRoute).toContain('createFileRoute("/app")');
-    expect(appRoute).toContain("previewMode");
+    expect(appRoute).toContain("createFileRoute('/app')");
+    expect(appRoute).toContain("status:404");
+    expect(appRoute).toContain("noindex,nofollow");
+    expect(appRoute).not.toContain("previewMode");
   });
 
   test("ships the canonical generations workspace recipe", () => {
