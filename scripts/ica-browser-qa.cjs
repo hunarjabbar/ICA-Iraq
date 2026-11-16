@@ -179,6 +179,21 @@ async function verifyCompactScale(page,test){
       assert.ok(state.linkCount >= (test.minLinks ?? 11), test.name + ' links');
       if (test.marker) assert.ok(state.bodyText.includes(test.marker), test.name + ' expected UI content');
       assert.ok(!state.bodyText.startsWith('Unable to load'), test.name + ' app crash');
+      if(state.horizontalOverflow>2&&!test.ccc&&!test.marker){
+        const offenderReport=await page.evaluate(()=>{
+          const vw=document.documentElement.clientWidth;
+          return Array.from(document.body.querySelectorAll('*')).map(el=>{
+            const r=el.getBoundingClientRect();
+            const computed=getComputedStyle(el);
+            return {tag:el.tagName.toLowerCase(),className:typeof el.className==='string'?el.className.slice(0,140):'',
+              left:Math.round(r.left),right:Math.round(r.right),width:Math.round(r.width),
+              scrollWidth:el.scrollWidth,overflowX:computed.overflowX,
+              position:computed.position};
+          }).filter(x=>x.width>0&&(x.right>vw+2||x.left<-2))
+          .sort((a,b)=>Math.max(b.right-vw,-b.left)-Math.max(a.right-vw,-a.left)).slice(0,18)
+        });
+        console.error('ICA_LAYOUT_OVERFLOW_ELEMENTS',test.name,JSON.stringify(offenderReport));
+      }
       assert.ok(state.horizontalOverflow <= 2, test.name + ' horizontal overflow: ' + state.horizontalOverflow);
       assert.deepEqual(errors, [], test.name + ' console/hydration errors');
       const actionableFailures = failures.filter(f => !(/net::ERR_ABORTED$/.test(f) && /\/rest\/v1\/ica_reader_events(?:[?:]|$)/.test(f))); 
