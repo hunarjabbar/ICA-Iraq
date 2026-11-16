@@ -1,0 +1,27 @@
+name: ICA v24 preview visual verification
+on:
+  pull_request:
+    paths:
+      - "app/src/styles.css"
+      - "app/src/components/ica/**"
+      - "app/tests/**"
+      - "scripts/ica-v24-preview-qa.cjs"
+      - ".github/workflows/ica-v24-preview-qa.yml"
+permissions:
+  contents: read
+jobs:
+  browser-preview:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install matching Playwright runtime
+        run: npm install --no-save playwright@1.58.2
+      - name: Check deployed v24 CSS, responsive pages, RTL, icons and reduced motion
+        env:
+          ICA_TEST_URL: https://ica-international-portal-jq1n28tuf-hunarjabbar70-1239s-projects.vercel.app
+        run: node scripts/ica-v24-preview-qa.cjs
