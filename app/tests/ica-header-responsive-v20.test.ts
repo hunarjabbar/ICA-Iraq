@@ -7,6 +7,7 @@ const read=(name:string)=>readFileSync(new URL(name,import.meta.url),'utf8')
 const site=read('../src/components/ica/site.tsx')
 const css=read('../src/styles.css')
 const favicon=read('../public/favicon.svg')
+const chromiumQA=read('../../scripts/ica-browser-qa.cjs')
 describe('ICA International header v20 canonical navigation',()=>{
  test('localized routes preserve intended query/hash and remove stale locale on English',()=>{
   expect(localizedIcaRoute('/desk/latest','ckb')).toBe('/desk/latest?lang=ckb')
@@ -43,6 +44,15 @@ describe('ICA International header v20 canonical navigation',()=>{
    'aria-current={isActiveIcaHeaderRoute(current,href)',
    'hidden={!menuOpen}'
   ])expect(site).toContain(contract)
+ })
+ test('real-browser QA covers viewport, keyboard, dialog and RTL navigation behavior',()=>{
+  for(const contract of [
+   'verifyHeaderV20','wide desktop English','tablet landscape English',
+   'tablet portrait Arabic','compact English phone','Sorani Kurdish',
+   "page.keyboard.press('Escape')","page.keyboard.press('Shift+Tab')",
+   "page.locator('main').dispatchEvent('pointerdown'",
+   "test.lang!=='en'","no duplicate navigation targets"
+  ])expect(chromiumQA).toContain(contract)
  })
  test('header supports desktop, tablet, compact mobile, RTL, reduced-motion and safe clipping',()=>{
   for(const rule of [
