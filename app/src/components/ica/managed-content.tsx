@@ -3,6 +3,7 @@ import {useLocation} from '@tanstack/react-router'
 import {getManagedPageBlocks} from '@/lib/ica.functions'
 import {isLanguage} from '@/lib/ica-i18n'
 import {managedPageForPathname,localizedManagedHref} from '@/lib/ica-managed-routes'
+import {EditorialBody} from './editorial-body'
 import './managed-content.css'
 
 type Block={
@@ -47,7 +48,7 @@ export function ManagedICAContent(){
     {c.eyebrow&&<span className="ica-managed-eyebrow">{c.eyebrow}</span>}
     {hero?<h2>{c.title}</h2>:<h3>{c.title}</h3>}
     {c.summary&&<p className="ica-managed-summary">{c.summary}</p>}
-    {c.body&&<div className="ica-managed-body">{c.body.split(/\n{2,}/).filter(Boolean).map((p,i)=><p key={i}>{p}</p>)}</div>}
+    {c.body&&<EditorialBody body={c.body} className="ica-managed-body"/>}
     {c.cta_label&&cta&&<a className="ica-managed-cta" href={cta}>{c.cta_label}<span aria-hidden="true"> ↗</span></a>}
    </div>
   </article>
