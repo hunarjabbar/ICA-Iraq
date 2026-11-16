@@ -148,7 +148,7 @@ export function SectionMosaic({articles,wire}:{articles:ICAArticle[];wire:WireIt
    return <section key={key} className={'ica-intl-desk-card ica-intl-desk-card-'+key}>
     <div className="ica-intl-desk-header"><div><span>{String(index+1).padStart(2,'0')} / {L('deskLabel')}</span><h3>{deskName(lang,key)}</h3></div><a href={path('/desk/'+key)} aria-label={L('expand')+' '+deskName(lang,key)}><ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>
     <p>{deskDescription(lang,key)}</p>
-    <div className="ica-intl-desk-list">{hits.length?hits.map(x=><a key={x.id} href={x.url} target={x.kind==='external'?'_blank':undefined} rel={x.kind==='external'?'noopener noreferrer':undefined}><strong lang={x.language} dir="auto">{x.title}</strong><span>{x.source} · {formatLocalDate(x.date,lang)} ↗</span></a>):<span className="ica-intl-desk-empty">{L('noDeskCoverage')}</span>}</div>
+    <div className="ica-intl-desk-list">{hits.length?hits.map(x=><a key={x.id} href={x.url} target={x.kind==='external'?'_blank':undefined} rel={x.kind==='external'?'noopener noreferrer':undefined}><strong lang={x.language} dir="auto">{x.title}</strong><span>{x.source} · {formatLocalDate(x.date,lang)} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></span></a>):<span className="ica-intl-desk-empty">{L('noDeskCoverage')}</span>}</div>
     <a className="ica-intl-desk-footer" href={path('/desk/'+key)}>{L('openDesk')} {deskName(lang,key)} <ArrowRight className="ica-action-icon ica-action-icon--forward" aria-hidden="true"/></a>
    </section>
   })}</div>
@@ -239,7 +239,7 @@ export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:Wire
   <p className="ica-desk-results-count" role="status">{filtered.length} {filtered.length===1?L('result'):L('results')} · {deskName(lang,current.slug)}</p>
   {filtered.length?<div className="ica-desk-story-grid">{filtered.map(x=><WireHeadline story={x} key={x.id}/>)}</div>:<div className="ica-intl-empty"><div><strong>{L('noMatching')}</strong><p>{L('noMatchingDescription')}</p></div><a href={path('/topics')}>{L('browseTopics')} <ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a></div>}
   <div className="ica-desk-verify"><span>{L('editorialPolicy')}</span><p>{L('policyDetails')}</p></div>
-  <section className="ica-intl-source-directory"><div><h2>{L('sourceDirectory')}</h2><p>{L('sourceDirectoryDetails')}</p></div><div>{sourceCatalog.map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
+  <section className="ica-intl-source-directory"><div><h2>{L('sourceDirectory')}</h2><p>{L('sourceDirectoryDetails')}</p></div><div>{sourceCatalog.map(s=><a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"><span>{deskName(lang,s.categoryDesk)}</span><strong>{s.name}</strong><ArrowUpRight className="ica-action-icon" aria-hidden="true"/></a>)}</div></section>
   <Newsletter/>
  </main></Shell>
 }
