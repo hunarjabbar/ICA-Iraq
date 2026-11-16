@@ -9,6 +9,9 @@ import {LiveTicker,PortalLead,TrendingDesk,SectionMosaic,MarketSourceStrip} from
 import {useManagedICAZone,ICA_NATIVE_HOME_ZONES,safeManagedHref,safeManagedImage} from '@/components/ica/managed-content'
 export const Route=createFileRoute('/')({loader:({location})=>getHomeFeed({data:{lang:languageFromHref(location.href)}}),head:()=>({links:[{rel:'canonical',href:'https://ica-international-portal.vercel.app/'},...localizedAlternates('/')]}),component:Index})
 function Index(){
+ return <Shell mainClass="ica-home"><HomeSections/></Shell>
+}
+function HomeSections(){
  const {articles,media,wire}=Route.useLoaderData()
  const {t,L,path,lang}=useICA()
  const feature=useManagedICAZone('intro',ICA_NATIVE_HOME_ZONES.featureStrip)
@@ -16,8 +19,7 @@ function Index(){
  const video=useManagedICAZone('feature',ICA_NATIVE_HOME_ZONES.video)
  const cultureHref=culture?.cta_href?safeManagedHref(culture.cta_href,lang):null
  const videoHref=video?.cta_href?safeManagedHref(video.cta_href,lang):null
- return <Shell mainClass="ica-home">
- <main>
+ return <main>
   <LiveTicker wire={wire.items}/>
   <div className="ica-content ica-global-content">
    <PortalLead articles={articles} wire={wire.items}/>
@@ -38,5 +40,4 @@ function Index(){
    <Newsletter/>
   </div>
  </main>
- </Shell>
 }
