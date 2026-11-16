@@ -3,6 +3,7 @@
 import type { ICAArticle, ICAMedia } from './ica.server'
 import type { WireItem } from './ica-wire.server'
 import { deskBySlug, isDesk } from './ica-desks'
+import {filterEnabledWirePublishers} from './ica-headline-policy'
 
 type Row = Record<string, unknown>
 const validTypes = ['news','press','culture','entertainment','analysis']
@@ -82,8 +83,15 @@ export async function readWire(desk='latest',limit=90):Promise<{items:WireItem[]
     if(matched.region)params.region='eq.'+matched.region
     if(matched.desk)params.desk='eq.'+matched.desk
   }
-  const rows=await read('ica_wire_items',params)
-  return {items:rows.map(wire),refreshedAt:null}
+  // Shared Supabase source register also serves the Central Command ICA editor.
+  // Fail closed on unavailable publisher controls: do not leak paused sources
+  // back into the scrolling public latest-news ribbon.
+  const [rows,publishers]=await Promise.all([
+   read('ica_wire_items',params),
+   read('ica_wire_sources',{select:'publisher,enabled',enabled:'eq.true',limit:'100'})
+  ])
+  const enabled=publishers.map(s=>({publisher:value(s,'publisher'),enabled:bool(s.enabled)}))
+  return {items:filterEnabledWirePublishers(rows.map(wire),enabled),refreshedAt:null}
 }
 export async function readHome(lang='en') {
   const [articles,media,wire]=await Promise.all([readArticles('',lang,'',24),readMedia(),readWire('latest',90)])
