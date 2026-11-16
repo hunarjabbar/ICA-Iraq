@@ -32,6 +32,17 @@ export const getPublishedStoryEditions=createServerFn({method:'GET'})
   return [] as Array<{lang:string;slug:string}>
  })
 
+export const getPublicIcaLiveUpdates=createServerFn({method:'GET'})
+ .validator((args:{articleId:string})=>({articleId:String(args?.articleId||'').slice(0,40)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublicLiveUpdates}=await import('./ica-vercel-public.server')
+   return readPublicLiveUpdates(data.articleId)
+  }
+  return [] as Array<{id:string;article_id:string;lang:string;headline:string;body:string;
+   source_url:string;urgency:string;published_at:string}>
+ })
+
 export const getMediaFeed = createServerFn({method:'GET'}).handler(async()=>{
  if(typeof process!=='undefined' && process.env.VERCEL){const {readMedia}=await import('./ica-vercel-public.server');return readMedia()}
  const {listMedia}=await import('./ica.server');return listMedia()
