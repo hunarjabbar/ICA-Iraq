@@ -1,5 +1,5 @@
 import {useLocation} from '@tanstack/react-router'
-import {useState,useEffect,type FormEvent,type ReactNode} from 'react'
+import {useState,useEffect,useRef,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 import {ICA_DESKS} from '../../lib/ica-desks'
 import {isLanguage,rtlLanguage,deskName,formatLocalDate,getI18n,type Language} from '../../lib/ica-i18n'
@@ -28,34 +28,142 @@ export function useICA(){
  return {lang,t:labels[lang],L:getI18n(lang),rtl:rtlLanguage(lang),path}
 }
 export function Brand({inverse=false}:{inverse?:boolean}){
- const {path}=useICA()
- return <a className={'ica-brand '+(inverse?'ica-brand-inverse':'')} href={path('/')} aria-label="Iraqi-Chinese Agency home">
+ const {path,t}=useICA()
+ return <a className={'ica-brand '+(inverse?'ica-brand-inverse':'')} href={path('/')}
+  aria-label={t.home+' · Iraqi-Chinese Agency'}>
   <span className="ica-symbol" aria-hidden="true"><b>ICA</b><i/></span>
-  <span className="ica-brand-name"><strong>IRAQI-CHINESE<br/>AGENCY</strong><small>ئـاژانسی عێراقی - چینی</small></span>
+  <span className="ica-brand-name">
+   <strong>IRAQI–CHINESE<span>AGENCY</span></strong>
+   <small>ئـاژانسی عێراقی - چینی</small>
+  </span>
  </a>
 }
+const activeRoute=(pathname:string,href:string)=>pathname===href||
+ (href==='/news'&&pathname.startsWith('/news/'))
 export function Header(){
  const {lang,t,L,rtl,path}=useICA()
- const nav=[['/desk/latest',t.news],['/desk/trending',t.trending],['/desk/hong-kong',t.hongKong],['/desk/asean',t.asean],['/desk/business',t.business],['/desk/finance',t.finance],['/topics',t.topics]]
- const mobileNav=[...nav,...ICA_DESKS.filter(x=>!['latest','trending','hong-kong','asean','business','finance'].includes(x.slug)).map(x=>['/desk/'+x.slug,deskName(lang,x.slug)]),['/newsroom',t.newsroom],['/culture',t.culture],['/video',t.video],['/entertainment',t.entertainment],['/about',t.about]]
- return <header className="ica-header">
-  <div className="ica-topline"><span>ICA | IRAQ × CHINA</span><span>{L('topline')}</span></div>
+ const location=useLocation()
+ const current=location.pathname
+ const [menuOpen,setMenuOpen]=useState(false)
+ const toggleRef=useRef<HTMLButtonElement>(null)
+ const panelRef=useRef<HTMLDivElement>(null)
+ const nav=[['/desk/latest',t.news],['/desk/trending',t.trending],
+  ['/desk/hong-kong',t.hongKong],['/desk/asean',t.asean],
+  ['/desk/business',t.business],['/desk/finance',t.finance],['/topics',t.topics]]
+ const extraDesks=ICA_DESKS.filter(x=>!['latest','trending','hong-kong','asean','business','finance'].includes(x.slug))
+  .map(x=>['/desk/'+x.slug,deskName(lang,x.slug)])
+ const agency=[['/culture',t.culture],['/video',t.video],['/entertainment',t.entertainment],
+  ['/about',t.about],['/contact',t.contact]]
+ const groups=[
+  {title:L('browseSections'),items:[['/',t.home],...nav,['/newsroom',t.newsroom]]},
+  {title:L('globalDesks'),items:extraDesks},
+  {title:L('agency'),items:agency}
+ ]
+ const closeMenu=(restoreFocus=false)=>{
+  setMenuOpen(false)
+  if(restoreFocus)toggleRef.current?.focus()
+ }
+ // Navigation and locale changes close stale drawers on SPA transitions.
+ useEffect(()=>{setMenuOpen(false)},[location.href])
+ useEffect(()=>{
+  if(!menuOpen)return
+  const priorOverflow=document.body.style.overflow
+  document.body.style.overflow='hidden'
+  panelRef.current?.querySelector<HTMLElement>('button')?.focus()
+  const onKey=(e:KeyboardEvent)=>{
+   if(e.key==='Escape'){e.preventDefault();closeMenu(true);return}
+   if(e.key!=='Tab'||!panelRef.current)return
+   const nodes=Array.from(panelRef.current.querySelectorAll<HTMLElement>(
+    'button:not([disabled]),a[href],select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+   )).filter(el=>el.getClientRects().length>0)
+   if(!nodes.length)return
+   const first=nodes[0],last=nodes[nodes.length-1]
+   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  }
+  const onPointer=(e:PointerEvent)=>{
+   const target=e.target as Node
+   if(!panelRef.current?.contains(target)&&!toggleRef.current?.contains(target))
+    closeMenu()
+  }
+  const onResize=()=>{if(window.innerWidth>1360)closeMenu()}
+  document.addEventListener('keydown',onKey)
+  document.addEventListener('pointerdown',onPointer)
+  window.addEventListener('resize',onResize)
+  return ()=>{
+   document.body.style.overflow=priorOverflow
+   document.removeEventListener('keydown',onKey)
+   document.removeEventListener('pointerdown',onPointer)
+   window.removeEventListener('resize',onResize)
+  }
+ },[menuOpen])
+ const links=(entries:string[][],className='')=>entries.map(([href,name])=>
+  <a className={className} href={path(href)} key={href}
+   aria-current={activeRoute(current,href)?'page':undefined}
+   onClick={()=>closeMenu()}>{name}</a>)
+ return <header className={'ica-header ica-header-v20'+(menuOpen?' ica-header-menu-open':'')}>
+  <div className="ica-topline"><span>ICA <span aria-hidden="true">/</span> IRAQ × CHINA</span>
+   <span>{L('topline')}</span></div>
   <div className="ica-nav">
    <Brand/>
-   <nav className="ica-nav-links" aria-label="Primary navigation">{nav.map(([url,label])=><a key={url} href={path(url)}>{label}</a>)}</nav>
+   <nav className="ica-nav-links" aria-label={L('browseSections')}>{links(nav)}</nav>
    <div className="ica-nav-actions">
-    <label className="ica-language"><span className="sr-only">{t.language}</span><select value={lang} aria-label={t.language} onChange={e=>{const selected=e.target.value;if(!isLanguage(selected))return;try{window.localStorage.setItem('ica-language',selected)}catch{}const u=new URL(window.location.href);if(selected==='en')u.searchParams.delete('lang');else u.searchParams.set('lang',selected);window.location.assign(u.toString())}}><option value="en">EN</option><option value="ar">عربي</option><option value="ckb">کوردی</option><option value="zh">中文</option></select></label>
-    <a className="ica-nav-contact" href={path('/contact')}>{t.contact}</a>
+    <label className="ica-language"><span className="sr-only">{t.language}</span>
+     <select value={lang} aria-label={t.language} onChange={e=>{
+      const selected=e.target.value
+      if(!isLanguage(selected))return
+      try{window.localStorage.setItem('ica-language',selected)}catch{}
+      const u=new URL(window.location.href)
+      if(selected==='en')u.searchParams.delete('lang')
+      else u.searchParams.set('lang',selected)
+      window.location.assign(u.toString())
+     }}>
+      <option value="en">EN</option><option value="ar">عربي</option>
+      <option value="ckb">کوردی</option><option value="zh">中文</option>
+     </select>
+    </label>
+    <a className="ica-nav-contact" href={path('/contact')}
+     aria-current={current==='/contact'?'page':undefined}>{t.contact}</a>
+    <button ref={toggleRef} className="ica-menu-toggle" type="button"
+     aria-controls="ica-mobile-drawer" aria-expanded={menuOpen}
+     aria-label={menuOpen?L('closeMenu'):L('browseSections')}
+     onClick={()=>setMenuOpen(wasOpen=>!wasOpen)}>
+     <span className="ica-menu-toggle-lines" aria-hidden="true"><i/><i/><i/></span>
+     <span className="ica-menu-toggle-text">{menuOpen?L('closeMenu'):L('browseSections')}</span>
+    </button>
    </div>
   </div>
-  <MobileNavigation items={mobileNav} rtl={rtl} path={path} close={L('closeMenu')} browse={L('browseSections')} contact={L('contactICA')} />
-  <nav className="ica-header-topicline" aria-label={L('globalDesks')}><span>{L('globalDesks')}</span><div>{ICA_DESKS.filter(x=>!['latest','trending'].includes(x.slug)).map(x=><a key={x.slug} href={path('/desk/'+x.slug)}>{deskName(lang,x.slug)}</a>)}</div></nav>
+  <nav className="ica-header-topicline" aria-label={L('globalDesks')}>
+   <span>{L('globalDesks')}</span>
+   <div className="ica-topicline-scroll" tabIndex={0} role="group"
+    aria-label={L('globalDesks')}>
+    {ICA_DESKS.filter(x=>!['latest','trending'].includes(x.slug)).map(x=>
+     <a key={x.slug} href={path('/desk/'+x.slug)}
+      aria-current={activeRoute(current,'/desk/'+x.slug)?'page':undefined}>
+      {deskName(lang,x.slug)}</a>)}
+   </div>
+  </nav>
+  {menuOpen&&<button type="button" className="ica-menu-scrim" tabIndex={-1}
+   aria-label={L('closeMenu')} onClick={()=>closeMenu()}/>}
+  <div id="ica-mobile-drawer" ref={panelRef} className="ica-menu-drawer"
+   hidden={!menuOpen} role="dialog" aria-modal={menuOpen?'true':undefined}
+   aria-label={L('browseSections')} dir={rtl?'rtl':'ltr'}>
+   <div className="ica-menu-drawer-head">
+    <span>ICA <span aria-hidden="true">/</span> {L('browseSections')}</span>
+    <button type="button" aria-label={L('closeMenu')} onClick={()=>closeMenu(true)}>
+     <span aria-hidden="true">×</span>{L('closeMenu')}
+    </button>
+   </div>
+   <div className="ica-menu-drawer-groups">
+    {groups.map((group,i)=><section className="ica-menu-group" key={i}>
+     <h2>{group.title}</h2>
+     <nav aria-label={group.title}>{links(group.items)}</nav>
+    </section>)}
+   </div>
+  </div>
  </header>
 }
-function MobileNavigation({items,rtl,path,close,browse,contact}:{items:string[][];rtl:boolean;path:(p:string)=>string;close:string;browse:string;contact:string}){
- const [open,setOpen]=useState(false)
- return <div className="ica-mobile-nav"><button type="button" aria-expanded={open} aria-controls="ica-mobile-drawer" onClick={()=>setOpen(!open)}>{open?close:browse} <span aria-hidden="true">{open?'×':'☰'}</span></button>{open&&<nav id="ica-mobile-drawer" dir={rtl?'rtl':'ltr'} aria-label="Mobile navigation">{items.map(([url,name])=><a href={path(url)} key={url}>{name}</a>)}<a href={path('/contact')}>{contact}</a></nav>}</div>
-}
+
 export function Footer(){
  const {t,L,path}=useICA()
  return <footer className="ica-footer"><div className="ica-footer-upper"><div><Brand inverse/><p>{L('footerDesc')}</p></div><div><h4>{L('discover')}</h4><a href={path('/desk/latest')}>{t.news}</a><a href={path('/desk/trending')}>{t.trending}</a><a href={path('/desk/hong-kong')}>{t.hongKong}</a><a href={path('/desk/asean')}>{t.asean}</a><a href={path('/topics')}>{t.topics}</a><a href={path('/culture')}>{t.culture}</a><a href={path('/video')}>{t.video}</a><a href={path('/entertainment')}>{t.entertainment}</a></div><div><h4>{L('agency')}</h4><a href={path('/newsroom')}>{t.newsroom}</a><a href={path('/about')}>{t.about}</a><a href={path('/contact')}>{t.contact}</a></div><div className="ica-footer-news"><h4>{L('partCCC')}</h4><p>{L('footerCCC')}</p><a href="https://ccc-iraq-cultural-centre.vercel.app/" target="_blank" rel="noopener noreferrer">{L('visitCCC')} ↗</a></div></div><div className="ica-footer-lower"><span>© {new Date().getUTCFullYear()} Iraqi-Chinese Agency. {L('allRights')}</span><span>{L('integrity')}</span></div></footer>
