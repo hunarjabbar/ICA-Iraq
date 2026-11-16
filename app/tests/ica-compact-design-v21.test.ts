@@ -62,6 +62,14 @@ describe('ICA public compact editorial design v21',()=>{
   expect(compact).toContain('.ica-site .ica-header-v20 .ica-menu-drawer')
   expect(compact).toContain('max-height:calc(100dvh - 110px)')
  })
+ test('hidden anti-spam fields stay 1px instead of expanding RTL contact pages',()=>{
+  expect(css).toContain('ICA v21 anti-spam input')
+  expect(css).toContain('.ica-site .ica-contact-form input.ica-trap')
+  expect(css).toContain('width:1px!important;height:1px!important')
+  expect(css).toContain('min-width:1px!important;max-width:1px!important')
+  expect(css).toContain('pointer-events:none')
+  expect(browser).toContain('ICA_LAYOUT_OVERFLOW_ELEMENTS')
+ })
  test('Arabic, Sorani and Chinese have independent readable typographic safeguards',()=>{
   expect(compact).toContain('.ica-site:is([lang="ar"],[lang="ckb"])')
   expect(compact).toContain('font-size:14.5px')
