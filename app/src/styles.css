@@ -1048,3 +1048,24 @@ html:has(.ica-site){color-scheme:light}
 .ica-editorial-table{border-collapse:collapse;width:100%;max-width:100%;display:block;overflow-x:auto;margin:1.25rem 0;font-size:.9em;white-space:normal}
 .ica-editorial-table th,.ica-editorial-table td{border:1px solid #ddd7d9;padding:.65rem .8rem;min-width:90px;text-align:start;vertical-align:top}
 .ica-editorial-table th{background:#f5f1f2;font-weight:700}
+
+
+/* ICA breaking / live coverage public timeline; source-checked publications only. */
+.ica-live-timeline{margin:2rem auto;max-width:980px;min-width:0;border-top:3px solid #d90724;padding:1.25rem 0 0}
+.ica-live-heading{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:0 0 1.4rem}
+.ica-live-heading h2{font-size:clamp(1.4rem,2.3vw,2rem);letter-spacing:-.025em;line-height:1.25;margin:0}
+.ica-live-heading small{color:#6b707b;font-size:.75rem;margin-inline-start:auto}
+.ica-live-indicator{color:#d90724;line-height:1;animation:ica-live-dot 2s ease-in-out infinite}
+.ica-live-items{list-style:none;padding:0;margin:0;display:grid;gap:0}
+.ica-live-item{position:relative;padding:1.05rem 1.25rem 1.6rem;margin-inline-start:.6rem;border-inline-start:1px solid #e8dce0;min-width:0;overflow-wrap:anywhere}
+.ica-live-item:before{content:"";position:absolute;inset-inline-start:-5px;top:1.3rem;width:9px;height:9px;border-radius:100%;background:#d90724}
+.ica-live-item>div:first-child{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;font-size:.75rem;color:#707078}
+.ica-live-item h3{font-size:clamp(1.04rem,2vw,1.32rem);line-height:1.4;margin:.65rem 0}
+.ica-live-copy{font-size:.93rem;line-height:1.8}
+.ica-live-copy p{margin:.6rem 0}
+.ica-live-item>a{color:#b70c2b;text-decoration:underline;text-underline-offset:.2em;font-size:.83rem;font-weight:650}
+.ica-live-urgency{font-size:.66rem;letter-spacing:.09em;font-weight:750;text-transform:uppercase;color:#b40d2e}
+.ica-live-critical .ica-live-urgency{color:#9b1b11}
+@keyframes ica-live-dot{50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.ica-live-indicator{animation:none}}
+@media(max-width:620px){.ica-live-timeline{margin-block:1rem}.ica-live-item{padding:1rem 0 1.25rem 1rem}.ica-live-heading small{margin-inline-start:0}}
