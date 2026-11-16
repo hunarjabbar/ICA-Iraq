@@ -20,7 +20,7 @@ function config() {
   }
   return { url, key }
 }
-async function read(table: 'ica_news_articles' | 'ica_wire_items' | 'ica_wire_sources' | 'ica_media_library', params: Record<string,string>): Promise<Row[]> {
+async function read(table: 'ica_news_articles' | 'ica_wire_items' | 'ica_wire_sources' | 'ica_media_library' | 'ica_live_updates_v42', params: Record<string,string>): Promise<Row[]> {
   const env = config()
   if (!env) return []
   const target = new URL('/rest/v1/' + table, env.url)
@@ -87,6 +87,28 @@ export async function readPublishedStoryEditions(slug:string):Promise<Array<{lan
   .sort((a,b)=>validLangs.indexOf(value(a,'lang'))-validLangs.indexOf(value(b,'lang')))
   .filter(row=>{const lang=value(row,'lang');if(seen.has(lang))return false;seen.add(lang);return true})
   .map(row=>({lang:value(row,'lang'),slug:value(row,'slug')}))
+}
+
+export type PublicIcaLiveUpdate={
+ id:string;article_id:string;lang:string;headline:string;body:string;
+ source_url:string;urgency:string;published_at:string;
+}
+/** Public-only updates: RLS additionally blocks unpublished parent articles.
+ * Keep a strict projection to prevent audit / editorial identities leaking.
+ */
+export async function readPublicLiveUpdates(articleId:string):Promise<PublicIcaLiveUpdate[]>{
+ if(!/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(articleId))return []
+ const rows=await read('ica_live_updates_v42',{
+  select:'id,article_id,lang,headline,body,source_url,urgency,published_at',
+  article_id:'eq.'+articleId,status:'eq.published',
+  order:'published_at.desc',limit:'40'
+ })
+ return rows.filter(x=>validLangs.includes(value(x,'lang'))&&
+  /^https:\/\/[^ ]{5,900}$/.test(value(x,'source_url'))&&
+  ['normal','breaking','critical'].includes(value(x,'urgency'))).
+  map(x=>({id:value(x,'id'),article_id:value(x,'article_id'),lang:value(x,'lang'),
+   headline:value(x,'headline'),body:value(x,'body'),source_url:value(x,'source_url'),
+   urgency:value(x,'urgency'),published_at:value(x,'published_at')}))
 }
 
 export async function readMedia():Promise<ICAMedia[]> {
