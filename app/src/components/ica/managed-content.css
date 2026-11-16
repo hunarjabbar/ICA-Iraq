@@ -22,7 +22,7 @@
 .ica-managed-cta:focus-visible{outline:3px solid #df3752;outline-offset:4px}
 @media(max-width:850px){.ica-managed-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ica-managed-card.ica-managed-hero,.ica-managed-card.ica-managed-feature{grid-template-columns:1fr}.ica-managed-card.ica-managed-hero .ica-managed-image{order:-1}}
 @media(max-width:560px){.ica-managed-sections{width:calc(100% - 1.3rem);margin:1.5rem auto 2.5rem}.ica-managed-card-grid{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:no-preference){.ica-managed-card{transition:box-shadow .2s ease,transform .2s ease}.ica-managed-card:hover{box-shadow:0 9px 30px rgba(0,0,0,.06);transform:translateY(-2px)}}
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine){.ica-managed-card{transition:box-shadow 180ms cubic-bezier(0.23,1,0.32,1)}.ica-managed-card:hover{box-shadow:0 8px 25px rgba(54,16,25,.07)}}
 
 
 /* Native page and desk copy remain in original positions, with approved rich text. */
