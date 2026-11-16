@@ -1829,3 +1829,18 @@ html:has(.ica-site){color-scheme:light}
  .ica-site .ica-trending-tile:hover,.ica-site .ica-topic-card:hover{transform:none;}
  .ica-site .ica-topicline-scroll{scroll-behavior:auto;}
 }
+
+
+/* ICA v21 anti-spam input: never inherit the visible field's full-width sizing.
+   The private honeypot remains part of the form submission but stays off the layout. */
+.ica-site .ica-contact-form,.ica-site .ica-newsletter-form{position:relative;}
+.ica-site input.ica-trap,
+.ica-site .ica-contact-form input.ica-trap,
+.ica-site .ica-newsletter-form input.ica-trap{
+ position:absolute!important;
+ width:1px!important;height:1px!important;
+ min-width:1px!important;max-width:1px!important;
+ padding:0!important;margin:0!important;border:0!important;
+ inset-inline-start:0;inset-block-start:0;
+ opacity:0;clip-path:inset(50%);overflow:hidden;pointer-events:none;
+}
