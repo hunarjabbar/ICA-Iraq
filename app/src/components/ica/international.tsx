@@ -1,5 +1,6 @@
 import {useEffect,useMemo,useState} from 'react'
 import {Shell,Newsletter,useICA} from './site'
+import {useManagedICAZone,ICA_NATIVE_HOME_ZONES} from './managed-content'
 import {ICA_DESKS,deskBySlug} from '../../lib/ica-desks'
 import {deskName,deskDescription,formatLocalDate} from '../../lib/ica-i18n'
 import type {WireItem} from '../../lib/ica-wire.server'
@@ -110,10 +111,11 @@ export function LiveTicker({wire}:{wire:WireItem[]}){
 }
 export function PortalLead({articles,wire}:{articles:ICAArticle[];wire:WireItem[]}){
  const {path,L,lang}=useICA()
+ const content=useManagedICAZone('hero',ICA_NATIVE_HOME_ZONES.hero)
  const stories=splitStories(articles,wire,path)
  const picks=[...stories.filter(s=>s.featured),...stories.filter(s=>!s.featured)].filter((s,i,a)=>a.findIndex(x=>x.id===s.id)===i).slice(0,5)
  return <section className="ica-intl-hero" aria-labelledby="ica-global-headlines">
-  <div className="ica-intl-hero-title"><div><span className="ica-intl-kicker" >{L('globalEdition')}</span><h1 id="ica-global-headlines">{L('worldPerspective')}<span className="ica-intl-red-dot">.</span></h1><p>{L('heroDescription')}</p></div><div className="ica-intl-edition"><span>{L('dailyEdition')}</span><strong>{L('globalDesk')}</strong><small>{formatLocalDate(new Date(),lang,{day:'numeric',month:'long',year:'numeric'})}</small></div></div>
+  <div className="ica-intl-hero-title"><div><span className="ica-intl-kicker" >{content?.eyebrow||L('globalEdition')}</span><h1 id="ica-global-headlines">{content?.title||L('worldPerspective')}<span className="ica-intl-red-dot">.</span></h1><p>{content?.summary||L('heroDescription')}</p></div><div className="ica-intl-edition"><span>{L('dailyEdition')}</span><strong>{L('globalDesk')}</strong><small>{formatLocalDate(new Date(),lang,{day:'numeric',month:'long',year:'numeric'})}</small></div></div>
   {picks.length? <div className="ica-intl-hero-grid">
    <WireHeadline story={picks[0]} variation="lead"/>
    <div className="ica-intl-hero-secondary">{picks.slice(1,3).map(x=><WireHeadline story={x} key={x.id}/>)}</div>
