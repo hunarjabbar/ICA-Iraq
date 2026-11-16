@@ -137,6 +137,81 @@ async function verifyCompactScale(page,test){
  console.log('PASS ICA compact visual metrics '+test.name+' '+JSON.stringify(report))
 }
 
+async function verifyEmilNative(page,test){
+ if(test.ccc||test.marker)return
+ const data=await page.evaluate(()=>{
+  const site=document.querySelector('.ica-site')
+  if(!site)return null
+  const tokens=getComputedStyle(site)
+  if(tokens.getPropertyValue('--ica-press-time').trim()!=='120ms')
+   return {deferred:true}
+  return {
+   viewport:document.querySelector('meta[name="viewport"]')?.getAttribute('content'),
+   theme:[...document.querySelectorAll('meta[name="theme-color"]')].map(m=>({
+    media:m.getAttribute('media'),color:m.getAttribute('content')
+   })),
+   scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,
+   reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+ })
+ if(!data)throw Error(test.name+' missing ICA root on native UX check')
+ if(data.deferred){
+  console.warn('Emil v22 browser platform checks deferred until production release '+test.url)
+  return
+ }
+ assert.ok(data.viewport.includes('viewport-fit=cover'),test.name+' not safe-area enabled')
+ assert.ok(data.viewport.includes('interactive-widget=resizes-content'),test.name+' keyboard resizing disabled')
+ assert.ok(!/maximum-scale|user-scalable=no/.test(data.viewport),test.name+' accessibility zoom restricted')
+ assert.equal(data.theme.length,2,test.name+' color-scheme browser chrome coverage')
+ assert.ok(data.theme.every(m=>m.color.toUpperCase()==='#2B171D'),test.name+' chrome color differs from masthead')
+ assert.equal(data.scrollBehavior,'auto',test.name+' global smooth scrolling delays navigation')
+ if(test.name==='wide desktop English'){
+  await page.emulateMedia({reducedMotion:'reduce'})
+  const reduced=await page.evaluate(()=>({
+   ticker:document.querySelector('.ica-news-track')
+    ?getComputedStyle(document.querySelector('.ica-news-track')).animationName:null,
+   nav:getComputedStyle(document.querySelector('.ica-nav-contact')).transitionDuration
+  }))
+  if(reduced.ticker!==null)assert.equal(reduced.ticker,'none','ticker keeps moving with reduced motion')
+  assert.ok(reduced.nav.split(',').every(v=>parseFloat(v)===0),'reduced-motion control transitions')
+  await page.emulateMedia({reducedMotion:'no-preference'})
+ }
+ if(test.name==='compact English phone'){
+  const browser=page.context().browser()
+  const ctx=await browser.newContext({
+   viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true
+  })
+  try{
+   const touch=await ctx.newPage()
+   const url=new URL('/contact?lang=ckb',test.url).toString()
+   const response=await touch.goto(url,{waitUntil:'domcontentloaded',timeout:30000})
+   await touch.waitForTimeout(250)
+   const inspected=await touch.evaluate(()=>{
+    const input=document.querySelector('.ica-contact-form input:not(.ica-trap)')
+    const toggle=document.querySelector('.ica-menu-toggle')
+    const trap=document.querySelector('.ica-trap')
+    return {
+     coarse:matchMedia('(pointer:coarse)').matches,
+     inputFont:input?parseFloat(getComputedStyle(input).fontSize):null,
+     toggleHeight:toggle?parseFloat(getComputedStyle(toggle).minHeight):null,
+     honeypot:trap?Math.round(trap.getBoundingClientRect().width):null,
+     overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
+     dir:document.documentElement.dir
+    }
+   })
+   assert.equal(response.status(),200,'native touch Sorani contact route')
+   assert.ok(inspected.coarse,'test must simulate an actual coarse pointer')
+   assert.ok(inspected.inputFont>=16,'coarse-pointer form text zooms iOS: '+inspected.inputFont)
+   assert.ok(inspected.toggleHeight>=44,'touch menu smaller than 44 CSS px')
+   assert.ok(inspected.honeypot<=2,'hidden field has expanded on touch')
+   assert.ok(inspected.overflow<=2,'touch layout overflow '+inspected.overflow)
+   assert.equal(inspected.dir,'rtl')
+   console.log('PASS Emil v22 touch/keyboard/safe-area',JSON.stringify(inspected))
+  }finally{await ctx.close()}
+ }
+ console.log('PASS Emil v22 motion and platform',test.name)
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const base = process.env.ICA_TEST_URL || 'https://ica-international-portal.vercel.app';
@@ -207,6 +282,7 @@ async function verifyCompactScale(page,test){
 
       await verifyHeaderV20(page,test);
       await verifyCompactScale(page,test);
+      await verifyEmilNative(page,test);
       console.log('PASS', test.name);
       await page.close();
     }
