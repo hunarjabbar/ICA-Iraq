@@ -78,6 +78,14 @@ describe('ICA public compact editorial design v21',()=>{
   expect(compact).toContain('letter-spacing:normal')
   expect(css).toContain('unicode-bidi:isolate')
  })
+ test('hidden anti-bot inputs cannot inherit full-width form dimensions in RTL',()=>{
+  expect(css).toContain('ICA v21 honeypot regression')
+  expect(css).toContain('.ica-site .ica-trap{')
+  expect(css).toContain('width:1px!important')
+  expect(css).toContain('height:1px!important')
+  expect(css).toContain('.ica-site .ica-contact-form,.ica-site .ica-newsletter-form{position:relative;}')
+  expect(browser).toContain('honeypotWidth<=2')
+ })
  test('native ICA cards use responsive lazy images and section containers stay semantic',()=>{
   expect(site).toContain('loading="lazy" decoding="async"')
   expect(site).toContain('sizes="(max-width: 640px) 100vw')
