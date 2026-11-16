@@ -2,7 +2,7 @@ import { QueryClientProvider, type QueryClient } from '@tanstack/react-query'
 import { Outlet, createRootRouteWithContext, useRouter, useLocation, HeadContent, Scripts } from '@tanstack/react-router'
 import { useEffect, type ReactNode } from 'react'
 import appCss from '../styles.css?url'
-import {ICA_THEME_COLOR} from '../lib/ica-theme'
+import {ICA_CHROME_COLOR} from '../lib/ica-theme'
 import {languageFromHref,rtlLanguage} from '../lib/ica-i18n'
 import appMetaJson from '../app-meta.json'
 import { reportHiggsfieldError } from '../lib/higgsfield-error-reporting'
@@ -13,8 +13,9 @@ export const Route=createRootRouteWithContext<{queryClient:QueryClient}>()({
   meta:[
    {title:appMeta.og_title||'ICA | Iraqi-Chinese Agency'},
    {name:'description',content:appMeta.og_description||'Independent news, newsroom and culture connecting Iraq and China.'},
-   {name:'viewport',content:'width=device-width,initial-scale=1'},
-   {name:'theme-color',content:ICA_THEME_COLOR},
+   {name:'viewport',content:'width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content'},
+   {name:'theme-color',media:'(prefers-color-scheme: light)',content:ICA_CHROME_COLOR},
+   {name:'theme-color',media:'(prefers-color-scheme: dark)',content:ICA_CHROME_COLOR},
    {property:'og:type',content:'website'},
    {property:'og:title',content:appMeta.og_title||'Iraqi-Chinese Agency'},
    {property:'og:description',content:appMeta.og_description||'Independent editorial reporting across Iraq and China'},
