@@ -14,8 +14,8 @@ export const Route=createRootRouteWithContext<{queryClient:QueryClient}>()({
    {title:appMeta.og_title||'ICA | Iraqi-Chinese Agency'},
    {name:'description',content:appMeta.og_description||'Independent news, newsroom and culture connecting Iraq and China.'},
    {name:'viewport',content:'width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content'},
-   {name:'theme-color',media:'(prefers-color-scheme: light)',content:ICA_CHROME_COLOR},
-   {name:'theme-color',media:'(prefers-color-scheme: dark)',content:ICA_CHROME_COLOR},
+   // ICA uses a single light interface; TanStack deduplicates theme-color by name.
+   {name:'theme-color',content:ICA_CHROME_COLOR},
    {property:'og:type',content:'website'},
    {property:'og:title',content:appMeta.og_title||'Iraqi-Chinese Agency'},
    {property:'og:description',content:appMeta.og_description||'Independent editorial reporting across Iraq and China'},
