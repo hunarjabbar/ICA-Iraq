@@ -75,6 +75,63 @@ async function verifyHeaderV20(page,test){
  console.log('PASS v20 header responsive/navigation',test.name)
 }
 
+
+async function verifyCompactScale(page,test){
+ if(test.marker||test.ccc)return
+ const report=await page.evaluate(()=>{
+  const site=document.querySelector('.ica-site')
+  if(!site)return null
+  const style=getComputedStyle(site)
+  if(style.getPropertyValue('--ica-container').trim()!=='1200px')return {deferred:true}
+  const px=selector=>{
+   const el=document.querySelector(selector)
+   return el?Number.parseFloat(getComputedStyle(el).fontSize):null
+  }
+  const height=selector=>{
+   const el=document.querySelector(selector)
+   return el?Math.round(el.getBoundingClientRect().height):null
+  }
+  const width=selector=>{
+   const el=document.querySelector(selector)
+   return el?Math.round(el.getBoundingClientRect().width):null
+  }
+  const minHeight=selector=>{
+   const el=document.querySelector(selector)
+   return el?Number.parseFloat(getComputedStyle(el).minHeight):null
+  }
+  const horizontalOverflow=document.documentElement.scrollWidth-document.documentElement.clientWidth
+  const header=height('.ica-header-v20')
+  const mainTitle=px('.ica-intl-hero h1, .ica-desk-intro h1, .ica-page-intro h1, .ica-topic-detail-hero h1')
+  const deskMin=minHeight('.ica-intl-desk-card')
+  const topicMin=minHeight('.ica-topic-card')
+  const cards=Array.from(document.querySelectorAll('.ica-intl-desk-card,.ica-topic-card')).slice(0,50)
+  const cardOverflows=cards.filter(el=>el.scrollWidth-el.clientWidth>2).map(el=>el.className).slice(0,5)
+  return {
+   viewport:document.documentElement.clientWidth,
+   rootFont:px('.ica-site'),
+   container:width('.ica-content,.ica-page-content'),
+   header,mainTitle,deskMin,topicMin,cardOverflows,horizontalOverflow,
+   cardTitle: px('.ica-story-text h3,.ica-wire-story h3,.ica-topic-card h3')
+  }
+ })
+ if(!report){throw Error(test.name+' missing ICA public scale root')}
+ if(report.deferred){
+  console.warn('Compact scale not deployed at '+test.url+'; browser metrics deferred')
+  return
+ }
+ const budget=test.width<=640?117:135
+ assert.ok(report.header<=budget,test.name+' header height '+report.header+' exceeds '+budget)
+ assert.ok(report.rootFont>=13&&report.rootFont<=15,test.name+' inconsistent root scale '+report.rootFont)
+ if(report.container!==null)assert.ok(report.container<=1203,test.name+' content footprint '+report.container)
+ if(report.mainTitle!==null)assert.ok(report.mainTitle<=64,test.name+' oversized page headline '+report.mainTitle)
+ if(report.cardTitle!==null)assert.ok(report.cardTitle<=38,test.name+' oversized card heading '+report.cardTitle)
+ if(report.deskMin!==null)assert.ok(report.deskMin<=270,test.name+' excessive desk card minimum '+report.deskMin)
+ if(report.topicMin!==null)assert.ok(report.topicMin<=195,test.name+' excessive atlas card minimum '+report.topicMin)
+ assert.deepEqual(report.cardOverflows,[],test.name+' cards overflow')
+ assert.ok(report.horizontalOverflow<=2,test.name+' horizontal overflow '+report.horizontalOverflow)
+ console.log('PASS ICA compact visual metrics '+test.name+' '+JSON.stringify(report))
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const base = process.env.ICA_TEST_URL || 'https://ica-international-portal.vercel.app';
@@ -85,6 +142,12 @@ async function verifyHeaderV20(page,test){
     { name: 'tablet portrait Arabic', url: base + '/?lang=ar', width: 768, height: 1024, lang: 'ar', dir: 'rtl' },
     { name: 'compact English phone', url: base + '/', width: 320, height: 640, lang: 'en', dir: 'ltr' },
     { name: 'mobile English', url: base + '/', width: 375, height: 812, lang: 'en', dir: 'ltr' },
+    { name: 'small mobile 360 English desk', url: base + '/desk/latest', width: 360, height: 760, lang: 'en', dir: 'ltr' },
+    { name: 'phone 480 Arabic Research Atlas', url: base + '/topics?lang=ar', width: 480, height: 800, lang: 'ar', dir: 'rtl' },
+    { name: 'tablet 640 Chinese culture', url: base + '/culture?lang=zh', width: 640, height: 900, lang: 'zh', dir: 'ltr' },
+    { name: 'tablet 820 Sorani contact', url: base + '/contact?lang=ckb', width: 820, height: 1180, lang: 'ckb', dir: 'rtl' },
+    { name: 'desktop 1440 topic directory', url: base + '/topics', width: 1440, height: 900, lang: 'en', dir: 'ltr' },
+    { name: 'mobile video Chinese', url: base + '/video?lang=zh', width: 390, height: 844, lang: 'zh', dir: 'ltr' },
     { name: 'Sorani Kurdish', url: base + '/?lang=ckb', width: 390, height: 844, lang: 'ckb', dir: 'rtl' },
     { name: 'Arabic newsroom', url: base + '/desk/latest?lang=ar', width: 390, height: 844, lang: 'ar', dir: 'rtl' },
     { name: 'Simplified Chinese', url: base + '/?lang=zh', width: 1280, height: 800, lang: 'zh', dir: 'ltr' },
@@ -123,6 +186,7 @@ async function verifyHeaderV20(page,test){
       assert.deepEqual(actionableFailures, [], test.name + ' failed requests');
 
       await verifyHeaderV20(page,test);
+      await verifyCompactScale(page,test);
       console.log('PASS', test.name);
       await page.close();
     }
