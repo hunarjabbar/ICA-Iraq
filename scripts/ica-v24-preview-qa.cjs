@@ -47,7 +47,8 @@ const cases = [
       assert.ok(state.overflow<=2,item.label + ' overflow '+state.overflow);
       assert.ok(['#fff','#ffffff'].includes(state.surface),item.label + ' surface token '+state.surface);
       assert.equal(state.line,'#e6e2df',item.label + ' border token');
-      assert.ok(state.font.includes('Inter'),item.label + ' font stack '+state.font);
+      const expectedBase = ['ar','ckb'].includes(item.lang) ? 'Noto Sans Arabic' : item.lang==='zh' ? 'Noto Sans SC' : 'Inter';
+      assert.ok(state.font.includes(expectedBase),item.label + ' font stack '+state.font);
       if (item.path.startsWith('/?lang=ar') || item.path.startsWith('/?lang=ckb'))
         assert.ok(state.headingFont.includes('Noto Sans Arabic'),item.label + ' heading font '+state.headingFont);
       if (item.path.startsWith('/?lang=zh'))
