@@ -62,7 +62,8 @@ export function useManagedICAZone(section:string,blockKey:string):Record<string,
 export function ManagedICAContent(){
  const {page,blocks,lang}=useContext(Context)
  if(!page||!blocks.length)return null
- const included=blocks.filter(b=>!(page==='home'&&nativeSlotSections.get(b.block_key)===b.section))
+ const included=blocks.filter(b=>!(page==='home'&&nativeSlotSections.get(b.block_key)===b.section||
+  page!=='home'&&b.section==='hero'&&b.block_key==='page-headline'))
  if(!included.length)return null
  const feature=included.filter(b=>b.section==='hero'||b.section==='feature'||b.section==='intro')
  const other=included.filter(b=>!feature.includes(b))
