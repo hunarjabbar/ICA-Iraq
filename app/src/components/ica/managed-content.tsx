@@ -18,7 +18,12 @@ export const ICA_NATIVE_HOME_ZONES=Object.freeze({
  culture:'culture-spotlight',
  video:'video-stage'
 })
-const nativeZoneKeys=new Set(Object.values(ICA_NATIVE_HOME_ZONES))
+const nativeSlotSections=new Map<string,string>([
+ [ICA_NATIVE_HOME_ZONES.hero,'hero'],
+ [ICA_NATIVE_HOME_ZONES.featureStrip,'intro'],
+ [ICA_NATIVE_HOME_ZONES.culture,'feature'],
+ [ICA_NATIVE_HOME_ZONES.video,'feature']
+])
 const safeHttp=(s:string)=>/^https:\/\/[a-z0-9.-]+(?:\/|$)/i.test(s)
 export const safeManagedHref=(href:string,lang:string):string|null=>{
  if(!href||!(href.startsWith('/')&&!href.startsWith('//')||safeHttp(href)))return null
@@ -57,8 +62,7 @@ export function useManagedICAZone(section:string,blockKey:string):Record<string,
 export function ManagedICAContent(){
  const {page,blocks,lang}=useContext(Context)
  if(!page||!blocks.length)return null
- const included=blocks.filter(b=>!(page==='home'&&nativeZoneKeys.has(b.block_key)&&
-  (b.section==='hero'||b.section==='intro'||b.section==='feature')))
+ const included=blocks.filter(b=>!(page==='home'&&nativeSlotSections.get(b.block_key)===b.section))
  if(!included.length)return null
  const feature=included.filter(b=>b.section==='hero'||b.section==='feature'||b.section==='intro')
  const other=included.filter(b=>!feature.includes(b))
