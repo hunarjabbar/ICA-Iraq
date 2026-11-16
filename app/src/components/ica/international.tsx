@@ -1,4 +1,4 @@
-import {useMemo,useState} from 'react'
+import {useEffect,useMemo,useState} from 'react'
 import {Shell,Newsletter,useICA} from './site'
 import {ICA_DESKS,deskBySlug} from '../../lib/ica-desks'
 import {deskName,deskDescription,formatLocalDate} from '../../lib/ica-i18n'
@@ -53,15 +53,59 @@ export function WireHeadline({story,variation='regular',number=0}:{story:Story;v
   </a>
  </article>
 }
+// All ticker links come from published source-wire data. There are no per-publisher
+// navigation tabs: the strip is exclusively a continuous latest-headline feed.
+function latestTickerItems(items:WireItem[]){
+ const seen=new Set<string>()
+ return items.filter(item=>{
+  if(item.status!=='linked'||!item.headline?.trim()||!item.source_url?.startsWith('https://'))return false
+  const key=item.headline.trim().toLocaleLowerCase()
+  if(seen.has(key))return false
+  seen.add(key);return true
+ }).sort((a,b)=>Date.parse(b.published_at||'')-Date.parse(a.published_at||'')).slice(0,12)
+}
 export function LiveTicker({wire}:{wire:WireItem[]}){
- const {path,L,lang}=useICA()
- const items=wire.slice(0,8)
+ const {path,L,lang,rtl}=useICA()
+ const [items,setItems]=useState<WireItem[]>(()=>latestTickerItems(wire))
+ useEffect(()=>{setItems(latestTickerItems(wire))},[wire])
+ useEffect(()=>{
+  let alive=true,controller:AbortController|null=null
+  const update=async()=>{
+   if(typeof document==='undefined'||document.hidden)return
+   controller?.abort();controller=new AbortController()
+   try{
+    const res=await fetch('/api/ica-wire?desk=latest',{cache:'no-store',signal:controller.signal})
+    if(!res.ok)return
+    const data=await res.json() as {ok?:boolean;items?:WireItem[]}
+    if(alive&&data.ok&&Array.isArray(data.items)){
+     const recent=latestTickerItems(data.items)
+     if(recent.length)setItems(recent)
+    }
+   }catch{/* Preserve last verified headlines while the wire is unreachable. */}
+  }
+  const onVisible=()=>{if(!document.hidden)void update()}
+  const interval=window.setInterval(()=>{void update()},90000)
+  document.addEventListener('visibilitychange',onVisible)
+  return ()=>{alive=false;controller?.abort();window.clearInterval(interval);document.removeEventListener('visibilitychange',onVisible)}
+ },[])
  if(!items.length)return null
- return <aside className="ica-live-ticker" aria-label={L('externalHeadlines')}>
-  <a href={path('/desk/latest')} className="ica-ticker-key">{L('sourceWire')} <span aria-hidden="true">●</span></a>
-  <div className="ica-ticker-scroll">{items.map(item=><a key={item.id} href={safeHref(item.source_url)} target="_blank" rel="noopener noreferrer">
-   <span>{item.source_name}</span><span lang="en" dir="auto">{item.headline}</span></a>)}</div>
-  <a href={path('/desk/latest')} className="ica-ticker-more">{L('latestLabel')} ↗</a>
+ const links=(duplicate:boolean)=>items.map(item=><a
+  key={(duplicate?'repeat-':'live-')+item.id}
+  href={safeHref(item.source_url)} target="_blank" rel="noopener noreferrer"
+  lang="en" dir="auto" title={item.source_name+' · '+item.headline}
+  tabIndex={duplicate?-1:undefined}>
+  <span className="ica-news-headline">{item.headline}</span>
+  <span className="ica-news-separator" aria-hidden="true">◆</span>
+ </a>)
+ return <aside className="ica-live-ticker ica-news-ticker" data-flow={rtl?'rtl':'ltr'}
+  aria-label={L('externalHeadlines')}>
+  <a className="ica-ticker-key" href={path('/desk/latest')}>{L('sourceWire')} <span aria-hidden="true">●</span></a>
+  <div className="ica-news-window">
+   <div className="ica-news-track">
+    <div className="ica-news-sequence">{links(false)}</div>
+    <div className="ica-news-sequence" aria-hidden="true">{links(true)}</div>
+   </div>
+  </div>
  </aside>
 }
 export function PortalLead({articles,wire}:{articles:ICAArticle[];wire:WireItem[]}){
