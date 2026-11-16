@@ -41,10 +41,11 @@ const cases = [
           icons:document.querySelectorAll('.ica-action-icon').length
         };
       });
+      console.log('INSPECT',item.label,JSON.stringify(state));
       assert.equal(state.lang,item.lang,item.label + ' lang');
       assert.equal(state.dir,item.dir,item.label + ' direction');
       assert.ok(state.overflow<=2,item.label + ' overflow '+state.overflow);
-      assert.equal(state.surface,'#ffffff',item.label + ' surface token');
+      assert.ok(['#fff','#ffffff'].includes(state.surface),item.label + ' surface token '+state.surface);
       assert.equal(state.line,'#e6e2df',item.label + ' border token');
       assert.ok(state.font.includes('Inter'),item.label + ' font stack '+state.font);
       if (item.path.startsWith('/?lang=ar') || item.path.startsWith('/?lang=ckb'))
