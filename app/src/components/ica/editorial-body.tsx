@@ -32,8 +32,8 @@ export function parseEditorialBlocks(source:string):Block[]{
  for(const raw of lines){const line=raw.trim();let hit:RegExpExecArray|null
   if(!line){flush();continue}
   if((hit=/^(#{1,3})\s+(.+)$/.exec(line))){flush();result.push({kind:('h'+Math.min(4,hit[1].length+1)) as 'h2'|'h3'|'h4',text:hit[2]});continue}
-  if((hit=/^[-*]\s+(.+)$/.exec(line))){if(listKind!=='ul')flush();listKind='ul';list.push(hit[1]);continue}
-  if((hit=/^\d+\.\s+(.+)$/.exec(line))){if(listKind!=='ol')flush();listKind='ol';list.push(hit[1]);continue}
+  if((hit=/^[-*]\s+(.+)$/.exec(line))){if(listKind!=='ul'||pending.length)flush();listKind='ul';list.push(hit[1]);continue}
+  if((hit=/^\d+\.\s+(.+)$/.exec(line))){if(listKind!=='ol'||pending.length)flush();listKind='ol';list.push(hit[1]);continue}
   if((hit=/^>\s+(.+)$/.exec(line))){flush();result.push({kind:'quote',text:hit[1]});continue}
   if(/^---+$/.test(line)){flush();result.push({kind:'hr'});continue}
   if(list.length)flush()
