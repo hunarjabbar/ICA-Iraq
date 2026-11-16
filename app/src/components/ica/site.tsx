@@ -179,8 +179,8 @@ export function StoryCard({story,feature=false}:{story:ICAArticle;feature?:boole
  const {t,L,lang,path}=useICA()
  return <article className={'ica-story-card '+(feature?'ica-story-feature':'')}>
  <a href={path('/news/'+story.slug)} className="ica-story-link">
- <div className="ica-story-image">{story.image_url?<img src={story.image_url} alt="" loading="lazy"/>:<span className="ica-story-placeholder" aria-hidden="true">ICA <i>PRESS</i></span>}</div>
- <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang}>{story.title}</h3><p lang={story.lang}>{story.excerpt}</p><span className="ica-story-read">{t.view} <span aria-hidden="true">↗</span></span></div>
+ <div className="ica-story-image">{story.image_url?<img src={story.image_url} alt="" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 850px) 50vw, 33vw"/>:<span className="ica-story-placeholder" aria-hidden="true">ICA <i>PRESS</i></span>}</div>
+ <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang} dir="auto">{story.title}</h3><p lang={story.lang} dir="auto">{story.excerpt}</p><span className="ica-story-read">{t.view} <span aria-hidden="true">↗</span></span></div>
  </a></article>
 }
 export function EmptyEditorial({filter}:{filter?:string}){
@@ -213,12 +213,12 @@ export function Intro({label,title,description,image}:{label:string;title:string
    {managed?.body&&<EditorialBody body={managed.body} className="ica-native-body"/>}
    {cta&&managed?.cta_label&&<a className="ica-native-cta" href={cta}>{managed.cta_label} ↗</a>}
   </div>
-  {photo&&<img src={photo} alt={managed?.image_alt||''}/>}
+  {photo&&<img src={photo} alt={managed?.image_alt||''} loading="lazy" decoding="async"/>}
  </div>
 }
 export function MediaItems({media}:{media:ICAMedia[]}){
  const {path,L,lang}=useICA()
- return media.length?<div className="ica-media-grid">{media.map(m=><article key={m.id} className="ica-media-tile"><a href={m.url} target="_blank" rel="noreferrer"><div className="ica-media-poster">{m.poster_url?<img src={m.poster_url} alt="" loading="lazy"/>:<span className="ica-media-symbol" aria-hidden="true">▶</span>}<span className="ica-play-symbol" aria-hidden="true">▶</span></div><span className="ica-media-category">{m.kind.toUpperCase()} / {m.category}</span><h3 lang="auto">{m.title}</h3><p>{m.description}</p></a></article>)}</div>:<div className="ica-media-empty"><img src="/assets/ica-entertainment.png" alt="Recording studio with cameras and film production equipment"/><div><h3>{L('mediaArchive')}</h3><p>{L('mediaPending')}</p><a href={path('/contact')}>{L('suggestProduction')} ↗</a></div></div>
+ return media.length?<div className="ica-media-grid">{media.map(m=><article key={m.id} className="ica-media-tile"><a href={m.url} target="_blank" rel="noreferrer"><div className="ica-media-poster">{m.poster_url?<img src={m.poster_url} alt="" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 850px) 50vw, 33vw"/>:<span className="ica-media-symbol" aria-hidden="true">▶</span>}<span className="ica-play-symbol" aria-hidden="true">▶</span></div><span className="ica-media-category">{m.kind.toUpperCase()} / {m.category}</span><h3 lang="auto">{m.title}</h3><p>{m.description}</p></a></article>)}</div>:<div className="ica-media-empty"><img src="/assets/ica-entertainment.png" alt="Recording studio with cameras and film production equipment" loading="lazy" decoding="async"/><div><h3>{L('mediaArchive')}</h3><p>{L('mediaPending')}</p><a href={path('/contact')}>{L('suggestProduction')} ↗</a></div></div>
 }
 export function ContactForm(){
  const {t,L}=useICA()
