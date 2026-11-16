@@ -1003,3 +1003,32 @@ html:has(.ica-site){color-scheme:light}
  .ica-desk-filter-header>button{width:100%;white-space:normal}
  .ica-intl-market-resources{grid-template-columns:1fr}
 }
+
+
+/* ICA news ribbon v16 — unobstructed latest headlines, not publisher tabs. */
+.ica-news-ticker{min-width:0;isolation:isolate;direction:inherit}
+.ica-news-window{flex:1 1 auto;min-width:0;overflow:hidden;position:relative;direction:ltr}
+.ica-news-window:before,.ica-news-window:after{content:"";pointer-events:none;position:absolute;z-index:1;top:0;bottom:0;width:18px}
+.ica-news-window:before{left:0;background:linear-gradient(90deg,#22151B,transparent)}
+.ica-news-window:after{right:0;background:linear-gradient(270deg,#22151B,transparent)}
+.ica-news-track{display:flex;width:max-content;align-items:center;animation:ica-news-left 75s linear infinite;will-change:transform}
+.ica-news-sequence{display:flex;align-items:center;flex:none;gap:0;white-space:nowrap}
+.ica-news-sequence a{display:inline-flex;align-items:center;gap:22px;white-space:nowrap;max-width:none;overflow:visible;text-overflow:clip;min-height:46px;padding:0 22px;color:#fff;font-size:12px;font-weight:600;text-decoration:none;unicode-bidi:isolate}
+.ica-news-sequence a:hover,.ica-news-sequence a:focus-visible{color:#ffb5c4;text-decoration:underline;text-underline-offset:3px}
+.ica-news-headline{max-width:none;white-space:nowrap;direction:auto}
+.ica-news-separator{font-size:7px;color:#e74a65;opacity:.9;flex-shrink:0}
+.ica-news-ticker:hover .ica-news-track,.ica-news-ticker:focus-within .ica-news-track{animation-play-state:paused}
+.ica-news-ticker[data-flow="rtl"] .ica-news-track{animation-name:ica-news-right}
+@keyframes ica-news-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes ica-news-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.ica-news-ticker .ica-ticker-key{white-space:nowrap;position:relative;z-index:2}
+@media(max-width:640px){
+ .ica-news-sequence a{min-height:42px;padding:0 16px;font-size:11px;gap:16px}
+ .ica-news-track{animation-duration:85s}
+ .ica-news-window:before,.ica-news-window:after{width:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-news-window{overflow-x:auto;scrollbar-width:thin}
+ .ica-news-track{animation:none;transform:none}
+ .ica-news-sequence[aria-hidden="true"]{display:none}
+}
