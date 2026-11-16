@@ -173,6 +173,19 @@ const bilateralCopy={
  ckb:{label:'عێراق × چین / مێزی دوولایەنە',title:'پوختەی دوولایەنە',intro:'ڕاپۆرت و چاوپێکەوتن و ڕوونکردنەوەی پشتڕاستکراو دەربارەی بازرگانی و خوێندن و کەلتووری عێراق و چین.',weekly:'پوختەی هەفتانە',awaiting:'هێشتا هیچ پوختەی هەفتانەی بڵاوکراوە نییە. بۆ نوێکارییەکان بەشداربە، نەک وەرگرتنی ڕەشنووس وەک هەواڵ.',topics:'پاشبنەمای بابەتەکان',topicsText:'وتارە بڵاوکراوەکان و بەستەری سەرچاوە دیاریکراوەکان پاڵاوتن بکە.',topicNames:['بازرگانی و دابینکردن','خوێندن و زمان','کەلتوور و ئاڵوگۆڕ'],keywords:['trade','education','culture'],official:'زانیاری فەرمی پێشانگای CCC',officialText:'CCC دۆخی پێشانگا و پرسیارەکان بەڕێوە دەبات؛ ICA ڕووماڵی هەواڵ و چاوپێکەوتن دەکات.',officialLink:'پێشانگای CCC و تۆمارکردنی ئارەزوو',policy:'چۆن ڕاپۆرت دەکەین'}
 } as const
 
+function ManagedDeskIntro({slug,date}:{slug:string;date:string|null}){
+ const {L,lang}=useICA()
+ const content=useManagedICAZone('hero','page-headline')
+ return <div className="ica-desk-intro">
+  <span className="ica-intl-kicker">{content?.eyebrow||L('internationalNewsroom')}</span>
+  <h1>{content?.title||deskName(lang,slug)}<span className="ica-intl-red-dot">.</span></h1>
+  <p>{content?.summary||deskDescription(lang,slug)}</p>
+  <div className="ica-desk-updated"><span>{L('attributedDisclaimer')}</span>
+   <span>{L('sourceSync')}: {date?formatLocalDate(date,lang):L('awaitingSync')}</span>
+  </div>
+ </div>
+}
+
 export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:WireItem[];articles:ICAArticle[];refreshedAt:string|null}){
  const {path,L,lang}=useICA()
  const current=deskBySlug(desk)||ICA_DESKS[0]
@@ -197,7 +210,7 @@ export function DeskPage({desk,wire,articles,refreshedAt}:{desk:string;wire:Wire
   finally{setSyncing(false)}
  }
  return <Shell><main className="ica-page-content ica-desk-page">
-  <div className="ica-desk-intro"><span className="ica-intl-kicker">{L('internationalNewsroom')}</span><h1>{deskName(lang,current.slug)}<span className="ica-intl-red-dot">.</span></h1><p>{deskDescription(lang,current.slug)}</p><div className="ica-desk-updated"><span>{L('attributedDisclaimer')}</span><span>{L('sourceSync')}: {date?formatLocalDate(date,lang):L('awaitingSync')}</span></div></div>
+  <ManagedDeskIntro slug={current.slug} date={date}/>
   <RegionNavigation/>
   {desk==='bilateral'&&<section className="ica-desk-verify" aria-labelledby="ica-bilateral-briefing-title">
    <span>{b.label}</span><h2 id="ica-bilateral-briefing-title">{b.title}</h2><p>{b.intro}</p>
