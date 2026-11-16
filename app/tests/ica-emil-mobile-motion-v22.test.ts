@@ -71,7 +71,7 @@ describe('ICA v22 mobile-native and reviewed interaction motion',()=>{
   expect(css).toContain('.ica-site .ica-header-v20 .ica-menu-drawer')
  })
  test('new checks are exercised in a real responsive browser workflow',()=>{
-  for(const key of ['verifyHeaderV20','verifyCompactScale','tablet 820 Sorani contact',
+  for(const key of ['verifyHeaderV20','verifyCompactScale','verifyEmilNative','tablet 820 Sorani contact',
    'phone 480 Arabic Research Atlas','compact English phone'])
     expect(browser).toContain(key)
  })
