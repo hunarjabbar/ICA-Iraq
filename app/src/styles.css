@@ -1044,3 +1044,7 @@ html:has(.ica-site){color-scheme:light}
 .ica-article-content a,.ica-managed-body a{color:var(--ica-red,#c21933);text-decoration:underline;text-underline-offset:.15em;overflow-wrap:anywhere}
 .ica-article-content p,.ica-managed-body p{white-space:pre-line}
 .ica-article-content strong,.ica-managed-body strong{font-weight:750}
+
+.ica-editorial-table{border-collapse:collapse;width:100%;max-width:100%;display:block;overflow-x:auto;margin:1.25rem 0;font-size:.9em;white-space:normal}
+.ica-editorial-table th,.ica-editorial-table td{border:1px solid #ddd7d9;padding:.65rem .8rem;min-width:90px;text-align:start;vertical-align:top}
+.ica-editorial-table th{background:#f5f1f2;font-weight:700}
