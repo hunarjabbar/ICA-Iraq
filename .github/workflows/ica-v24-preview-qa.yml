@@ -9,6 +9,7 @@ on:
       - ".github/workflows/ica-v24-preview-qa.yml"
 permissions:
   contents: read
+  deployments: read
 jobs:
   browser-preview:
     runs-on: ubuntu-latest
@@ -32,27 +33,66 @@ jobs:
           bun run build
       - name: Install matching Playwright runtime
         run: npm install --no-save playwright@1.58.2
-      # Vite's local preview is not a Vercel/TanStack production runtime for
-      # this Cloudflare-aware SSR app; it serves 500 without platform bindings.
-      # Pin all edited UI source blobs to the immutable preview. Any later UI
-      # change must update the verified preview and corresponding blob hashes.
-      - name: Verify deployed UI file integrity against immutable GitHub blobs
-        run: |
-          set -eu
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/international.tsx")" = "b8eddadc917b285106bed59d00fc3b54696434b3"
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/pages.tsx")" = "f1e7ba389ad4699ace2c5c72bc25e9fd15e941bd"
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/site.tsx")" = "27356f83f3d1c2f008b6dc67e08aa3e872406196"
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/topics.tsx")" = "a2517319cafd11b37c8bd778ce1988e5854f916b"
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/styles.css")" = "a4d63ca66096df9dc2dd0ab4ea4cb2b4ac1373da"
-      - name: Test verified Vercel preview with responsive menus, RTL and reduced motion
+      # Vite's local preview cannot replace this Cloudflare-aware SSR deployment.
+      # Only certify a Vercel preview whose public release manifest matches
+      # the PR source SHA; never pin an older preview URL or stylesheet blob.
+      - name: Find and certify immutable Vercel candidate for this PR
         env:
-          ICA_TEST_URL: https://ica-international-portal-5705x25mh-hunarjabbar70-1239s-projects.vercel.app
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_REPOSITORY: ${{ github.repository }}
+          ICA_CANDIDATE_PREVIEW_URL: ${{ vars.ICA_CANDIDATE_PREVIEW_URL }}
         run: |
-          for attempt in $(seq 1 6); do
-            if curl -fsS "${ICA_TEST_URL}/" > /dev/null; then break; fi
-            sleep 2
-          done
-          curl -fsS "${ICA_TEST_URL}/" > /dev/null
+          python3 - <<'PY'
+          import json,os,urllib.request,urllib.parse
+          repo=os.environ['GH_REPOSITORY']
+          sha=os.environ['EXPECTED_SHA']
+          token=os.environ.get('GH_TOKEN','')
+          candidates=[]
+          override=os.environ.get('ICA_CANDIDATE_PREVIEW_URL','').strip()
+          if override: candidates.append(override)
+          def github_json(url):
+              headers={'User-Agent':'ICA-Release-Gate/1.0','Accept':'application/vnd.github+json'}
+              if token: headers['Authorization']='Bearer '+token
+              with urllib.request.urlopen(urllib.request.Request(url,headers=headers),timeout=25) as response:
+                  return json.load(response)
+          try:
+              base='https://api.github.com/repos/'+repo
+              for deployment in github_json(base+'/deployments?sha='+sha+'&per_page=40'):
+                  for status in github_json(base+'/deployments/'+str(deployment['id'])+'/statuses?per_page=15'):
+                      if status.get('state')=='success':
+                          candidates.extend([status.get('environment_url',''),status.get('target_url','')])
+          except Exception as exc:
+              print('GitHub deployment-status discovery unavailable:',str(exc)[:180])
+          seen=set()
+          for candidate in candidates:
+              candidate=candidate.strip().rstrip('/')
+              if candidate in seen: continue
+              seen.add(candidate)
+              parsed=urllib.parse.urlparse(candidate)
+              if parsed.scheme!='https' or not (parsed.hostname or '').endswith('.vercel.app') or parsed.username or parsed.password:
+                  continue
+              if parsed.path not in ('','/'): continue
+              try:
+                  req=urllib.request.Request(candidate+'/release.json',headers={'User-Agent':'ICA-Release-Gate/1.0'})
+                  with urllib.request.urlopen(req,timeout=25) as response:
+                      release=json.load(response)
+                  if release.get('project')!='ica' or release.get('commit')!=sha:
+                      print('Rejecting stale ICA preview: release manifest does not match PR commit')
+                      continue
+                  with open(os.environ['GITHUB_ENV'],'a') as env:
+                      env.write('ICA_TEST_URL='+candidate+'\n')
+                  print('Verified exact ICA preview candidate:',candidate,'commit:',sha)
+                  break
+              except Exception as exc:
+                  print('Preview candidate not yet verifiable:',str(exc)[:160])
+          else:
+              raise SystemExit('No Vercel preview with ICA release.json matching the PR SHA; '
+                               'wait for preview capacity or set ICA_CANDIDATE_PREVIEW_URL '
+                               'to a preview of this commit. Production is not certified.')
+          PY
+      - name: Test matching Vercel preview with responsive menus, RTL and reduced motion
+        run: |
+          curl --fail --silent --show-error "${ICA_TEST_URL}/" > /dev/null
           node scripts/ica-v24-preview-qa.cjs
-          # Also run the full production browser matrix against this exact candidate.
           node scripts/ica-browser-qa.cjs
