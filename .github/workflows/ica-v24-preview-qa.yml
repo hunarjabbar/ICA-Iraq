@@ -1,4 +1,4 @@
-name: ICA v24 preview visual verification
+name: ICA current-source visual verification
 on:
   pull_request:
     paths:
@@ -14,14 +14,43 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.58.2-noble
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          fetch-depth: 0
+      - name: Install Bun archive prerequisite
+        run: apt-get update -qq && apt-get install -y unzip
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.4.4'
+      - name: Install and build checked-out source
+        working-directory: app
+        run: |
+          bun install --frozen-lockfile
+          bun run build
       - name: Install matching Playwright runtime
         run: npm install --no-save playwright@1.58.2
-      - name: Check deployed v24 CSS, responsive pages, RTL, icons and reduced motion
+      # Vite's local preview is not a Vercel/TanStack production runtime for
+      # this Cloudflare-aware SSR app; it serves 500 without platform bindings.
+      # Pin all edited UI source blobs to the immutable preview. Any later UI
+      # change must update the verified preview and corresponding blob hashes.
+      - name: Verify deployed UI file integrity against immutable GitHub blobs
+        run: |
+          set -eu
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/international.tsx")" = "b8eddadc917b285106bed59d00fc3b54696434b3"
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/pages.tsx")" = "f1e7ba389ad4699ace2c5c72bc25e9fd15e941bd"
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/site.tsx")" = "27356f83f3d1c2f008b6dc67e08aa3e872406196"
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/topics.tsx")" = "a2517319cafd11b37c8bd778ce1988e5854f916b"
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/styles.css")" = "d30ae25426e0cbcda9dedb59d1a14bfcd3a327d1"
+      - name: Test verified Vercel preview with responsive menus, RTL and reduced motion
         env:
-          ICA_TEST_URL: https://ica-international-portal-jq1n28tuf-hunarjabbar70-1239s-projects.vercel.app
-        run: node scripts/ica-v24-preview-qa.cjs
+          ICA_TEST_URL: https://ica-international-portal-6do0txvdy-hunarjabbar70-1239s-projects.vercel.app
+        run: |
+          for attempt in $(seq 1 6); do
+            if curl -fsS "${ICA_TEST_URL}/" > /dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS "${ICA_TEST_URL}/" > /dev/null
+          node scripts/ica-v24-preview-qa.cjs

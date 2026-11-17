@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 
 const origin = (process.env.ICA_TEST_URL || '').replace(/\/$/, '');
-if (!/^https:\/\/[-a-z0-9.]+\.vercel\.app$/i.test(origin)) {
+if (!/^https:\/\/[-a-z0-9.]+\.vercel\.app$/i.test(origin) && origin !== 'http://127.0.0.1:4173') {
   throw new Error('ICA_TEST_URL must be the approved Vercel preview URL');
 }
 const cases = [
@@ -56,6 +56,18 @@ const cases = [
       if (item.path==='/')
         assert.ok(state.cards>=6 && state.icons>=6,item.label + ' desks/icons '+JSON.stringify(state));
       assert.deepEqual(errors,[],item.label + ' browser errors');
+      if(item.width<=1360){
+        const toggle=page.locator('.ica-menu-toggle');
+        await toggle.click();
+        const drawer=page.locator('#ica-mobile-drawer');
+        await drawer.waitFor({state:'visible'});
+        await drawer.locator('button').first().click();
+        await drawer.waitFor({state:'hidden'});
+        await toggle.click();
+        await page.keyboard.press('Escape');
+        await drawer.waitFor({state:'hidden'});
+        assert(await toggle.evaluate(el=>el===document.activeElement),'Escape restores focus');
+      }
       console.log('PASS',item.label,JSON.stringify(state));
       await page.close();
     }

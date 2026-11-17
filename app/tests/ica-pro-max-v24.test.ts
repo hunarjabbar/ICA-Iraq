@@ -27,7 +27,7 @@ describe('ICA editorial design v24',()=>{
   expect(styles).toContain('ICA International v21 — compact, editorial-responsive proportional system.')
  })
  test('icon actions share sizing and accessible semantics',()=>{
-  expect(intl).toContain("import {ArrowRight,ArrowUpRight} from 'lucide-react'")
+  expect(intl).toContain("import {ChevronRight,ExternalLink} from 'lucide-react'")
   expect(intl).toContain('className="ica-action-icon" aria-hidden="true"')
   expect(intl).toContain('ica-action-icon--forward')
   expect(v24).toContain('.ica-site .ica-action-icon')
