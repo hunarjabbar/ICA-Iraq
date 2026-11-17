@@ -63,7 +63,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           EXPECTED_SHA: ${{ github.event.pull_request.head.sha }}
           GH_REPOSITORY: ${{ github.repository }}
-          # Read-only branch alias fallback; /release.json must still equal the PR SHA.\n          # A stale branch alias fails closed and never certifies another commit.\n          ICA_CANDIDATE_PREVIEW_URL: ${{ vars.ICA_CANDIDATE_PREVIEW_URL || 'https://ica-international-porta-git-59fe85-hunarjabbar70-1239s-projects.vercel.app' }}
+          # Fail closed unless the branch alias serves this PR head's exact SHA.
+          # The repository variable can override the alias when needed.
+          ICA_CANDIDATE_PREVIEW_URL: ${{ vars.ICA_CANDIDATE_PREVIEW_URL || 'https://ica-international-porta-git-59fe85-hunarjabbar70-1239s-projects.vercel.app' }}
         run: |
           python3 - <<'PY'
           import json,os,urllib.request,urllib.parse
