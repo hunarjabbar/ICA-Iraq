@@ -2642,6 +2642,8 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
  .ica-site .ica-header-v20 .ica-nav-actions{gap:6px}
  .ica-site .ica-header-v20 .ica-header-topicline{
   min-height:39px;gap:9px;
+  /* Remove excess strip padding without shrinking the topic links or touch controls. */
+  padding-block:0;
   padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
   padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
  }
