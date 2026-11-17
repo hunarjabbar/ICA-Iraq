@@ -80,8 +80,7 @@ export function ManagedICAContent(){
     {hero?<h2>{c.title}</h2>:<h3>{c.title}</h3>}
     {c.summary&&<p className="ica-managed-summary">{c.summary}</p>}
     {c.body&&<EditorialBody body={c.body} className="ica-managed-body"/>}
-    {c.cta_label&&cta&&<a className="ica-managed-cta" href={cta}>{c.cta_label}
-      <span aria-hidden="true"> ↗</span></a>}
+    {c.cta_label&&cta&&<a className="ica-managed-cta" href={cta}>{c.cta_label}</a>}
    </div>
   </article>
  }

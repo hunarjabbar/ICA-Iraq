@@ -2301,3 +2301,372 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
 @media(prefers-reduced-motion:reduce){
  .ica-site :is(button,a,input,select,textarea){transition:none!important}
 }
+
+/* ICA v26 — phone-native editorial geometry; Emil mobile-native + UI UX Pro Max.
+   Width and typography live in one public-only token layer, not in browser zoom. */
+@media(max-width:680px){
+ .ica-site{
+  --ica-gutter:clamp(8px,2.5vw,11px);
+  --ica-grid-gap:8px;
+  --ica-section-space:24px;
+  --ica-card-pad:clamp(10px,2.6vw,13px);
+  --ica-radius:6px;
+  --ica-control-radius:6px;
+  --ica-type-body:13px;
+  --ica-type-small:12px;
+  --ica-type-card:clamp(14px,3.65vw,16px);
+  --ica-type-heading:clamp(20px,5.05vw,26px);
+  --ica-type-hero:clamp(25px,6.4vw,32px);
+  line-height:1.53;
+ }
+ .ica-site .ica-header-v20 .ica-nav,
+ .ica-site .ica-header-v20 .ica-topline,
+ .ica-site .ica-header-v20 .ica-header-topicline{padding-inline:var(--ica-gutter)}
+ .ica-site .ica-intl-hero{padding:18px 0 23px}
+ .ica-site .ica-intl-hero-title{margin-bottom:12px;gap:10px}
+ .ica-site .ica-intl-hero h1{line-height:1.12;letter-spacing:-.038em;margin:6px 0 8px}
+ .ica-site .ica-intl-hero-title p{font-size:13px;line-height:1.52}
+ .ica-site .ica-intl-hero-grid{gap:8px;padding-top:10px}
+ .ica-site .ica-wire-lead-art{min-height:132px;padding:12px;border-radius:6px}
+ .ica-site .ica-wire-lead-art strong{font-size:clamp(24px,6vw,31px)}
+ .ica-site .ica-wire-story h3{font-size:var(--ica-type-card);line-height:1.3;margin:6px 0}
+ .ica-site .ica-wire-story-lead h3{font-size:clamp(18px,4.8vw,21px)}
+ .ica-site .ica-wire-story p,.ica-site .ica-wire-story-lead p{font-size:12.5px}
+ .ica-site .ica-intl-hero-side{padding:11px;gap:8px}
+ .ica-site .ica-intl-trending{padding:19px 0}
+ .ica-site .ica-intl-trending-top h2,.ica-site .ica-intl-section-heading h2{
+  font-size:var(--ica-type-heading);line-height:1.22
+ }
+ .ica-site .ica-trending-tile{flex-basis:clamp(190px,55vw,225px);min-width:190px;min-height:150px;padding:10px}
+ .ica-site .ica-trending-tile h3{font-size:14px;line-height:1.32}
+ .ica-site .ica-intl-mosaic{padding:19px 0 26px}
+ .ica-site .ica-intl-section-heading{margin-bottom:11px}
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-newsroom-top article,.ica-desk-story,.ica-media-card,.ica-managed-card){
+  border-radius:var(--ica-radius);
+ }
+ .ica-site .ica-intl-desk-card{padding:var(--ica-card-pad);min-height:0}
+ .ica-site .ica-intl-desk-header h3{font-size:clamp(17px,4.45vw,21px);margin:4px 0}
+ .ica-site .ica-intl-desk-list>a{padding:7px 0}
+ .ica-site .ica-intl-market-strip{padding:12px;margin-bottom:24px;border-radius:6px}
+ .ica-site .ica-intl-market-strip h2{font-size:var(--ica-type-heading)}
+ .ica-site .ica-intl-market-resources>a{padding:10px}
+ .ica-site .ica-news-section{padding:var(--ica-section-space) 0}
+ .ica-site .ica-section-heading{margin-bottom:11px;padding-bottom:9px}
+ .ica-site .ica-story-grid,.ica-site .ica-media-grid,
+ .ica-site .ica-topics-home-grid,.ica-site .ica-topic-directory-grid{
+  gap:var(--ica-grid-gap);
+ }
+ .ica-site .ica-story-text{padding:9px 1px}
+ .ica-site .ica-story-text h3{font-size:var(--ica-type-card);line-height:1.33;margin:6px 0}
+ .ica-site .ica-story-feature .ica-story-text h3{font-size:clamp(16px,4.15vw,19px)}
+ .ica-site .ica-page-intro,.ica-site .ica-desk-intro{
+  padding:15px 12px;margin:9px 0 17px;border-radius:6px
+ }
+ .ica-site .ica-topic-card,.ica-site .ica-topic-directory-grid .ica-topic-card{
+  padding:var(--ica-card-pad);min-height:0
+ }
+ .ica-site .ica-topic-card h3{font-size:16px;line-height:1.3}
+ .ica-site .ica-article-head h1,.ica-site .ica-topic-detail-hero h1{
+  font-size:clamp(25px,6.5vw,32px);line-height:1.18
+ }
+ .ica-site .ica-contact-form,.ica-site .ica-newsletter{padding:var(--ica-card-pad)}
+ .ica-site :is(input,select,textarea){font-size:16px}
+ .ica-site :is(button,.ica-nav-contact,.ica-menu-toggle,.ica-native-cta){touch-action:manipulation}
+ .ica-site:is([lang="ar"],[lang="ckb"]){
+  --ica-type-body:14px;
+  --ica-type-card:clamp(15px,3.85vw,17px);
+  --ica-type-heading:clamp(21px,5.3vw,27px);
+  --ica-type-hero:clamp(26px,6.7vw,34px);
+ }
+ .ica-site:is([lang="ar"],[lang="ckb"]) :is(h1,h2,h3){letter-spacing:0;line-height:1.4}
+}
+@media(max-height:560px) and (max-width:950px) and (pointer:coarse){
+ .ica-site{
+  --ica-gutter:9px;--ica-grid-gap:8px;--ica-card-pad:11px;
+  --ica-radius:6px;--ica-type-card:15px;
+  --ica-type-heading:clamp(21px,3vw,26px);
+  --ica-type-hero:clamp(25px,4vw,34px);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-managed-card){border-radius:6px}
+}
+
+/* ICA v26 — wider mobile editorial canvas and quieter squared-soft cards.
+   Keeps native hit targets, dynamic text sizing and all RTL/Chinese pathways. */
+@media(max-width:767px){
+ .ica-site{
+  --ica-gutter:clamp(8px,2.25vw,12px);
+  --ica-section-space:clamp(20px,4.8vw,30px);
+  --ica-grid-gap:clamp(7px,2vw,10px);
+  --ica-card-pad:clamp(10px,2.7vw,14px);
+  --ica-radius:6px;
+  --ica-control-radius:6px;
+  --ica-type-body:13.5px;
+  --ica-type-card:clamp(14px,3.7vw,17px);
+  --ica-type-heading:clamp(20px,5.15vw,26px);
+  --ica-type-hero:clamp(27px,6.75vw,34px);
+  --ica-ui-shadow:0 1px 5px rgb(39 19 27 / 4%);
+  --ica-ui-lift:0 3px 12px rgb(39 19 27 / 6%);
+  font-size:var(--ica-type-body);
+ }
+ .ica-site :is(.ica-content,.ica-page-content,.ica-admin,
+  .ica-footer-upper,.ica-footer-lower,.ica-global-content){
+  max-width:100%;padding-inline:var(--ica-gutter);margin-inline:auto;
+ }
+ .ica-site .ica-header-v20 :is(.ica-nav,.ica-header-topicline,.ica-topline){
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site :is(.ica-intl-hero h1,.ica-page-intro h1,.ica-desk-intro h1,
+  .ica-topic-detail-hero h1,.ica-article-head h1,
+  .ica-home .scroll-scrub__title){
+  font-size:var(--ica-type-hero);line-height:1.19;letter-spacing:-.035em;
+ }
+ .ica-site :is(.ica-intl-trending-top h2,.ica-intl-section-heading h2,
+  .ica-section-heading h2,.ica-coverage-header h2,
+  .ica-topics-home-title h2,.ica-intl-market-strip h2,
+  .ica-culture-description h2,.ica-video-stage h2){
+  font-size:var(--ica-type-heading);line-height:1.24;letter-spacing:-.022em;
+ }
+ .ica-site :is(.ica-wire-story h3,.ica-wire-story-lead h3,
+  .ica-trending-tile h3,.ica-story-text h3,
+  .ica-intl-desk-header h3,.ica-topic-card h3,
+  .ica-managed-copy h3){
+  font-size:var(--ica-type-card);line-height:1.33;letter-spacing:-.012em;
+ }
+ .ica-site :is(.ica-intl-hero-title p,.ica-wire-story p,
+  .ica-trending-tile p,.ica-story-text p,.ica-intl-desk-card>p,
+  .ica-page-intro p,.ica-managed-summary,.ica-managed-body){
+  font-size:13px;line-height:1.5;
+ }
+ .ica-site :is(.ica-intl-hero,.ica-intl-trending,.ica-intl-mosaic,
+  .ica-news-section,.ica-topics-home){padding-block:var(--ica-section-space)}
+ .ica-site :is(.ica-intl-mosaic-grid,.ica-intl-hero-grid,
+  .ica-desk-story-grid,.ica-story-grid,.ica-topic-directory-grid,
+  .ica-topics-home-grid,.ica-media-grid,.ica-managed-card-grid){
+  gap:var(--ica-grid-gap);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article,
+  .ica-values article,.ica-managed-card,.ica-intl-hero-side,
+  .ica-page-intro,.ica-desk-intro,.ica-newsletter,.ica-culture-spotlight,
+  .ica-media-poster,.ica-story-image){
+  border-radius:var(--ica-radius);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-topic-card,.ica-newsroom-top article,
+  .ica-managed-copy,.ica-trending-tile,.ica-intl-hero-side){
+  padding:var(--ica-card-pad);
+ }
+ .ica-site .ica-intl-desk-card{min-height:0}
+ .ica-site .ica-trending-tile{min-height:156px}
+ .ica-site .ica-trending-tile h3{margin-block:5px auto}
+ .ica-site .ica-intl-hero-title{margin-bottom:13px}
+ .ica-site .ica-intl-hero-grid{padding-top:10px}
+ .ica-site .ica-intl-desk-header h3{margin-block:3px}
+ .ica-site .ica-intl-desk-list>a{padding-block:8px}
+ .ica-site .ica-intl-market-strip{padding:14px}
+ .ica-site .ica-page-intro,.ica-site .ica-desk-intro{padding:18px var(--ica-card-pad)}
+ .ica-site .ica-header-v20 .ica-menu-toggle,
+ .ica-site .ica-header-v20 .ica-menu-drawer-head button{
+  border-radius:6px;
+ }
+ .ica-site :is(.ica-nav-contact,.ica-native-cta,.ica-contact-form>button,
+  .ica-newsletter-entry button,.ica-desk-controls button,
+  .ica-topic-desk-filter button,.ica-topic-more button,.ica-about-outro a){
+  border-radius:6px;min-height:44px;
+ }
+ .ica-site :is(input:not(.ica-trap),select,textarea){font-size:16px}
+}
+.ica-site:is([lang="ar"],[lang="ckb"]) :is(.ica-intl-hero h1,.ica-page-intro h1,
+ .ica-desk-intro h1,.ica-section-heading h2,.ica-topic-detail-hero h1){
+ letter-spacing:0;line-height:1.48;
+}
+
+/* ICA v27 — editorial header rhythm and lightweight 1px card boundaries.
+   Complements v26; retains menu visibility, locale handling, touch sizes and RTL. */
+.ica-site{
+ --ica27-card-border:#e8e9ec;
+ --ica27-chrome-border:#e9e9ec;
+ --ica27-surface:#fff;
+ --ica27-active:#e3001b;
+ --ica27-soft-active:#fff3f4;
+ --ica27-radius:6px;
+}
+.ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+ .ica-desk-story-grid>.ica-wire-story,.ica-intl-source-directory>div:last-child>a,
+ .ica-newsroom-top article,.ica-values article,.ica-managed-card,
+ .ica-desk-verify,.ica-intl-empty,.ica-media-tile){
+ border:1px solid var(--ica27-card-border)!important;
+ border-radius:var(--ica27-radius)!important;
+ box-shadow:0 1px 4px rgb(29 28 35 / 2%)!important;
+}
+.ica-site :is(.ica-trending-tile,.ica-desk-story-grid>.ica-wire-story){
+ border-block-start:1px solid var(--ica27-active)!important;
+}
+.ica-site .ica-newsroom-top article{
+ border-inline-start:1px solid var(--ica27-active)!important;
+}
+.ica-site .ica-managed-card{overflow:hidden}
+.ica-site .ica-intl-market-resources>a{
+ border:1px solid rgb(255 255 255 / 17%)!important;
+ border-radius:var(--ica27-radius)!important;
+ box-shadow:none!important;
+}
+@media(hover:hover) and (pointer:fine){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-newsroom-top article,
+  .ica-intl-source-directory>div:last-child>a,.ica-managed-card):hover{
+  border-color:#d7dbe0!important;
+  box-shadow:0 2px 8px rgb(29 28 35 / 4%)!important;
+ }
+}
+.ica-site .ica-header-v20{
+ background:#fff;border-bottom:1px solid var(--ica27-chrome-border);
+ box-shadow:0 1px 3px rgb(29 28 35 / 3%);
+}
+.ica-site .ica-header-v20 .ica-topline{
+ height:23px;background:#2b171d;color:#f7eff1;
+ border-bottom:0;font-size:9px;letter-spacing:.03em;
+}
+.ica-site .ica-header-v20 .ica-nav{
+ height:62px;max-width:var(--ica-container);
+ gap:clamp(7px,1vw,14px);padding-inline:var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-brand{gap:8px}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol{
+ width:38px;height:38px;min-width:38px;
+ border-radius:7px;box-shadow:none!important;
+}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:15px}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol i{
+ width:15px;height:2px;inset:auto auto 7px 11px;
+}
+.ica-site .ica-header-v20 .ica-brand-name strong{
+ font-size:11px;line-height:1.2;letter-spacing:.015em;
+}
+.ica-site .ica-header-v20 .ica-brand-name small{font-size:8px}
+.ica-site .ica-header-v20 .ica-nav-links{gap:clamp(7px,.85vw,13px)}
+.ica-site .ica-header-v20 .ica-nav-links a{
+ min-height:44px;font-size:11px;font-weight:650;
+ border-bottom:1px solid transparent;
+ transition:color 160ms ease,border-color 160ms ease;
+}
+.ica-site .ica-header-v20 .ica-nav-links a[aria-current="page"]{
+ border-bottom-color:var(--ica27-active);
+}
+.ica-site .ica-header-v20 .ica-nav-actions{gap:8px}
+.ica-site .ica-header-v20 .ica-language select{
+ min-height:44px;border:1px solid var(--ica27-chrome-border);
+ border-radius:6px;background:#fff;box-shadow:none;
+}
+.ica-site .ica-header-v20 .ica-nav-contact{
+ min-height:44px;padding:9px 12px;border-radius:6px;
+ background:#e3001b;color:#fff;box-shadow:none;
+}
+.ica-site .ica-header-v20 .ica-header-topicline{
+ min-height:35px;gap:12px;
+ background:#fff;color:#4f5057;
+ border-top:1px solid var(--ica27-chrome-border);
+ padding:3px var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-header-topicline>span{
+ font-size:9px;letter-spacing:.03em;font-weight:750;
+}
+.ica-site .ica-header-v20 .ica-topicline-scroll{
+ gap:13px;padding-block:1px;scroll-padding-inline:var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-header-topicline a{
+ min-height:32px;font-size:10px;font-weight:650;
+ border-bottom:1px solid transparent;
+}
+.ica-site .ica-header-v20 .ica-header-topicline a[aria-current="page"]{
+ border-bottom-color:var(--ica27-active);
+}
+.ica-site .ica-header-v20 .ica-menu-toggle,
+.ica-site .ica-header-v20 .ica-menu-drawer-head button{
+ min-height:44px;min-width:44px;
+ border:1px solid var(--ica27-chrome-border);
+ border-radius:6px;box-shadow:none;
+ background:#fff;color:#34373b;
+}
+.ica-site .ica-header-v20 .ica-menu-toggle[aria-expanded="true"]{
+ background:var(--ica27-soft-active);color:#b40024;
+ border-color:#f1d9de;
+}
+.ica-site .ica-header-v20 .ica-menu-toggle-lines i{
+ height:1.5px;border-radius:1px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer{
+ border-top:1px solid var(--ica27-chrome-border);
+ box-shadow:0 9px 24px rgb(29 28 35 / 9%);
+ background:#fff;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-head{
+ border-bottom:1px solid var(--ica27-chrome-border);
+ min-height:50px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:clamp(11px,2vw,24px)}
+.ica-site .ica-header-v20 .ica-menu-group a{
+ min-height:44px;border-radius:6px;font-weight:650;
+}
+.ica-site .ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ background:var(--ica27-soft-active);
+ box-shadow:inset 1px 0 0 var(--ica27-active);
+ color:#ad0020;
+}
+.ica-site[dir="rtl"] .ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ box-shadow:inset -1px 0 0 var(--ica27-active);
+}
+@media(max-width:767px){
+ .ica-site .ica-header-v20 .ica-topline{
+  height:calc(21px + env(safe-area-inset-top,0px));
+  padding-top:env(safe-area-inset-top,0px);
+ }
+ .ica-site .ica-header-v20 .ica-nav{
+  height:55px;gap:6px;
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-brand{gap:6px}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol{
+  width:35px;height:35px;min-width:35px;border-radius:6px;
+ }
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:13px}
+ .ica-site .ica-header-v20 .ica-brand-name strong{font-size:10px}
+ .ica-site .ica-header-v20 .ica-nav-actions{gap:6px}
+ .ica-site .ica-header-v20 .ica-header-topicline{
+  min-height:39px;gap:9px;
+  /* Remove excess strip padding without shrinking the topic links or touch controls. */
+  padding-block:0;
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-header-topicline a{min-height:36px}
+ .ica-site .ica-header-v20 .ica-topicline-scroll{gap:11px}
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+  max-height:calc(100dvh - 110px - env(safe-area-inset-top,0px));
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+ }
+ .ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:12px;padding-block:12px}
+ .ica-site .ica-header-v20 .ica-menu-group h2{margin-bottom:6px}
+ .ica-site .ica-header-v20 .ica-menu-group a{padding:8px 10px}
+}
+@media(hover:none),(pointer:coarse){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-managed-card,.ica-newsroom-top article):hover{
+  box-shadow:0 1px 4px rgb(29 28 35 / 2%)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site .ica-header-v20 :is(.ica-nav-links a,.ica-menu-toggle,.ica-menu-drawer){
+  transition:none!important;animation:none!important;
+ }
+}
