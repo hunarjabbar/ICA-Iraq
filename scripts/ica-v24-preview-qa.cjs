@@ -30,6 +30,10 @@ const cases = [
         const site = document.querySelector('.ica-site');
         const css = site ? getComputedStyle(site) : null;
         const h1 = site?.querySelector('h1');
+        const header = document.querySelector('.ica-header-v20');
+        const nav = header?.querySelector('.ica-nav');
+        const firstCard = document.querySelector('.ica-intl-desk-card,.ica-topic-card,.ica-managed-card,.ica-newsroom-top article');
+        const menu = header?.querySelector('.ica-menu-toggle');
         return {
           lang:document.documentElement.lang,dir:document.documentElement.dir,
           overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,
@@ -37,6 +41,11 @@ const cases = [
           line:css?.getPropertyValue('--ica-ui-line').trim(),
           font:css?.fontFamily || '',
           headingFont:h1 ? getComputedStyle(h1).fontFamily : '',
+          headerEdge:header?getComputedStyle(header).borderBottomWidth:null,
+          headerNavHeight:nav?.getBoundingClientRect().height||0,
+          cardEdge:firstCard?getComputedStyle(firstCard).borderTopWidth:null,
+          cardRadius:firstCard?getComputedStyle(firstCard).borderTopLeftRadius:null,
+          toggleHeight:menu?.getBoundingClientRect().height||0,
           cards:document.querySelectorAll('.ica-intl-desk-card').length,
           icons:document.querySelectorAll('.ica-action-icon').length
         };
@@ -45,6 +54,13 @@ const cases = [
       assert.equal(state.lang,item.lang,item.label + ' lang');
       assert.equal(state.dir,item.dir,item.label + ' direction');
       assert.ok(state.overflow<=2,item.label + ' overflow '+state.overflow);
+      assert.equal(state.headerEdge,'1px',item.label+' masthead is thicker than a hairline');
+      if(state.cardEdge) assert.equal(state.cardEdge,'1px',item.label+' card edge exceeds 1px');
+      if(item.width<=767){
+        assert.ok(state.headerNavHeight<=60,item.label+' phone header oversized '+state.headerNavHeight);
+        if(state.cardRadius)assert.ok(parseFloat(state.cardRadius)<=6,item.label+' card corners too round '+state.cardRadius);
+        assert.ok(state.toggleHeight>=44,item.label+' navigation toggle misses 44px target');
+      }
       assert.ok(['#fff','#ffffff'].includes(state.surface),item.label + ' surface token '+state.surface);
       assert.equal(state.line,'#e6e2df',item.label + ' border token');
       const expectedBase = ['ar','ckb'].includes(item.lang) ? 'Noto Sans Arabic' : item.lang==='zh' ? 'Noto Sans SC' : 'Inter';
