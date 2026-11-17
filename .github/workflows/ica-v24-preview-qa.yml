@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Install Bun archive prerequisite
         run: apt-get update -qq && apt-get install -y unzip
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
@@ -36,7 +37,9 @@ jobs:
       # The pinned immutable deployment below was built from the app sources
       # at this commit. Fail closed if new app sources are not yet deployed.
       - name: Verify browser target matches checked-out application source
-        run: git diff --quiet 2960508db56045daf73c26785085c264d140577a HEAD -- app/src app/public app/package.json app/bun.lock
+        run: |
+          test -d "$GITHUB_WORKSPACE/.git"
+          git -C "$GITHUB_WORKSPACE" diff --quiet 2960508db56045daf73c26785085c264d140577a HEAD -- app/src app/public app/package.json app/bun.lock
       - name: Test verified Vercel preview with responsive menus, RTL and reduced motion
         env:
           ICA_TEST_URL: https://ica-international-portal-6do0txvdy-hunarjabbar70-1239s-projects.vercel.app
