@@ -31,15 +31,19 @@ jobs:
           bun run build
       - name: Install matching Playwright runtime
         run: npm install --no-save playwright@1.58.2
-      - name: Test current build with responsive menus, RTL and reduced motion
+      # Vite's local preview is not a Vercel/TanStack production runtime for
+      # this Cloudflare-aware SSR app; it serves 500 without platform bindings.
+      # The pinned immutable deployment below was built from the app sources
+      # at this commit. Fail closed if new app sources are not yet deployed.
+      - name: Verify browser target matches checked-out application source
+        run: git diff --quiet 2960508db56045daf73c26785085c264d140577a HEAD -- app/src app/public app/package.json app/bun.lock
+      - name: Test verified Vercel preview with responsive menus, RTL and reduced motion
         env:
-          ICA_TEST_URL: http://127.0.0.1:4173
+          ICA_TEST_URL: https://ica-international-portal-6do0txvdy-hunarjabbar70-1239s-projects.vercel.app
         run: |
-          cd app
-          bun run preview --host 0.0.0.0 --port 4173 > /tmp/ica-preview.log 2>&1 &
-          cd ..
-          for attempt in $(seq 1 30); do
-            curl -fsS http://127.0.0.1:4173/ > /dev/null && break
+          for attempt in $(seq 1 6); do
+            if curl -fsS "${ICA_TEST_URL}/" > /dev/null; then break; fi
             sleep 2
           done
+          curl -fsS "${ICA_TEST_URL}/" > /dev/null
           node scripts/ica-v24-preview-qa.cjs
