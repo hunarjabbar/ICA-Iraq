@@ -43,10 +43,10 @@ jobs:
           test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/pages.tsx")" = "f1e7ba389ad4699ace2c5c72bc25e9fd15e941bd"
           test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/site.tsx")" = "27356f83f3d1c2f008b6dc67e08aa3e872406196"
           test "$(git hash-object "$GITHUB_WORKSPACE/app/src/components/ica/topics.tsx")" = "a2517319cafd11b37c8bd778ce1988e5854f916b"
-          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/styles.css")" = "d30ae25426e0cbcda9dedb59d1a14bfcd3a327d1"
+          test "$(git hash-object "$GITHUB_WORKSPACE/app/src/styles.css")" = "a4d63ca66096df9dc2dd0ab4ea4cb2b4ac1373da"
       - name: Test verified Vercel preview with responsive menus, RTL and reduced motion
         env:
-          ICA_TEST_URL: https://ica-international-portal-6do0txvdy-hunarjabbar70-1239s-projects.vercel.app
+          ICA_TEST_URL: https://ica-international-portal-5705x25mh-hunarjabbar70-1239s-projects.vercel.app
         run: |
           for attempt in $(seq 1 6); do
             if curl -fsS "${ICA_TEST_URL}/" > /dev/null; then break; fi
@@ -54,3 +54,5 @@ jobs:
           done
           curl -fsS "${ICA_TEST_URL}/" > /dev/null
           node scripts/ica-v24-preview-qa.cjs
+          # Also run the full production browser matrix against this exact candidate.
+          node scripts/ica-browser-qa.cjs

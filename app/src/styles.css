@@ -2285,7 +2285,8 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
  .scroll-scrub__route-button){
  border-radius:var(--ica-control-radius);min-height:44px;box-shadow:none;
  background-image:none;font-weight:650;line-height:1.4;
- display:inline-flex;align-items:center;justify-content:center;gap:8px;
+ /* Keep responsive visibility (desktop toggle, mobile contact link) owned by header. */
+ align-items:center;justify-content:center;gap:8px;
  transition:background-color 150ms ease,border-color 150ms ease,color 150ms ease;
 }
 .ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button){
