@@ -2275,3 +2275,28 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
   .ica-intl-section-heading>a) .ica-action-icon{transition:none;transform:none}
  .ica-site[dir="rtl"] .ica-action-icon--forward{transform:scaleX(-1)}
 }
+
+
+/* Cohesive control family shared with CCC: quiet surfaces and 9px corners. */
+.ica-site{--ica-control-radius:9px}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button,.ica-nav-contact,
+ .ica-contact-form>button,.ica-newsletter-entry button,.ica-desk-controls button,
+ .ica-topic-desk-filter button,.ica-topic-more button,.ica-native-cta,.ica-about-outro a,
+ .scroll-scrub__route-button){
+ border-radius:var(--ica-control-radius);min-height:44px;box-shadow:none;
+ background-image:none;font-weight:650;line-height:1.4;
+ display:inline-flex;align-items:center;justify-content:center;gap:8px;
+ transition:background-color 150ms ease,border-color 150ms ease,color 150ms ease;
+}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button){
+ border:1px solid var(--ica-ui-line);background:var(--ica-surface);color:var(--ica-ink);
+}
+.ica-site :is(.ica-contact-form input,.ica-contact-form textarea,.ica-contact-form select,
+ .ica-newsletter-entry input,.ica-desk-controls input,.ica-topic-search-row input,
+ .ica-topic-search-row select){border-radius:var(--ica-control-radius)}
+.ica-site .ica-action-icon{inline-size:16px;block-size:16px;flex:0 0 16px;stroke-width:1.8;pointer-events:none}
+.ica-site :is(a,button):hover .ica-action-icon{translate:none;transform:none}
+.ica-site[dir="rtl"] .ica-action-icon--forward{transform:scaleX(-1)}
+@media(prefers-reduced-motion:reduce){
+ .ica-site :is(button,a,input,select,textarea){transition:none!important}
+}

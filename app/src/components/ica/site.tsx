@@ -1,3 +1,4 @@
+import {X,ExternalLink,Send} from 'lucide-react'
 import {useLocation} from '@tanstack/react-router'
 import {useState,useEffect,useRef,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
@@ -145,7 +146,7 @@ export function Header(){
    <div className="ica-menu-drawer-head">
     <span>ICA <span aria-hidden="true">/</span> {L('browseSections')}</span>
     <button type="button" aria-label={L('closeMenu')} onClick={()=>closeMenu(true)}>
-     <span aria-hidden="true">×</span>{L('closeMenu')}
+     <X className="ica-action-icon" aria-hidden="true"/>{L('closeMenu')}
     </button>
    </div>
    <div className="ica-menu-drawer-groups">
@@ -160,7 +161,7 @@ export function Header(){
 
 export function Footer(){
  const {t,L,path}=useICA()
- return <footer className="ica-footer"><div className="ica-footer-upper"><div><Brand inverse/><p>{L('footerDesc')}</p></div><div><h4>{L('discover')}</h4><a href={path('/desk/latest')}>{t.news}</a><a href={path('/desk/trending')}>{t.trending}</a><a href={path('/desk/hong-kong')}>{t.hongKong}</a><a href={path('/desk/asean')}>{t.asean}</a><a href={path('/topics')}>{t.topics}</a><a href={path('/culture')}>{t.culture}</a><a href={path('/video')}>{t.video}</a><a href={path('/entertainment')}>{t.entertainment}</a></div><div><h4>{L('agency')}</h4><a href={path('/newsroom')}>{t.newsroom}</a><a href={path('/about')}>{t.about}</a><a href={path('/contact')}>{t.contact}</a></div><div className="ica-footer-news"><h4>{L('partCCC')}</h4><p>{L('footerCCC')}</p><a href="https://ccc-iraq-cultural-centre.vercel.app/" target="_blank" rel="noopener noreferrer">{L('visitCCC')} ↗</a></div></div><div className="ica-footer-lower"><span>© {new Date().getUTCFullYear()} Iraqi-Chinese Agency. {L('allRights')}</span><span>{L('integrity')}</span></div></footer>
+ return <footer className="ica-footer"><div className="ica-footer-upper"><div><Brand inverse/><p>{L('footerDesc')}</p></div><div><h4>{L('discover')}</h4><a href={path('/desk/latest')}>{t.news}</a><a href={path('/desk/trending')}>{t.trending}</a><a href={path('/desk/hong-kong')}>{t.hongKong}</a><a href={path('/desk/asean')}>{t.asean}</a><a href={path('/topics')}>{t.topics}</a><a href={path('/culture')}>{t.culture}</a><a href={path('/video')}>{t.video}</a><a href={path('/entertainment')}>{t.entertainment}</a></div><div><h4>{L('agency')}</h4><a href={path('/newsroom')}>{t.newsroom}</a><a href={path('/about')}>{t.about}</a><a href={path('/contact')}>{t.contact}</a></div><div className="ica-footer-news"><h4>{L('partCCC')}</h4><p>{L('footerCCC')}</p><a href="https://ccc-iraq-cultural-centre.vercel.app/" target="_blank" rel="noopener noreferrer">{L('visitCCC')} <ExternalLink className="ica-action-icon" aria-hidden="true"/></a></div></div><div className="ica-footer-lower"><span>© {new Date().getUTCFullYear()} Iraqi-Chinese Agency. {L('allRights')}</span><span>{L('integrity')}</span></div></footer>
 }
 export function Shell({children,mainClass=''}:{children:ReactNode;mainClass?:string}){
  const {rtl,lang}=useICA()
@@ -180,16 +181,16 @@ export function StoryCard({story,feature=false}:{story:ICAArticle;feature?:boole
  return <article className={'ica-story-card '+(feature?'ica-story-feature':'')}>
  <a href={path('/news/'+story.slug)} className="ica-story-link">
  <div className="ica-story-image">{story.image_url?<img src={story.image_url} alt="" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 850px) 50vw, 33vw"/>:<span className="ica-story-placeholder" aria-hidden="true">ICA <i>PRESS</i></span>}</div>
- <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang} dir="auto">{story.title}</h3><p lang={story.lang} dir="auto">{story.excerpt}</p><span className="ica-story-read">{t.view} <span aria-hidden="true">↗</span></span></div>
+ <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang} dir="auto">{story.title}</h3><p lang={story.lang} dir="auto">{story.excerpt}</p><span className="ica-story-read">{t.view} <Send className="ica-action-icon" aria-hidden="true"/></span></div>
  </a></article>
 }
 export function EmptyEditorial({filter}:{filter?:string}){
  const {t,L,path}=useICA()
- return <div className="ica-editorial-empty"><div className="ica-editorial-empty-icon" aria-hidden="true">ICA</div><h3>{filter?filter:t.recent}</h3><p>{t.empty}</p><a href={path('/newsroom')}>{L('editorialStandards')} <span aria-hidden="true">↗</span></a></div>
+ return <div className="ica-editorial-empty"><div className="ica-editorial-empty-icon" aria-hidden="true">ICA</div><h3>{filter?filter:t.recent}</h3><p>{t.empty}</p><a href={path('/newsroom')}>{L('editorialStandards')} <Send className="ica-action-icon" aria-hidden="true"/></a></div>
 }
 export function NewsSection({articles,title,tag}:{articles:ICAArticle[];title?:string;tag?:string}){
  const {t,L,path}=useICA()
- return <section className="ica-news-section"><div className="ica-section-heading"><div><span className="ica-eyebrow">{tag||L('editorialDesk')}</span><h2>{title||t.latest}</h2></div><a className="ica-section-action" href={path('/news')}>{t.all}<span aria-hidden="true">↗</span></a></div>
+ return <section className="ica-news-section"><div className="ica-section-heading"><div><span className="ica-eyebrow">{tag||L('editorialDesk')}</span><h2>{title||t.latest}</h2></div><a className="ica-section-action" href={path('/news')}>{t.all}<Send className="ica-action-icon" aria-hidden="true"/></a></div>
  {articles.length?<div className="ica-story-grid">{articles.slice(0,6).map((a,i)=><StoryCard story={a} feature={i===0} key={a.id}/>)}</div>:<EmptyEditorial/>}
  </section>
 }
@@ -200,7 +201,7 @@ export function Newsletter(){
   e.preventDefault();const form=e.currentTarget;const fd=new FormData(form);setState('pending')
   try{const r=await fetch('/api/ica',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subscribe',email:fd.get('email'),lang,website:fd.get('website')})});const d=await r.json();setState(r.ok&&d.ok?'success':'error');if(d.ok)form.reset()}catch{setState('error')}
  }
- return <section className="ica-newsletter" aria-labelledby="ica-subscribe-title"><div className="ica-newsletter-art" aria-hidden="true"><span>ICA</span><i/></div><div className="ica-newsletter-copy"><h2 id="ica-subscribe-title">{t.subscribe}</h2><p>{t.subHelp}</p></div><form onSubmit={send} className="ica-newsletter-form"><label htmlFor="ica-email">{t.email}</label><div className="ica-newsletter-entry"><input type="email" name="email" id="ica-email" placeholder="reader@example.com" required maxLength={240}/><button type="submit" disabled={state==='pending'}>{state==='pending'?'…':t.join} <span aria-hidden="true">↗</span></button></div><input className="ica-trap" type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true"/><p aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('newsletterPrivacy')}</p></form></section>
+ return <section className="ica-newsletter" aria-labelledby="ica-subscribe-title"><div className="ica-newsletter-art" aria-hidden="true"><span>ICA</span><i/></div><div className="ica-newsletter-copy"><h2 id="ica-subscribe-title">{t.subscribe}</h2><p>{t.subHelp}</p></div><form onSubmit={send} className="ica-newsletter-form"><label htmlFor="ica-email">{t.email}</label><div className="ica-newsletter-entry"><input type="email" name="email" id="ica-email" placeholder="reader@example.com" required maxLength={240}/><button type="submit" disabled={state==='pending'}>{state==='pending'?'…':t.join} <Send className="ica-action-icon" aria-hidden="true"/></button></div><input className="ica-trap" type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true"/><p aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('newsletterPrivacy')}</p></form></section>
 }
 export function Intro({label,title,description,image}:{label:string;title:string;description:string;image?:string}){
  const {lang}=useICA()
@@ -229,5 +230,6 @@ export function ContactForm(){
   e.preventDefault();const form=e.currentTarget;const data=Object.fromEntries(new FormData(form).entries());setState('pending')
   try{const r=await fetch('/api/ica',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,action:'contact'})});const res=await r.json();setState(r.ok&&res.ok?'success':'error');if(res.ok)form.reset()}catch{setState('error')}
  }
- return <form onSubmit={send} className="ica-contact-form"><div className="ica-form-row"><label>{L('name')}<input name="name" minLength={2} maxLength={120} required autoComplete="name"/></label><label>{L('email')}<input name="email" type="email" maxLength={240} required autoComplete="email"/></label></div><label>{L('topic')}<select name="topic" required defaultValue={subject?"News tip":""}><option value="" disabled>{L('selectTopic')}</option><option value="News tip">{L('tip')}</option><option value="Press enquiry">{L('enquiry')}</option><option value="Cultural collaboration">{L('collab')}</option><option value="Corrections request">{L('correctionRequest')}</option><option value="Other request">{L('other')}</option></select></label><label>{L('message')}<textarea name="message" minLength={12} maxLength={4000} rows={7} required defaultValue={subject?L('regardingResearch')+" "+subject+"\n\n":""} placeholder={L('messagePlaceholder')} /></label><input name="website" className="ica-trap" tabIndex={-1} autoComplete="off" aria-hidden="true"/><button type="submit" disabled={state==='pending'}>{state==='pending'?L('sending'):L('send')}<span aria-hidden="true">↗</span></button><p className="ica-form-response" role="status" aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('contactPrivacy')}</p></form>
+ return <form onSubmit={send} className="ica-contact-form"><div className="ica-form-row"><label>{L('name')}<input name="name" minLength={2} maxLength={120} required autoComplete="name"/></label><label>{L('email')}<input name="email" type="email" maxLength={240} required autoComplete="email"/></label></div><label>{L('topic')}<select name="topic" required defaultValue={subject?"News tip":""}><option value="" disabled>{L('selectTopic')}</option><option value="News tip">{L('tip')}</option><option value="Press enquiry">{L('enquiry')}</option><option value="Cultural collaboration">{L('collab')}</option><option value="Corrections request">{L('correctionRequest')}</option><option value="Other request">{L('other')}</option></select></label><label>{L('message')}<textarea name="message" minLength={12} maxLength={4000} rows={7} required defaultValue={subject?L('regardingResearch')+" "+subject+"\n\n":""} placeholder={L('messagePlaceholder')} /></label><input name="website" className="ica-trap" tabIndex={-1} autoComplete="off" aria-hidden="true"/><button type="submit" disabled={state==='pending'}>{state==='pending'?L('sending'):L('send')}<Send className="ica-action-icon" aria-hidden="true"/></button><p className="ica-form-response" role="status" aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('contactPrivacy')}</p></form>
 }
+
