@@ -33,6 +33,23 @@ jobs:
           bun run build
       - name: Install matching Playwright runtime
         run: npm install --no-save playwright@1.58.2
+      # This is source browser smoke coverage, not a deployed Vercel runtime.
+      # Keep the separate immutable Vercel release-manifest gate below.
+      - name: Verify ICA candidate UI against checked-out local dev runtime
+        env:
+          ICA_TEST_URL: http://127.0.0.1:4173
+        run: |
+          set -eu
+          (cd app && bun run dev --host 127.0.0.1 --port 4173 --strictPort > /tmp/ica-source-v27.log 2>&1) &
+          for attempt in $(seq 1 45); do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/ > /dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          if ! curl --fail --silent --show-error http://127.0.0.1:4173/ > /dev/null; then
+            cat /tmp/ica-source-v27.log
+            exit 1
+          fi
+          node scripts/ica-v24-preview-qa.cjs
       # Vite's local preview cannot replace this Cloudflare-aware SSR deployment.
       # Only certify a Vercel preview whose public release manifest matches
       # the PR source SHA; never pin an older preview URL or stylesheet blob.
