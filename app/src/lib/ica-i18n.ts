@@ -25,7 +25,15 @@ export function formatLocalDate(date:string|Date,language:Language,options:Intl.
    :soraniMonths[month]
   const dayText=soraniDigits(options.day==='2-digit'?String(day).padStart(2,'0'):day)
   const yearText=soraniDigits(options.year==='2-digit'?String(year%100).padStart(2,'0'):year)
-  return `${dayText}ی ${monthText} ${yearText}`
+  const dateText=`${dayText}ی ${monthText} ${yearText}`
+  if(options.hour||options.minute){
+   // UTC clock is deterministic in SSR and client hydration for Sorani.
+   // The zone is explicit so readers do not confuse it with their own locale.
+   const hour=soraniDigits(String(value.getUTCHours()).padStart(2,'0'))
+   const minute=soraniDigits(String(value.getUTCMinutes()).padStart(2,'0'))
+   return `${dateText} · ${hour}:${minute} UTC`
+  }
+  return dateText
  }
  try{return new Intl.DateTimeFormat(localeCodes[language],{timeZone:'UTC',...options}).format(value)}
  catch{return new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',...options}).format(value)}

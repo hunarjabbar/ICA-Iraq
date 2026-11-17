@@ -1,6 +1,7 @@
-import {useMemo,useState} from 'react'
+import {useEffect,useMemo,useState} from 'react'
 import {Shell,Intro,useICA,Newsletter} from './site'
-import {topics,topicCategories,findTopic,researchReviewedOn,type ICATopic} from '../../data/ica-topics'
+import {topics,researchReviewedOn,type ICATopic} from '../../data/ica-topics'
+import {getLiveResearchAtlas} from '../../lib/ica.functions'
 import {atlasExtra,atlasCategory} from '../../lib/ica-atlas-i18n'
 
 const copy={
@@ -9,24 +10,38 @@ const copy={
  ckb:{title:'ئەڵفوبێی توێژینەوەی ICA',intro:'٧٢ بیرۆکەی ڕاپۆرتی سەرچاوەدار لەبارەی دیپلۆماسی و کەلتوور و بازرگانی و کۆمەڵگا. ئەمانە هەواڵی بڵاوکراوە نین.',topic:'بابەتەکان',categories:'بەشەکانی توێژینەوە',sources:'سەرچاوەکان',filter:'پاڵاوتن بەپێی بەش',search:'گەڕان بۆ بابەت و سەرچاوە',all:'هەموو بەشەکان',surprise:'بابەتێکی هەڕەمەکی',status:'بیرۆکەی توێژینەوە',read:'بینینی بابەت',source:'سەرچاوەی سەرەکی',show:'بابەتی زیاتر',count:'پیشاندانی',of:'لە',empty:'هیچ ئەنجامێکی گونجاو نەدۆزرایەوە.',disclaimer:'ئەم بابەتانە پێشنیاری توێژینەوەن نەک هەواڵی پشتڕاستکراوەی ICA. پێویستیان بە پشتڕاستکردنەوە هەیە.',next:'پرسیارەکانی توێژینەوە',related:'بابەتی هاوشێوە',back:'گەڕانەوە بۆ بابەتەکان',pitch:'پێشنیاری ڕاپۆرت',updated:'بەرواری پشکنینی سەرچاوە'},
  zh:{title:'ICA 选题研究图谱',intro:'72 个附有来源的选题构想，涵盖外交、文化、商业、遗产与社会。它们是待调查的选题，并非已发布新闻。',topic:'研究选题',categories:'编辑专题',sources:'研究来源',filter:'按专题筛选',search:'搜索话题或资料',all:'全部专题',surprise:'随机发现',status:'待研究选题',read:'了解选题',source:'研究参考来源',show:'查看更多',count:'显示',of:'共',empty:'未找到匹配的选题。',disclaimer:'此处仅为编辑研究选题，不代表 ICA 已核实并发布的新闻。正式报道需要进一步查证。',next:'调查问题',related:'相关选题',back:'返回选题',pitch:'建议报道',updated:'来源核查日期'}
 } as const
+function useAtlas(){
+ const [remote,setRemote]=useState<ICATopic[]|null>(null)
+ useEffect(()=>{
+  let active=true
+  getLiveResearchAtlas().then(result=>{
+   if(active&&result?.available&&Array.isArray(result.items))setRemote(result.items)
+  }).catch(()=>undefined)
+  return ()=>{active=false}
+ },[])
+ return remote??topics
+}
 function useCopy(){const {lang}=useICA();return copy[lang]}
 export function TopicCard({item,numbered=false}:{item:ICATopic;numbered?:boolean}){
  const {path,lang}=useICA(),c=useCopy(),extra=atlasExtra[lang]
  return <article className="ica-topic-card">
-   <div className="ica-topic-card-top"><span className="ica-topic-card-number">{numbered?item.id:extra.researchLabel}</span><span className="ica-topic-card-status">{c.status}</span></div>
+   <div className="ica-topic-card-top"><span className="ica-topic-card-number">{numbered?'#'+item.id.slice(0,6):extra.researchLabel}</span><span className="ica-topic-card-status">{c.status}</span></div>
    <span className="ica-topic-card-desk">{atlasCategory(lang,item.category)}</span>
    <h3 lang="en" dir="auto"><a href={path('/topics/'+item.slug)}>{item.title}</a></h3>
    <p lang="en" dir="auto">{item.summary}</p>
-   <div className="ica-topic-card-bottom"><span>{item.publisher}</span><a href={path('/topics/'+item.slug)} aria-label={c.read+': '+item.title}>{c.read} <span aria-hidden="true">↗</span></a></div>
+   <div className="ica-topic-card-bottom"><span>{item.publisher}</span><a href={path('/topics/'+item.slug)} aria-label={c.read+': '+item.title}>{c.read} </a></div>
  </article>
 }
 export function TopicsHomePreview(){
  const {path,lang}=useICA(),c=useCopy(),extra=atlasExtra[lang]
- const chosen=[topics[0],topics[14],topics[29],topics[37],topics[51],topics[67]]
+ const atlas=useAtlas()
+ const indexes=[0,14,29,37,51,67]
+ const chosen=indexes.map(i=>atlas[i]).filter((x):x is ICATopic=>!!x)
+ if(!chosen.length)chosen.push(...atlas.slice(0,6))
  return <section className="ica-topics-home" aria-labelledby="ica-topic-home-heading">
   <div className="ica-topics-home-title">
    <div><span className="ica-topics-home-eyebrow">{extra.homeEyebrow}</span><h2 id="ica-topic-home-heading">{c.title}</h2><p>{extra.homeIntro}</p></div>
-   <a href={path('/topics')} className="ica-topics-home-link">{c.read} · {topics.length} <span aria-hidden="true">↗</span></a>
+   <a href={path('/topics')} className="ica-topics-home-link">{c.read} · {atlas.length} </a>
   </div>
   <div className="ica-topics-home-grid">{chosen.map(x=><TopicCard key={x.slug} item={x}/>)}</div>
   <p className="ica-topics-home-notice">{c.disclaimer}</p>
@@ -34,25 +49,30 @@ export function TopicsHomePreview(){
 }
 export function TopicsIndex(){
  const {path,lang}=useICA(),c=useCopy(),extra=atlasExtra[lang]
+ const atlas=useAtlas()
+ const categories=useMemo(()=>Object.values(atlas.reduce<Record<string,{name:string;count:number}>>((all,t)=>{
+  const bucket=all[t.category]||(all[t.category]={name:t.category,count:0});bucket.count++;return all
+ },{})).sort((a,b)=>a.name.localeCompare(b.name)),[atlas])
  const [search,setSearch]=useState('')
  const [desk,setDesk]=useState('all')
  const [count,setCount]=useState(18)
- const visible=useMemo(()=>topics.filter(t=>(desk==='all'||t.category===desk)&&[t.title,t.summary,t.category,t.sourceName,t.publisher].join(' ').toLowerCase().includes(search.toLowerCase().trim())),[search,desk])
+ const visible=useMemo(()=>atlas.filter(t=>(desk==='all'||t.category===desk)&&[t.title,t.summary,t.category,t.sourceName,t.publisher].join(' ').toLowerCase().includes(search.toLowerCase().trim())),[search,desk,atlas])
  const shown=visible.slice(0,count)
  function exploreRandom(){
-  const list=desk==='all'?topics:topics.filter(t=>t.category===desk)
+  const list=desk==='all'?atlas:atlas.filter(t=>t.category===desk)
+  if(!list.length)return
   const rand=new Uint32Array(1);crypto.getRandomValues(rand)
   window.location.assign(path('/topics/'+list[rand[0]%list.length].slug))
  }
  return <Shell><main className="ica-page-content ica-topic-directory">
    <Intro label={extra.introLabel} title={c.title} description={c.intro} image="/assets/ica-cover-scene.png"/>
-   <div className="ica-topic-stats" aria-label={c.categories}><div><strong>{topics.length}</strong><span>{c.topic}</span></div><div><strong>{topicCategories.length}</strong><span>{c.categories}</span></div><div><strong>{new Set(topics.map(t=>t.sourceUrl)).size}</strong><span>{c.sources}</span></div><div><strong>2026</strong><span>{c.updated}</span></div></div>
+   <div className="ica-topic-stats" aria-label={c.categories}><div><strong>{atlas.length}</strong><span>{c.topic}</span></div><div><strong>{categories.length}</strong><span>{c.categories}</span></div><div><strong>{new Set(atlas.map(t=>t.sourceUrl)).size}</strong><span>{c.sources}</span></div><div><strong>2026</strong><span>{c.updated}</span></div></div>
    <p className="ica-research-disclaimer"><span aria-hidden="true">i</span>{c.disclaimer}</p>
    <div className="ica-topic-workbench">
-    <div className="ica-topic-workbench-heading"><h2>{c.categories}</h2><button className="ica-topic-random" type="button" onClick={exploreRandom}>{c.surprise}<span aria-hidden="true">↗</span></button></div>
+    <div className="ica-topic-workbench-heading"><h2>{c.categories}</h2><button className="ica-topic-random" type="button" onClick={exploreRandom}>{c.surprise}</button></div>
     <div className="ica-topic-search-row"><label><span className="sr-only">{c.search}</span><input type="search" value={search} onChange={e=>{setSearch(e.target.value);setCount(18)}} placeholder={c.search}/></label>
-    <label><span className="sr-only">{c.filter}</span><select value={desk} onChange={e=>{setDesk(e.target.value);setCount(18)}}><option value="all">{c.all}</option>{topicCategories.map(x=><option key={x.name} value={x.name}>{atlasCategory(lang,x.name)}</option>)}</select></label></div>
-    <div className="ica-topic-desk-filter" aria-label={c.filter}><button type="button" aria-pressed={desk==='all'} onClick={()=>{setDesk('all');setCount(18)}}>{c.all}<span>{topics.length}</span></button>{topicCategories.map(x=><button key={x.name} type="button" aria-pressed={desk===x.name} onClick={()=>{setDesk(x.name);setCount(18)}}>{atlasCategory(lang,x.name)}<span>{x.count}</span></button>)}</div>
+    <label><span className="sr-only">{c.filter}</span><select value={desk} onChange={e=>{setDesk(e.target.value);setCount(18)}}><option value="all">{c.all}</option>{categories.map(x=><option key={x.name} value={x.name}>{atlasCategory(lang,x.name)}</option>)}</select></label></div>
+    <div className="ica-topic-desk-filter" aria-label={c.filter}><button type="button" aria-pressed={desk==='all'} onClick={()=>{setDesk('all');setCount(18)}}>{c.all}<span>{atlas.length}</span></button>{categories.map(x=><button key={x.name} type="button" aria-pressed={desk===x.name} onClick={()=>{setDesk(x.name);setCount(18)}}>{atlasCategory(lang,x.name)}<span>{x.count}</span></button>)}</div>
    </div>
    <div className="ica-topic-results-count" role="status">{c.count} {shown.length} {c.of} {visible.length} {c.topic.toLowerCase()}</div>
    {shown.length?<div className="ica-topic-directory-grid">{shown.map(item=><TopicCard item={item} numbered key={item.id}/>)}</div>:<div className="ica-topic-zero"><h3>{c.empty}</h3><button type="button" onClick={()=>{setSearch('');setDesk('all')}}>{c.all}</button></div>}
@@ -63,16 +83,18 @@ export function TopicsIndex(){
 }
 export function TopicDetail({slug}:{slug:string}){
  const {path,lang}=useICA(),c=useCopy(),extra=atlasExtra[lang]
- const item=findTopic(slug)
- if(!item)return <Shell><main className="ica-article-notfound"><h1>{extra.notFound}</h1><p>{extra.notFoundDesc}</p><a href={path('/topics')}>{c.back} ↗</a></main></Shell>
- const related=topics.filter(x=>x.category===item.category&&x.slug!==item.slug).slice(0,3)
+ const atlas=useAtlas()
+ const item=atlas.find(x=>x.slug===slug)
+ if(!item)return <Shell><main className="ica-article-notfound"><h1>{extra.notFound}</h1><p>{extra.notFoundDesc}</p><a href={path('/topics')}>{c.back}</a></main></Shell>
+ const related=atlas.filter(x=>x.category===item.category&&x.slug!==item.slug).slice(0,3)
  const href=path('/contact')+(path('/contact').includes('?')?'&':'?')+'subject='+encodeURIComponent(item.title)
  return <Shell><main className="ica-topic-detail">
   <div className="ica-topic-crumb"><a href={path('/topics')}>← {c.back}</a><span>{atlasCategory(lang,item.category)}</span></div>
   <div className="ica-topic-detail-hero"><span className="ica-topic-detail-status">{c.status} / {item.id}</span><h1 lang="en" dir="auto">{item.title}</h1><p lang="en" dir="auto">{item.summary}</p><p className="ica-translation-note">{extra.originalLanguage}</p><div><span>{atlasCategory(lang,item.category)}</span><span>{c.updated}: {researchReviewedOn}</span></div></div>
-  <div className="ica-topic-detail-body"><article><h2>{extra.reportingPrompt}</h2><p lang="en" dir="auto">{item.summary}</p><ol>{extra.verifySteps.map((step,i)=><li key={i}>{step}</li>)}</ol><div className="ica-topic-detail-editorial"><strong>{extra.editorialStatus}</strong><p>{extra.editorialCaution}</p></div><a className="ica-topic-pitch" href={href}>{c.pitch}<span aria-hidden="true">↗</span></a></article>
-   <aside className="ica-topic-source"><span>{extra.readSource}</span><h3>{c.source}</h3><strong>{item.sourceName}</strong><p>{item.publisher}</p><a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">{extra.readSource} <span aria-hidden="true">↗</span></a><small>{extra.sourceDetail}</small></aside>
+  <div className="ica-topic-detail-body"><article><h2>{extra.reportingPrompt}</h2><p lang="en" dir="auto">{item.summary}</p><ol>{extra.verifySteps.map((step,i)=><li key={i}>{step}</li>)}</ol><div className="ica-topic-detail-editorial"><strong>{extra.editorialStatus}</strong><p>{extra.editorialCaution}</p></div><a className="ica-topic-pitch" href={href}>{c.pitch}</a></article>
+   <aside className="ica-topic-source"><span>{extra.readSource}</span><h3>{c.source}</h3><strong>{item.sourceName}</strong><p>{item.publisher}</p><a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">{extra.readSource} </a><small>{extra.sourceDetail}</small></aside>
   </div>
-  <section className="ica-topic-related"><div><h2>{c.related}</h2><a href={path('/topics')}>{c.back} ↗</a></div><div className="ica-topic-directory-grid">{related.map(x=><TopicCard key={x.slug} item={x}/>)}</div></section>
+  <section className="ica-topic-related"><div><h2>{c.related}</h2><a href={path('/topics')}>{c.back}</a></div><div className="ica-topic-directory-grid">{related.map(x=><TopicCard key={x.slug} item={x}/>)}</div></section>
  </main></Shell>
 }
+

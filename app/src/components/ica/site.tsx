@@ -1,8 +1,12 @@
+import {X,ExternalLink,Send} from 'lucide-react'
 import {useLocation} from '@tanstack/react-router'
-import {useState,useEffect,type FormEvent,type ReactNode} from 'react'
+import {useState,useEffect,useRef,type FormEvent,type ReactNode} from 'react'
 import type {ICAArticle,ICAMedia} from '../../lib/ica.server'
 import {ICA_DESKS} from '../../lib/ica-desks'
+import {localizedIcaRoute,isActiveIcaHeaderRoute} from '../../lib/ica-navigation'
 import {isLanguage,rtlLanguage,deskName,formatLocalDate,getI18n,type Language} from '../../lib/ica-i18n'
+import {ManagedICAContent,ICAContentProvider,useManagedICAZone,safeManagedImage,safeManagedHref} from './managed-content'
+import {EditorialBody} from './editorial-body'
 
 export type {Language} from '../../lib/ica-i18n'
 const labels={
@@ -17,46 +21,147 @@ export function useICA(){
  const p=new URLSearchParams(query)
  const raw=p.get('lang')
  const lang:Language=isLanguage(raw)?raw:'en'
- const path=(target:string)=>{
-  if(lang==='en')return target
-  const [base,hash]=target.split('#',2)
-  const sep=base.includes('?')?'&':'?'
-  return base+sep+'lang='+encodeURIComponent(lang)+(hash===undefined?'':'#'+hash)
- }
+ const path=(target:string)=>localizedIcaRoute(target,lang)
  return {lang,t:labels[lang],L:getI18n(lang),rtl:rtlLanguage(lang),path}
 }
 export function Brand({inverse=false}:{inverse?:boolean}){
- const {path}=useICA()
- return <a className={'ica-brand '+(inverse?'ica-brand-inverse':'')} href={path('/')} aria-label="Iraqi-Chinese Agency home">
+ const {path,t}=useICA()
+ return <a className={'ica-brand '+(inverse?'ica-brand-inverse':'')} href={path('/')}
+  aria-label={t.home+' · Iraqi-Chinese Agency'}>
   <span className="ica-symbol" aria-hidden="true"><b>ICA</b><i/></span>
-  <span className="ica-brand-name"><strong>IRAQI-CHINESE<br/>AGENCY</strong><small>ئـاژانسی عێراقی - چینی</small></span>
+  <span className="ica-brand-name">
+   <strong>IRAQI–CHINESE<span>AGENCY</span></strong>
+   <small>ئـاژانسی عێراقی - چینی</small>
+  </span>
  </a>
 }
 export function Header(){
  const {lang,t,L,rtl,path}=useICA()
- const nav=[['/desk/latest',t.news],['/desk/trending',t.trending],['/desk/hong-kong',t.hongKong],['/desk/asean',t.asean],['/desk/business',t.business],['/desk/finance',t.finance],['/topics',t.topics]]
- const mobileNav=[...nav,...ICA_DESKS.filter(x=>!['latest','trending','hong-kong','asean','business','finance'].includes(x.slug)).map(x=>['/desk/'+x.slug,deskName(lang,x.slug)]),['/newsroom',t.newsroom],['/culture',t.culture],['/video',t.video],['/entertainment',t.entertainment],['/about',t.about]]
- return <header className="ica-header">
-  <div className="ica-topline"><span>ICA | IRAQ × CHINA</span><span>{L('topline')}</span></div>
+ const location=useLocation()
+ const current=location.pathname
+ const [menuOpen,setMenuOpen]=useState(false)
+ const toggleRef=useRef<HTMLButtonElement>(null)
+ const panelRef=useRef<HTMLDivElement>(null)
+ const nav=[['/desk/latest',t.news],['/desk/trending',t.trending],
+  ['/desk/hong-kong',t.hongKong],['/desk/asean',t.asean],
+  ['/desk/business',t.business],['/desk/finance',t.finance],['/topics',t.topics]]
+ const extraDesks=ICA_DESKS.filter(x=>!['latest','trending','hong-kong','asean','business','finance'].includes(x.slug))
+  .map(x=>['/desk/'+x.slug,deskName(lang,x.slug)])
+ const agency=[['/culture',t.culture],['/video',t.video],['/entertainment',t.entertainment],
+  ['/about',t.about],['/contact',t.contact]]
+ const groups=[
+  {title:L('browseSections'),items:[['/',t.home],...nav,['/newsroom',t.newsroom]]},
+  {title:L('globalDesks'),items:extraDesks},
+  {title:L('agency'),items:agency}
+ ]
+ const closeMenu=(restoreFocus=false)=>{
+  setMenuOpen(false)
+  if(restoreFocus)toggleRef.current?.focus()
+ }
+ // Navigation and locale changes close stale drawers on SPA transitions.
+ useEffect(()=>{setMenuOpen(false)},[location.href])
+ useEffect(()=>{
+  if(!menuOpen)return
+  const priorOverflow=document.body.style.overflow
+  document.body.style.overflow='hidden'
+  panelRef.current?.querySelector<HTMLElement>('button')?.focus()
+  const onKey=(e:KeyboardEvent)=>{
+   if(e.key==='Escape'){e.preventDefault();closeMenu(true);return}
+   if(e.key!=='Tab'||!panelRef.current)return
+   const nodes=Array.from(panelRef.current.querySelectorAll<HTMLElement>(
+    'button:not([disabled]),a[href],select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+   )).filter(el=>el.getClientRects().length>0)
+   if(!nodes.length)return
+   const first=nodes[0],last=nodes[nodes.length-1]
+   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  }
+  const onPointer=(e:PointerEvent)=>{
+   const target=e.target as Node
+   if(!panelRef.current?.contains(target)&&!toggleRef.current?.contains(target))
+    closeMenu()
+  }
+  const onResize=()=>{if(window.innerWidth>1360)closeMenu()}
+  document.addEventListener('keydown',onKey)
+  document.addEventListener('pointerdown',onPointer)
+  window.addEventListener('resize',onResize)
+  return ()=>{
+   document.body.style.overflow=priorOverflow
+   document.removeEventListener('keydown',onKey)
+   document.removeEventListener('pointerdown',onPointer)
+   window.removeEventListener('resize',onResize)
+  }
+ },[menuOpen])
+ const links=(entries:string[][],className='')=>entries.map(([href,name])=>
+  <a className={className} href={path(href)} key={href}
+   aria-current={isActiveIcaHeaderRoute(current,href)?'page':undefined}
+   onClick={()=>closeMenu()}>{name}</a>)
+ return <header className={'ica-header ica-header-v20'+(menuOpen?' ica-header-menu-open':'')}>
+  <div className="ica-topline"><span>ICA <span aria-hidden="true">/</span> IRAQ × CHINA</span>
+   <span>{L('topline')}</span></div>
   <div className="ica-nav">
    <Brand/>
-   <nav className="ica-nav-links" aria-label="Primary navigation">{nav.map(([url,label])=><a key={url} href={path(url)}>{label}</a>)}</nav>
+   <nav className="ica-nav-links" aria-label={L('browseSections')}>{links(nav)}</nav>
    <div className="ica-nav-actions">
-    <label className="ica-language"><span className="sr-only">{t.language}</span><select value={lang} aria-label={t.language} onChange={e=>{const selected=e.target.value;if(!isLanguage(selected))return;try{window.localStorage.setItem('ica-language',selected)}catch{}const u=new URL(window.location.href);if(selected==='en')u.searchParams.delete('lang');else u.searchParams.set('lang',selected);window.location.assign(u.toString())}}><option value="en">EN</option><option value="ar">عربي</option><option value="ckb">کوردی</option><option value="zh">中文</option></select></label>
-    <a className="ica-nav-contact" href={path('/contact')}>{t.contact}</a>
+    <label className="ica-language"><span className="sr-only">{t.language}</span>
+     <select value={lang} aria-label={t.language} onChange={e=>{
+      const selected=e.target.value
+      if(!isLanguage(selected))return
+      try{window.localStorage.setItem('ica-language',selected)}catch{}
+      const u=new URL(window.location.href)
+      if(selected==='en')u.searchParams.delete('lang')
+      else u.searchParams.set('lang',selected)
+      window.location.assign(u.toString())
+     }}>
+      <option value="en">EN</option><option value="ar">عربي</option>
+      <option value="ckb">کوردی</option><option value="zh">中文</option>
+     </select>
+    </label>
+    <a className="ica-nav-contact" href={path('/contact')}
+     aria-current={current==='/contact'?'page':undefined}>{t.contact}</a>
+    <button ref={toggleRef} className="ica-menu-toggle" type="button"
+     aria-controls="ica-mobile-drawer" aria-expanded={menuOpen}
+     aria-label={menuOpen?L('closeMenu'):L('browseSections')}
+     onClick={()=>setMenuOpen(wasOpen=>!wasOpen)}>
+     <span className="ica-menu-toggle-lines" aria-hidden="true"><i/><i/><i/></span>
+     <span className="ica-menu-toggle-text">{menuOpen?L('closeMenu'):L('browseSections')}</span>
+    </button>
    </div>
   </div>
-  <MobileNavigation items={mobileNav} rtl={rtl} path={path} close={L('closeMenu')} browse={L('browseSections')} contact={L('contactICA')} />
-  <nav className="ica-header-topicline" aria-label={L('globalDesks')}><span>{L('globalDesks')}</span><div>{ICA_DESKS.filter(x=>!['latest','trending'].includes(x.slug)).map(x=><a key={x.slug} href={path('/desk/'+x.slug)}>{deskName(lang,x.slug)}</a>)}</div></nav>
+  <nav className="ica-header-topicline" aria-label={L('globalDesks')}>
+   <span>{L('globalDesks')}</span>
+   <div className="ica-topicline-scroll" tabIndex={0} role="group"
+    aria-label={L('globalDesks')}>
+    {ICA_DESKS.filter(x=>!['latest','trending'].includes(x.slug)).map(x=>
+     <a key={x.slug} href={path('/desk/'+x.slug)}
+      aria-current={isActiveIcaHeaderRoute(current,'/desk/'+x.slug)?'page':undefined}>
+      {deskName(lang,x.slug)}</a>)}
+   </div>
+  </nav>
+  {menuOpen&&<button type="button" className="ica-menu-scrim" tabIndex={-1}
+   aria-label={L('closeMenu')} onClick={()=>closeMenu()}/>}
+  <div id="ica-mobile-drawer" ref={panelRef} className="ica-menu-drawer"
+   hidden={!menuOpen} role="dialog" aria-modal={menuOpen?'true':undefined}
+   aria-label={L('browseSections')} dir={rtl?'rtl':'ltr'}>
+   <div className="ica-menu-drawer-head">
+    <span>ICA <span aria-hidden="true">/</span> {L('browseSections')}</span>
+    <button type="button" aria-label={L('closeMenu')} onClick={()=>closeMenu(true)}>
+     <X className="ica-action-icon" aria-hidden="true"/>{L('closeMenu')}
+    </button>
+   </div>
+   <div className="ica-menu-drawer-groups">
+    {groups.map((group,i)=><section className="ica-menu-group" key={i}>
+     <h2>{group.title}</h2>
+     <nav aria-label={group.title}>{links(group.items)}</nav>
+    </section>)}
+   </div>
+  </div>
  </header>
 }
-function MobileNavigation({items,rtl,path,close,browse,contact}:{items:string[][];rtl:boolean;path:(p:string)=>string;close:string;browse:string;contact:string}){
- const [open,setOpen]=useState(false)
- return <div className="ica-mobile-nav"><button type="button" aria-expanded={open} aria-controls="ica-mobile-drawer" onClick={()=>setOpen(!open)}>{open?close:browse} <span aria-hidden="true">{open?'×':'☰'}</span></button>{open&&<nav id="ica-mobile-drawer" dir={rtl?'rtl':'ltr'} aria-label="Mobile navigation">{items.map(([url,name])=><a href={path(url)} key={url}>{name}</a>)}<a href={path('/contact')}>{contact}</a></nav>}</div>
-}
+
 export function Footer(){
  const {t,L,path}=useICA()
- return <footer className="ica-footer"><div className="ica-footer-upper"><div><Brand inverse/><p>{L('footerDesc')}</p></div><div><h4>{L('discover')}</h4><a href={path('/desk/latest')}>{t.news}</a><a href={path('/desk/trending')}>{t.trending}</a><a href={path('/desk/hong-kong')}>{t.hongKong}</a><a href={path('/desk/asean')}>{t.asean}</a><a href={path('/topics')}>{t.topics}</a><a href={path('/culture')}>{t.culture}</a><a href={path('/video')}>{t.video}</a><a href={path('/entertainment')}>{t.entertainment}</a></div><div><h4>{L('agency')}</h4><a href={path('/newsroom')}>{t.newsroom}</a><a href={path('/about')}>{t.about}</a><a href={path('/contact')}>{t.contact}</a></div><div className="ica-footer-news"><h4>{L('partCCC')}</h4><p>{L('footerCCC')}</p><a href="https://ccc-iraq-cultural-centre.vercel.app/" target="_blank" rel="noopener noreferrer">{L('visitCCC')} ↗</a></div></div><div className="ica-footer-lower"><span>© {new Date().getUTCFullYear()} Iraqi-Chinese Agency. {L('allRights')}</span><span>{L('integrity')}</span></div></footer>
+ return <footer className="ica-footer"><div className="ica-footer-upper"><div><Brand inverse/><p>{L('footerDesc')}</p></div><div><h4>{L('discover')}</h4><a href={path('/desk/latest')}>{t.news}</a><a href={path('/desk/trending')}>{t.trending}</a><a href={path('/desk/hong-kong')}>{t.hongKong}</a><a href={path('/desk/asean')}>{t.asean}</a><a href={path('/topics')}>{t.topics}</a><a href={path('/culture')}>{t.culture}</a><a href={path('/video')}>{t.video}</a><a href={path('/entertainment')}>{t.entertainment}</a></div><div><h4>{L('agency')}</h4><a href={path('/newsroom')}>{t.newsroom}</a><a href={path('/about')}>{t.about}</a><a href={path('/contact')}>{t.contact}</a></div><div className="ica-footer-news"><h4>{L('partCCC')}</h4><p>{L('footerCCC')}</p><a href="https://ccc-iraq-cultural-centre.vercel.app/" target="_blank" rel="noopener noreferrer">{L('visitCCC')} <ExternalLink className="ica-action-icon" aria-hidden="true"/></a></div></div><div className="ica-footer-lower"><span>© {new Date().getUTCFullYear()} Iraqi-Chinese Agency. {L('allRights')}</span><span>{L('integrity')}</span></div></footer>
 }
 export function Shell({children,mainClass=''}:{children:ReactNode;mainClass?:string}){
  const {rtl,lang}=useICA()
@@ -69,23 +174,23 @@ export function Shell({children,mainClass=''}:{children:ReactNode;mainClass?:str
    if(isLanguage(saved)&&saved!=='en'){u.searchParams.set('lang',saved);window.location.replace(u.toString())}
   }catch{}
  },[lang])
- return <div dir={rtl?'rtl':'ltr'} lang={lang} className={'ica-site '+mainClass}><Header/>{children}<Footer/></div>
+ return <div dir={rtl?'rtl':'ltr'} lang={lang} className={'ica-site '+mainClass}><ICAContentProvider><Header/>{children}<ManagedICAContent/><Footer/></ICAContentProvider></div>
 }
 export function StoryCard({story,feature=false}:{story:ICAArticle;feature?:boolean}){
  const {t,L,lang,path}=useICA()
  return <article className={'ica-story-card '+(feature?'ica-story-feature':'')}>
  <a href={path('/news/'+story.slug)} className="ica-story-link">
- <div className="ica-story-image">{story.image_url?<img src={story.image_url} alt="" loading="lazy"/>:<span className="ica-story-placeholder" aria-hidden="true">ICA <i>PRESS</i></span>}</div>
- <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang}>{story.title}</h3><p lang={story.lang}>{story.excerpt}</p><span className="ica-story-read">{t.view} <span aria-hidden="true">↗</span></span></div>
+ <div className="ica-story-image">{story.image_url?<img src={story.image_url} alt="" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 850px) 50vw, 33vw"/>:<span className="ica-story-placeholder" aria-hidden="true">ICA <i>PRESS</i></span>}</div>
+ <div className="ica-story-text"><div className="ica-story-meta"><span>{story.type.toUpperCase()}</span><time dateTime={story.published_at||undefined}>{story.published_at?formatLocalDate(story.published_at,lang):'ICA'}</time></div><h3 lang={story.lang} dir="auto">{story.title}</h3><p lang={story.lang} dir="auto">{story.excerpt}</p><span className="ica-story-read">{t.view} <Send className="ica-action-icon" aria-hidden="true"/></span></div>
  </a></article>
 }
 export function EmptyEditorial({filter}:{filter?:string}){
  const {t,L,path}=useICA()
- return <div className="ica-editorial-empty"><div className="ica-editorial-empty-icon" aria-hidden="true">ICA</div><h3>{filter?filter:t.recent}</h3><p>{t.empty}</p><a href={path('/newsroom')}>{L('editorialStandards')} <span aria-hidden="true">↗</span></a></div>
+ return <div className="ica-editorial-empty"><div className="ica-editorial-empty-icon" aria-hidden="true">ICA</div><h3>{filter?filter:t.recent}</h3><p>{t.empty}</p><a href={path('/newsroom')}>{L('editorialStandards')} <Send className="ica-action-icon" aria-hidden="true"/></a></div>
 }
 export function NewsSection({articles,title,tag}:{articles:ICAArticle[];title?:string;tag?:string}){
  const {t,L,path}=useICA()
- return <section className="ica-news-section"><div className="ica-section-heading"><div><span className="ica-eyebrow">{tag||L('editorialDesk')}</span><h2>{title||t.latest}</h2></div><a className="ica-section-action" href={path('/news')}>{t.all}<span aria-hidden="true">↗</span></a></div>
+ return <section className="ica-news-section"><div className="ica-section-heading"><div><span className="ica-eyebrow">{tag||L('editorialDesk')}</span><h2>{title||t.latest}</h2></div><a className="ica-section-action" href={path('/news')}>{t.all}<Send className="ica-action-icon" aria-hidden="true"/></a></div>
  {articles.length?<div className="ica-story-grid">{articles.slice(0,6).map((a,i)=><StoryCard story={a} feature={i===0} key={a.id}/>)}</div>:<EmptyEditorial/>}
  </section>
 }
@@ -96,14 +201,25 @@ export function Newsletter(){
   e.preventDefault();const form=e.currentTarget;const fd=new FormData(form);setState('pending')
   try{const r=await fetch('/api/ica',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subscribe',email:fd.get('email'),lang,website:fd.get('website')})});const d=await r.json();setState(r.ok&&d.ok?'success':'error');if(d.ok)form.reset()}catch{setState('error')}
  }
- return <section className="ica-newsletter" aria-labelledby="ica-subscribe-title"><div className="ica-newsletter-art" aria-hidden="true"><span>ICA</span><i/></div><div className="ica-newsletter-copy"><h2 id="ica-subscribe-title">{t.subscribe}</h2><p>{t.subHelp}</p></div><form onSubmit={send} className="ica-newsletter-form"><label htmlFor="ica-email">{t.email}</label><div className="ica-newsletter-entry"><input type="email" name="email" id="ica-email" placeholder="reader@example.com" required maxLength={240}/><button type="submit" disabled={state==='pending'}>{state==='pending'?'…':t.join} <span aria-hidden="true">↗</span></button></div><input className="ica-trap" type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true"/><p aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('newsletterPrivacy')}</p></form></section>
+ return <section className="ica-newsletter" aria-labelledby="ica-subscribe-title"><div className="ica-newsletter-art" aria-hidden="true"><span>ICA</span><i/></div><div className="ica-newsletter-copy"><h2 id="ica-subscribe-title">{t.subscribe}</h2><p>{t.subHelp}</p></div><form onSubmit={send} className="ica-newsletter-form"><label htmlFor="ica-email">{t.email}</label><div className="ica-newsletter-entry"><input type="email" name="email" id="ica-email" placeholder="reader@example.com" required maxLength={240}/><button type="submit" disabled={state==='pending'}>{state==='pending'?'…':t.join} <Send className="ica-action-icon" aria-hidden="true"/></button></div><input className="ica-trap" type="text" name="website" autoComplete="off" tabIndex={-1} aria-hidden="true"/><p aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('newsletterPrivacy')}</p></form></section>
 }
 export function Intro({label,title,description,image}:{label:string;title:string;description:string;image?:string}){
- return <div className={'ica-page-intro '+(image?'ica-page-intro-image':'')}><div><span className="ica-intro-label">{label}</span><h1>{title}</h1><p>{description}</p></div>{image&&<img src={image} alt="" />}</div>
+ const {lang}=useICA()
+ const managed=useManagedICAZone('hero','page-headline')
+ const photo=managed?.image_url&&safeManagedImage(managed.image_url)?managed.image_url:image
+ const cta=managed?.cta_href?safeManagedHref(managed.cta_href,lang):null
+ return <div className={'ica-page-intro '+(photo?'ica-page-intro-image':'')}>
+  <div><span className="ica-intro-label">{managed?.eyebrow||label}</span>
+   <h1>{managed?.title||title}</h1><p>{managed?.summary||description}</p>
+   {managed?.body&&<EditorialBody body={managed.body} className="ica-native-body"/>}
+   {cta&&managed?.cta_label&&<a className="ica-native-cta" href={cta}>{managed.cta_label} ↗</a>}
+  </div>
+  {photo&&<img src={photo} alt={managed?.image_alt||''} loading="lazy" decoding="async"/>}
+ </div>
 }
 export function MediaItems({media}:{media:ICAMedia[]}){
  const {path,L,lang}=useICA()
- return media.length?<div className="ica-media-grid">{media.map(m=><article key={m.id} className="ica-media-tile"><a href={m.url} target="_blank" rel="noreferrer"><div className="ica-media-poster">{m.poster_url?<img src={m.poster_url} alt="" loading="lazy"/>:<span className="ica-media-symbol" aria-hidden="true">▶</span>}<span className="ica-play-symbol" aria-hidden="true">▶</span></div><span className="ica-media-category">{m.kind.toUpperCase()} / {m.category}</span><h3 lang="auto">{m.title}</h3><p>{m.description}</p></a></article>)}</div>:<div className="ica-media-empty"><img src="/assets/ica-entertainment.png" alt="Recording studio with cameras and film production equipment"/><div><h3>{L('mediaArchive')}</h3><p>{L('mediaPending')}</p><a href={path('/contact')}>{L('suggestProduction')} ↗</a></div></div>
+ return media.length?<div className="ica-media-grid">{media.map(m=><article key={m.id} className="ica-media-tile"><a href={m.url} target="_blank" rel="noreferrer"><div className="ica-media-poster">{m.poster_url?<img src={m.poster_url} alt="" loading="lazy" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 850px) 50vw, 33vw"/>:<span className="ica-media-symbol" aria-hidden="true">▶</span>}<span className="ica-play-symbol" aria-hidden="true">▶</span></div><span className="ica-media-category">{m.kind.toUpperCase()} / {m.category}</span><h3 lang="auto">{m.title}</h3><p>{m.description}</p></a></article>)}</div>:<div className="ica-media-empty"><img src="/assets/ica-entertainment.png" alt="Recording studio with cameras and film production equipment" loading="lazy" decoding="async"/><div><h3>{L('mediaArchive')}</h3><p>{L('mediaPending')}</p><a href={path('/contact')}>{L('suggestProduction')} ↗</a></div></div>
 }
 export function ContactForm(){
  const {t,L}=useICA()
@@ -114,5 +230,6 @@ export function ContactForm(){
   e.preventDefault();const form=e.currentTarget;const data=Object.fromEntries(new FormData(form).entries());setState('pending')
   try{const r=await fetch('/api/ica',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,action:'contact'})});const res=await r.json();setState(r.ok&&res.ok?'success':'error');if(res.ok)form.reset()}catch{setState('error')}
  }
- return <form onSubmit={send} className="ica-contact-form"><div className="ica-form-row"><label>{L('name')}<input name="name" minLength={2} maxLength={120} required autoComplete="name"/></label><label>{L('email')}<input name="email" type="email" maxLength={240} required autoComplete="email"/></label></div><label>{L('topic')}<select name="topic" required defaultValue={subject?"News tip":""}><option value="" disabled>{L('selectTopic')}</option><option value="News tip">{L('tip')}</option><option value="Press enquiry">{L('enquiry')}</option><option value="Cultural collaboration">{L('collab')}</option><option value="Corrections request">{L('correctionRequest')}</option><option value="Other request">{L('other')}</option></select></label><label>{L('message')}<textarea name="message" minLength={12} maxLength={4000} rows={7} required defaultValue={subject?L('regardingResearch')+" "+subject+"\n\n":""} placeholder={L('messagePlaceholder')} /></label><input name="website" className="ica-trap" tabIndex={-1} autoComplete="off" aria-hidden="true"/><button type="submit" disabled={state==='pending'}>{state==='pending'?L('sending'):L('send')}<span aria-hidden="true">↗</span></button><p className="ica-form-response" role="status" aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('contactPrivacy')}</p></form>
+ return <form onSubmit={send} className="ica-contact-form"><div className="ica-form-row"><label>{L('name')}<input name="name" minLength={2} maxLength={120} required autoComplete="name"/></label><label>{L('email')}<input name="email" type="email" maxLength={240} required autoComplete="email"/></label></div><label>{L('topic')}<select name="topic" required defaultValue={subject?"News tip":""}><option value="" disabled>{L('selectTopic')}</option><option value="News tip">{L('tip')}</option><option value="Press enquiry">{L('enquiry')}</option><option value="Cultural collaboration">{L('collab')}</option><option value="Corrections request">{L('correctionRequest')}</option><option value="Other request">{L('other')}</option></select></label><label>{L('message')}<textarea name="message" minLength={12} maxLength={4000} rows={7} required defaultValue={subject?L('regardingResearch')+" "+subject+"\n\n":""} placeholder={L('messagePlaceholder')} /></label><input name="website" className="ica-trap" tabIndex={-1} autoComplete="off" aria-hidden="true"/><button type="submit" disabled={state==='pending'}>{state==='pending'?L('sending'):L('send')}<Send className="ica-action-icon" aria-hidden="true"/></button><p className="ica-form-response" role="status" aria-live="polite">{state==='success'?t.success:state==='error'?t.error:L('contactPrivacy')}</p></form>
 }
+

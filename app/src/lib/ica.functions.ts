@@ -22,6 +22,41 @@ export const getArticleDetails = createServerFn({method:'GET'}).validator((data:
  const {getArticle}=await import('./ica.server')
  return getArticle(data.slug)
 })
+export const getPublishedStoryEditions=createServerFn({method:'GET'})
+ .validator((data:{slug:string})=>({slug:String(data?.slug||'').slice(0,110)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublishedStoryEditions}=await import('./ica-vercel-public.server')
+   return readPublishedStoryEditions(data.slug)
+  }
+  return [] as Array<{lang:string;slug:string}>
+ })
+
+export const getPublicIcaLiveUpdates=createServerFn({method:'GET'})
+ .validator((args:{articleId:string})=>({articleId:String(args?.articleId||'').slice(0,40)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublicLiveUpdates}=await import('./ica-vercel-public.server')
+   return readPublicLiveUpdates(data.articleId)
+  }
+  return [] as Array<{id:string;article_id:string;lang:string;headline:string;body:string;
+   source_url:string;urgency:string;published_at:string}>
+ })
+
+/** Public media references contain no Storage paths or unreviewed rights details. */
+export const getPublishedStoryAssets=createServerFn({method:'GET'})
+ .validator((input:{articleId:string})=>({articleId:String(input?.articleId||'').slice(0,40)}))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readPublicStoryAssets}=await import('./ica-vercel-public.server')
+   return readPublicStoryAssets(data.articleId)
+  }
+  return [] as Array<{
+   asset_id:string;article_id:string;placement:string;sort_order:number;lang:string;
+   title:string;alt_text:string;caption:string;credit:string;focal_x:number;focal_y:number
+  }>
+ })
+ 
 export const getMediaFeed = createServerFn({method:'GET'}).handler(async()=>{
  if(typeof process!=='undefined' && process.env.VERCEL){const {readMedia}=await import('./ica-vercel-public.server');return readMedia()}
  const {listMedia}=await import('./ica.server');return listMedia()
@@ -38,4 +73,26 @@ export const getPortalDesk = createServerFn({method:'GET'}).validator((data:{des
  const matched=deskBySlug(desk)
  const articles=desk==='latest'?allArticles:desk==='trending'?allArticles.filter(x=>x.trending||x.featured):allArticles.filter(a=>(!!matched?.region&&a.region===matched.region)||(!!matched?.desk&&a.desk===matched.desk))
  return {desk,wire,articles}
+})
+
+
+export const getManagedPageBlocks=createServerFn({method:'GET'})
+ .validator((input:{page:string;lang?:string})=>({
+  page:String(input?.page||'').slice(0,55),
+  lang:isLanguage(input?.lang)?input.lang:'en'
+ }))
+ .handler(async({data})=>{
+  if(typeof process!=='undefined'&&process.env.VERCEL){
+   const {readManagedBlocks}=await import('./ica-managed-content.server')
+   return readManagedBlocks(data.page,data.lang)
+  }
+  return []
+ })
+
+export const getLiveResearchAtlas=createServerFn({method:'GET'}).handler(async()=>{
+ if(typeof process!=='undefined'&&process.env.VERCEL){
+  const {readResearchAtlas}=await import('./ica-research-public.server')
+  return readResearchAtlas()
+ }
+ return {available:false,items:[]}
 })

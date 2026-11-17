@@ -185,7 +185,7 @@
 
 /* ICA independent editorial identity */
 :root {--ica-red:#E3001B;--ica-wine:#361019;--ica-ink:#242126;--ica-ivory:#FCFBF8;--ica-paper:#F3F0EC;--ica-muted:#746D71;--ica-line:#E9E2E0;--ica-display:"Arial Narrow","Helvetica Neue",Arial,sans-serif;--ica-body:Arial,Helvetica,sans-serif;}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}
 body{margin:0;background:var(--ica-ivory);color:var(--ica-ink);font-family:var(--ica-body);font-size:16px;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
 button,input,textarea,select{font:inherit}
@@ -212,11 +212,10 @@ img{max-width:100%;display:block}
 .ica-nav-actions{display:flex;align-items:center;gap:13px;white-space:nowrap}
 .ica-language select{background:transparent;color:var(--ica-ink);border:0;font-weight:800;font-size:12px;max-width:76px}
 .ica-nav-contact{font-size:12px;font-weight:800;background:var(--ica-red);color:#fff;padding:12px 16px;transition:transform .2s}
-.ica-nav-contact:hover{transform:translateY(-2px)}
-.ica-mobile-nav{display:none}
+
 .ica-film-intro{position:relative;background:#190e12;isolation:isolate}
 .ica-film-intro .ica-film-cta{position:absolute;z-index:12;top:min(72vh,690px);left:clamp(20px,6vw,90px);background:var(--ica-red);color:white;font-weight:800;padding:17px 23px;display:flex;align-items:center;justify-content:space-between;gap:42px;letter-spacing:.02em;box-shadow:0 14px 40px #0b000966;transition:transform .3s}
-.ica-film-cta:hover{transform:translateX(4px)}
+
 .ica-feature-strip{background:var(--ica-red);color:white;display:grid;grid-template-columns:1fr 1.5fr 1fr;align-items:center;gap:22px;padding:30px max(28px,calc((100vw - 1300px)/2));font-size:12px}
 .ica-feature-strip p{margin:0;font-weight:800;letter-spacing:.14em}
 .ica-feature-strip p span{font-size:20px;font-weight:400;margin:0 9px}
@@ -235,8 +234,8 @@ img{max-width:100%;display:block}
 .ica-story-link{display:block}
 .ica-story-image{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:#E8DDDC}
 .ica-story-feature .ica-story-image{aspect-ratio:16/10}
-.ica-story-image img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
-.ica-story-link:hover .ica-story-image img{transform:scale(1.05)}
+.ica-story-image img{width:100%;height:100%;object-fit:cover}
+
 .ica-story-placeholder{height:100%;display:flex;align-items:center;justify-content:center;gap:7px;color:var(--ica-red);font-family:var(--ica-display);font-size:clamp(28px,4vw,70px);font-weight:900;letter-spacing:-.06em;background:radial-gradient(circle at 30% 15%,#fff8f4,transparent 58%),linear-gradient(130deg,#EFE4E3,#D4C0C2)}
 .ica-story-placeholder i{font-size:11px;font-style:normal;letter-spacing:.15em;border:1px solid;padding:5px}
 .ica-story-text{padding:18px 2px}
@@ -405,11 +404,6 @@ img{max-width:100%;display:block}
  .ica-contact-layout{gap:55px}
 }
 @media (max-width:900px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:#fff;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:#fff;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine);letter-spacing:.05em}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;left:0;right:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 28px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
- .ica-mobile-nav nav a{padding:14px 5px;border-bottom:1px solid #F2EEEE;font-size:14px;font-weight:750}
  .ica-feature-strip{grid-template-columns:1fr;gap:12px;text-align:center}
  .ica-feature-strip>span{text-align:center}
  .ica-footer-upper{grid-template-columns:2fr 1fr 1fr}
@@ -479,11 +473,11 @@ img{max-width:100%;display:block}
 .ica-topics-home-title h2{font-family:var(--ica-display);font-size:clamp(40px,5vw,68px);font-weight:900;letter-spacing:-.065em;line-height:1.05;margin:15px 0}
 .ica-topics-home-title p{line-height:1.7;font-size:15px;color:var(--ica-muted);margin:0;max-width:630px}
 .ica-topics-home-link{flex-shrink:0;display:inline-flex;align-items:center;gap:22px;color:var(--ica-red);border-bottom:2px solid var(--ica-red);padding:10px 0;font-size:13px;font-weight:850}
-.ica-topics-home-link:hover{gap:30px;transition:gap .2s ease}
+
 .ica-topics-home-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
 .ica-topics-home-notice{color:var(--ica-muted);font-size:11px;line-height:1.5;margin:22px 0 0}
-.ica-topic-card{background:#fff;border:1px solid var(--ica-line);border-top:3px solid var(--ica-red);padding:24px 23px 21px;display:flex;flex-direction:column;gap:0;min-width:0;min-height:265px;transition:box-shadow .22s ease,transform .22s ease}
-.ica-topic-card:hover{box-shadow:0 18px 46px #36101914;transform:translateY(-3px)}
+.ica-topic-card{background:#fff;border:1px solid var(--ica-line);border-top:3px solid var(--ica-red);padding:24px 23px 21px;display:flex;flex-direction:column;gap:0;min-width:0;min-height:265px}
+
 .ica-topic-card-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:21px}
 .ica-topic-card-number{font-size:10px;color:#96878B;letter-spacing:.11em;font-weight:900}
 .ica-topic-card-status{font-size:10px;font-weight:750;color:#AD2B44;letter-spacing:.035em;white-space:nowrap}
@@ -565,13 +559,6 @@ img{max-width:100%;display:block}
 [dir=rtl] .ica-topic-source a span,[dir=rtl] .ica-topic-pitch span{display:inline-block;transform:scaleX(-1)}
 @media(max-width:1110px){
  .ica-topics-home-grid,.ica-topic-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media (min-width:901px) and (max-width:1060px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:#fff;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:#fff;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine)}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;left:0;right:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 28px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px}
- .ica-mobile-nav nav a{padding:14px 5px;border-bottom:1px solid #F2EEEE;font-size:14px;font-weight:750}
 }
 @media(max-width:700px){
  .ica-topics-home{padding:45px 0 25px;margin-bottom:55px}
@@ -686,8 +673,8 @@ img{max-width:100%;display:block}
 .ica-intl-trending-top>a,.ica-intl-section-heading>a{color:var(--ica-red);font-size:12px;font-weight:850;border-bottom:1px solid var(--ica-red);padding:10px 0;white-space:nowrap}
 .ica-intl-explain{font-size:12px;color:#776B70;line-height:1.65;margin:14px 0 24px}
 .ica-intl-trending-rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:7px 2px 19px;scrollbar-color:#D5C6CB transparent;scrollbar-width:thin}
-.ica-trending-tile{scroll-snap-align:start;min-width:260px;max-width:345px;flex:1 0 250px;background:white;border:1px solid var(--ica-line);border-top:3px solid var(--ica-red);padding:18px 20px 15px;min-height:270px;display:flex;flex-direction:column;transition:transform .2s}
-.ica-trending-tile:hover{transform:translateY(-3px)}
+.ica-trending-tile{scroll-snap-align:start;min-width:260px;max-width:345px;flex:1 0 250px;background:white;border:1px solid var(--ica-line);border-top:3px solid var(--ica-red);padding:18px 20px 15px;min-height:270px;display:flex;flex-direction:column}
+
 .ica-trending-number{font-weight:900;font-size:33px;letter-spacing:-.08em;color:var(--ica-red);line-height:1}
 .ica-trending-topic{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;color:#927A84;margin-top:15px}
 .ica-trending-tile h3{font-weight:900;font-size:19px;letter-spacing:-.045em;line-height:1.3;margin:10px 0 auto}
@@ -972,7 +959,6 @@ html:has(.ica-site){color-scheme:light}
 .ica-site :where(h1,h2,h3,p,strong,a){overflow-wrap:break-word}
 .ica-nav-links{min-width:0}
 .ica-header-topicline>div,.ica-desk-nav>div{min-width:0}
-.ica-mobile-nav nav{max-height:min(70dvh,540px);overflow-y:auto;overscroll-behavior:contain}
 .ica-intl-desk-list strong,.ica-wire-story h3,.ica-trending-tile h3{overflow-wrap:anywhere}
 .ica-intl-source-directory>div:last-child>a{padding-inline-end:28px}
 .ica-intl-source-directory>div:last-child>a span:last-child{inset-inline-end:10px;right:auto;left:auto}
@@ -981,16 +967,8 @@ html:has(.ica-site){color-scheme:light}
 .ica-site[dir="rtl"] .ica-intl-hero-grid :is(.ica-wire-story h3,.ica-wire-story p)[lang="en"]{direction:ltr;text-align:left}
 .ica-site[dir="rtl"] .ica-wire-story [dir="auto"]:not([lang="en"]){unicode-bidi:plaintext}
 .ica-site[lang="ar"] .ica-nav-links a,.ica-site[lang="ckb"] .ica-nav-links a{letter-spacing:normal}
-.ica-site[dir="rtl"] .ica-mobile-nav nav{direction:rtl}
 .ica-site[lang="ar"] .ica-desk-filter-header button,.ica-site[lang="ckb"] .ica-desk-filter-header button{white-space:normal;line-height:1.5}
 .ica-site[lang="ar"] .ica-trending-tile h3,.ica-site[lang="ckb"] .ica-trending-tile h3{letter-spacing:normal}
-@media(max-width:1180px){
- .ica-nav-links{display:none}
- .ica-mobile-nav{display:block;position:relative;background:white;border-top:1px solid var(--ica-line)}
- .ica-mobile-nav>button{width:100%;border:0;background:white;display:flex;justify-content:space-between;padding:12px 24px;font-size:12px;font-weight:850;color:var(--ica-wine)}
- .ica-mobile-nav nav{position:absolute;z-index:60;top:100%;inset-inline:0;background:#fff;box-shadow:0 20px 30px #0002;padding:10px 22px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}
- .ica-mobile-nav nav a{padding:12px 6px;border-bottom:1px solid #F2EEEE;font-size:13px;font-weight:750;line-height:1.5}
-}
 @media(max-width:700px){
  .ica-film-intro .ica-film-cta{inset-inline-start:18px;left:auto;right:auto}
  .ica-intl-hero-title,.ica-intl-hero-title>div,.ica-intl-market-strip,.ica-desk-intro,.ica-desk-controls{min-width:0}
@@ -998,8 +976,1697 @@ html:has(.ica-site){color-scheme:light}
  .ica-intl-hero h1,.ica-desk-intro h1{overflow-wrap:anywhere}
 }
 @media(max-width:410px){
- .ica-mobile-nav nav{grid-template-columns:1fr}
  .ica-header-topicline a{font-size:10px}
  .ica-desk-filter-header>button{width:100%;white-space:normal}
  .ica-intl-market-resources{grid-template-columns:1fr}
+}
+
+
+/* ICA news ribbon v16 — unobstructed latest headlines, not publisher tabs. */
+.ica-news-ticker{min-width:0;isolation:isolate;direction:inherit}
+.ica-news-window{flex:1 1 auto;min-width:0;overflow:hidden;position:relative;direction:ltr}
+.ica-news-window:before,.ica-news-window:after{content:"";pointer-events:none;position:absolute;z-index:1;top:0;bottom:0;width:18px}
+.ica-news-window:before{left:0;background:linear-gradient(90deg,#22151B,transparent)}
+.ica-news-window:after{right:0;background:linear-gradient(270deg,#22151B,transparent)}
+.ica-news-track{display:flex;width:max-content;align-items:center;animation:ica-news-left 75s linear infinite}
+.ica-news-sequence{display:flex;align-items:center;flex:none;gap:0;white-space:nowrap}
+.ica-news-sequence a{display:inline-flex;align-items:center;gap:22px;white-space:nowrap;max-width:none;overflow:visible;text-overflow:clip;min-height:46px;padding:0 22px;color:#fff;font-size:12px;font-weight:600;text-decoration:none;unicode-bidi:isolate}
+.ica-news-sequence a:hover,.ica-news-sequence a:focus-visible{color:#ffb5c4;text-decoration:underline;text-underline-offset:3px}
+.ica-news-headline{max-width:none;white-space:nowrap;direction:auto}
+.ica-news-separator{font-size:7px;color:#e74a65;opacity:.9;flex-shrink:0}
+.ica-news-ticker:hover .ica-news-track,.ica-news-ticker:focus-within .ica-news-track{animation-play-state:paused}
+.ica-news-ticker[data-flow="rtl"] .ica-news-track{animation-name:ica-news-right}
+@keyframes ica-news-left{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes ica-news-right{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.ica-news-ticker .ica-ticker-key{white-space:nowrap;position:relative;z-index:2}
+@media(max-width:640px){
+ .ica-news-sequence a{min-height:42px;padding:0 16px;font-size:11px;gap:16px}
+ .ica-news-track{animation-duration:85s}
+ .ica-news-window:before,.ica-news-window:after{width:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-news-window{overflow-x:auto;scrollbar-width:thin}
+ .ica-news-track{animation:none;transform:none}
+ .ica-news-sequence[aria-hidden="true"]{display:none}
+}
+
+/* Published ICA document typography — controlled Markdown, never HTML injection. */
+.ica-article-content h2,.ica-managed-body h2{font-size:clamp(1.25rem,2.1vw,1.75rem);line-height:1.3;margin:1.4rem 0 .7rem}
+.ica-article-content h3,.ica-managed-body h3{font-size:1.23rem;line-height:1.4;margin:1.15rem 0 .5rem}
+.ica-article-content h4,.ica-managed-body h4{font-size:1.08rem;margin:1rem 0 .4rem}
+.ica-article-content ul,.ica-article-content ol,.ica-managed-body ul,.ica-managed-body ol{padding-inline-start:1.8rem;margin:1rem 0;line-height:1.75}
+.ica-article-content li+li,.ica-managed-body li+li{margin-top:.35rem}
+.ica-article-content blockquote,.ica-managed-body blockquote{border-inline-start:3px solid var(--ica-red,#e3001b);padding:.65rem 1.2rem;background:#f7f3f4;margin:1.15rem 0}
+.ica-article-content hr,.ica-managed-body hr{border:0;border-top:1px solid #dcd9da;margin:1.5rem 0}
+.ica-article-content a,.ica-managed-body a{color:var(--ica-red,#c21933);text-decoration:underline;text-underline-offset:.15em;overflow-wrap:anywhere}
+.ica-article-content p,.ica-managed-body p{white-space:pre-line}
+.ica-article-content strong,.ica-managed-body strong{font-weight:750}
+
+.ica-editorial-table{border-collapse:collapse;width:100%;max-width:100%;display:block;overflow-x:auto;margin:1.25rem 0;font-size:.9em;white-space:normal}
+.ica-editorial-table th,.ica-editorial-table td{border:1px solid #ddd7d9;padding:.65rem .8rem;min-width:90px;text-align:start;vertical-align:top}
+.ica-editorial-table th{background:#f5f1f2;font-weight:700}
+
+
+/* ICA breaking / live coverage public timeline; source-checked publications only. */
+.ica-live-timeline{margin:2rem auto;max-width:980px;min-width:0;border-top:3px solid #d90724;padding:1.25rem 0 0}
+.ica-live-heading{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:0 0 1.4rem}
+.ica-live-heading h2{font-size:clamp(1.4rem,2.3vw,2rem);letter-spacing:-.025em;line-height:1.25;margin:0}
+.ica-live-heading small{color:#6b707b;font-size:.75rem;margin-inline-start:auto}
+.ica-live-indicator{color:#d90724;line-height:1}
+.ica-live-items{list-style:none;padding:0;margin:0;display:grid;gap:0}
+.ica-live-item{position:relative;padding:1.05rem 1.25rem 1.6rem;margin-inline-start:.6rem;border-inline-start:1px solid #e8dce0;min-width:0;overflow-wrap:anywhere}
+.ica-live-item:before{content:"";position:absolute;inset-inline-start:-5px;top:1.3rem;width:9px;height:9px;border-radius:100%;background:#d90724}
+.ica-live-item>div:first-child{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;font-size:.75rem;color:#707078}
+.ica-live-item h3{font-size:clamp(1.04rem,2vw,1.32rem);line-height:1.4;margin:.65rem 0}
+.ica-live-copy{font-size:.93rem;line-height:1.8}
+.ica-live-copy p{margin:.6rem 0}
+.ica-live-item>a{color:#b70c2b;text-decoration:underline;text-underline-offset:.2em;font-size:.83rem;font-weight:650}
+.ica-live-urgency{font-size:.66rem;letter-spacing:.09em;font-weight:750;text-transform:uppercase;color:#b40d2e}
+.ica-live-critical .ica-live-urgency{color:#9b1b11}
+
+@media(prefers-reduced-motion:reduce){.ica-live-indicator{animation:none}}
+@media(max-width:620px){.ica-live-timeline{margin-block:1rem}.ica-live-item{padding:1rem 0 1.25rem 1rem}.ica-live-heading small{margin-inline-start:0}}
+
+/* CEO-released ICA DAM story images — private originals are never embedded. */
+.ica-article-dam-cover,.ica-dam-story-gallery figure{margin:1.1rem 0 2rem;min-width:0}
+.ica-article-dam-cover img{width:100%;height:auto;max-height:660px;aspect-ratio:16/10;object-fit:cover;display:block;background:#f5f2f3;border-radius:5px}
+.ica-article-dam-cover figcaption,.ica-dam-story-gallery figcaption{font-size:.78rem;line-height:1.65;padding:.65rem .15rem;color:#66646d;overflow-wrap:anywhere;white-space:normal}
+.ica-article-dam-cover cite,.ica-dam-story-gallery cite{font-size:.72rem;font-style:normal;font-weight:700;unicode-bidi:plaintext}
+.ica-dam-story-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:1rem;margin:1.25rem 0 2.25rem}
+.ica-dam-story-gallery img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:#f5f1f2;border-radius:4px}
+.ica-article-dam-cover[dir=auto],.ica-dam-story-gallery figure[dir=auto]{unicode-bidi:plaintext}
+@media(max-width:640px){.ica-article-dam-cover img{aspect-ratio:4/3;max-height:360px}.ica-dam-story-gallery{grid-template-columns:minmax(0,1fr)}}
+
+
+/* ICA International v20 · unified brand/navigation system.
+   One responsive breakpoint (1360px), script-safe RTL and keyboard-controlled drawer.
+   The former duplicate legacy navigation selectors have been removed. */
+.ica-header-v20{
+ position:relative;z-index:100;isolation:isolate;background:#fff;
+ border-bottom:1px solid #e9e5e4;box-shadow:0 1px 0 rgb(25 20 25 / 3%);
+}
+.ica-header-v20 .ica-topline{
+ height:30px;background:#2b171d;color:#f6edef;
+ font-size:10px;font-weight:650;letter-spacing:.065em;
+ padding-inline:max(24px,calc((100% - 1400px)/2));
+}
+.ica-header-v20 .ica-topline>span:first-child{
+ direction:ltr;unicode-bidi:isolate;white-space:nowrap;
+}
+.ica-header-v20 .ica-topline>span:first-child span{color:#f8788b;margin-inline:6px}
+.ica-header-v20 .ica-nav{
+ max-width:1460px;width:100%;height:85px;
+ padding-inline:clamp(18px,2.7vw,38px);
+ gap:clamp(13px,1.7vw,30px);
+ justify-content:space-between;min-width:0;
+}
+.ica-header-v20 .ica-brand{
+ direction:ltr;text-align:left;unicode-bidi:isolate;
+ flex:0 0 auto;min-width:0;gap:12px;
+ border-radius:9px;padding:4px 0;
+}
+.ica-header-v20 .ica-brand .ica-symbol{
+ width:53px;height:53px;min-width:53px;
+ border-radius:11px;clip-path:none;
+ background:#e3001b;color:#fff;
+ box-shadow:inset 0 0 0 1px rgb(255 255 255 / 8%);
+}
+.ica-header-v20 .ica-brand .ica-symbol b{
+ font-family:Arial,Helvetica,sans-serif;font-weight:950;
+ font-size:20px;letter-spacing:-.08em;line-height:1;
+ margin:0 3px 4px 0;transform:none;
+}
+.ica-header-v20 .ica-brand .ica-symbol i{
+ height:3px;width:21px;inset:auto auto 11px 16px;
+ transform:none;border-radius:2px;background:#fff;opacity:.9;
+}
+.ica-header-v20 .ica-brand-name{gap:5px;min-width:0}
+.ica-header-v20 .ica-brand-name strong{
+ display:block;font-family:Arial,Helvetica,sans-serif;
+ color:#231f22;font-size:14px;line-height:1.12;
+ font-weight:900;letter-spacing:.04em;white-space:nowrap;
+}
+.ica-header-v20 .ica-brand-name strong span{display:block}
+.ica-header-v20 .ica-brand-name small{
+ font-family:Tahoma,Arial,sans-serif;direction:rtl;text-align:start;
+ letter-spacing:normal;color:#8e8589;font-size:9px;font-weight:650;
+}
+.ica-header-v20 .ica-nav-links{
+ flex:1 1 auto;min-width:0;display:flex;
+ gap:clamp(11px,1.25vw,21px);
+ align-items:center;justify-content:center;flex-wrap:nowrap;
+}
+.ica-header-v20 .ica-nav-links a{
+ display:inline-flex;align-items:center;min-height:42px;
+ white-space:nowrap;font-size:clamp(11px,.88vw,13px);
+ font-weight:750;letter-spacing:0;
+ border-bottom:2px solid transparent;
+ transition:color .17s,border-color .17s;
+}
+.ica-header-v20 .ica-nav-links a:hover,
+.ica-header-v20 .ica-nav-links a[aria-current="page"]{
+ color:var(--ica-red);border-bottom-color:var(--ica-red);
+}
+.ica-header-v20 .ica-nav-actions{
+ display:flex;align-items:center;justify-content:flex-end;
+ gap:12px;flex:0 0 auto;min-width:0;
+}
+.ica-header-v20 .ica-language select{
+ color:#34252b;background:#f7f6f5;border:1px solid #ebe6e5;
+ border-radius:7px;min-height:42px;padding:0 9px;
+ font-size:12px;font-weight:800;max-width:98px;min-width:65px;
+ cursor:pointer;
+}
+.ica-header-v20 .ica-language select:hover{border-color:#c7b6bc}
+.ica-header-v20 .ica-nav-contact{
+ display:inline-flex;align-items:center;justify-content:center;
+ min-height:42px;padding:10px 17px;
+ border-radius:7px;white-space:nowrap;
+ background:var(--ica-red);color:#fff;
+ font-size:12px;font-weight:750;letter-spacing:0;
+ box-shadow:none;transition:background .18s;
+}
+.ica-header-v20 .ica-nav-contact:hover{
+ transform:none;background:#bc0018;
+}
+.ica-header-v20 .ica-nav-contact[aria-current="page"]{
+ outline:2px solid #c50924;outline-offset:3px;
+}
+.ica-header-v20 .ica-header-topicline{
+ background:#faf9f8;min-height:40px;
+ gap:20px;padding:5px max(24px,calc((100% - 1400px)/2));
+ border-top:1px solid #ece8e8;color:#483c42;
+}
+.ica-header-v20 .ica-header-topicline>span{
+ letter-spacing:.09em;font-weight:850;font-size:10px;
+ color:var(--ica-red);
+}
+.ica-header-v20 .ica-topicline-scroll{
+ min-width:0;display:flex;gap:23px;overflow-x:auto;
+ scroll-behavior:smooth;overscroll-behavior-inline:contain;
+ padding-block:6px;scrollbar-width:thin;scrollbar-color:#e6d6d9 transparent;
+}
+.ica-header-v20 .ica-header-topicline a{
+ display:inline-flex;align-items:center;min-height:28px;
+ white-space:nowrap;font-size:11px;font-weight:700;
+ letter-spacing:0;border-bottom:2px solid transparent;
+}
+.ica-header-v20 .ica-header-topicline a[aria-current="page"]{
+ color:var(--ica-red);border-bottom-color:var(--ica-red);
+}
+.ica-header-v20 .ica-menu-toggle{display:none}
+.ica-header-v20 .ica-menu-scrim{
+ position:fixed;inset:0;z-index:5;width:100%;height:100%;
+ border:0;padding:0;cursor:default;background:rgb(27 18 23 / 48%);
+}
+.ica-header-v20 .ica-menu-drawer{
+ position:absolute;z-index:10;top:100%;inset-inline:0;
+ max-height:min(calc(100dvh - 145px),690px);
+ overflow-y:auto;overscroll-behavior:contain;
+ background:#fff;color:#2b2126;
+ padding:0 clamp(18px,4.5vw,60px) 30px;
+ border-top:1px solid #e9e5e5;
+ box-shadow:0 23px 35px rgb(26 14 22 / 18%);
+ scrollbar-color:#d8c8ce transparent;
+}
+.ica-header-v20 .ica-menu-drawer[hidden]{display:none!important}
+.ica-header-v20 .ica-menu-drawer-head{
+ position:sticky;top:0;z-index:1;background:#fff;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:14px;min-height:66px;padding-block:12px;
+ border-bottom:1px solid #ece7e9;
+}
+.ica-header-v20 .ica-menu-drawer-head>span{
+ font-size:13px;font-weight:850;letter-spacing:0;
+}
+.ica-header-v20 .ica-menu-drawer-head>span>span{color:var(--ica-red)}
+.ica-header-v20 .ica-menu-drawer-head button{
+ display:inline-flex;align-items:center;gap:9px;
+ border:1px solid #e3dcdf;border-radius:7px;
+ background:#fff;color:#39242d;
+ padding:8px 12px;min-height:43px;font-size:12px;font-weight:750;
+}
+.ica-header-v20 .ica-menu-drawer-head button span{font-size:25px;line-height:1}
+.ica-header-v20 .ica-menu-drawer-groups{
+ display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.2fr) minmax(0,.9fr);
+ gap:clamp(16px,3vw,48px);padding-block:24px 16px;
+}
+.ica-header-v20 .ica-menu-group{min-width:0}
+.ica-header-v20 .ica-menu-group h2{
+ font-size:12px;font-weight:850;
+ color:#a31931;letter-spacing:.01em;
+ margin:0 0 12px;line-height:1.5;
+}
+.ica-header-v20 .ica-menu-group nav{
+ display:grid;grid-template-columns:1fr;gap:3px;
+}
+.ica-header-v20 .ica-menu-group a{
+ display:flex;align-items:center;
+ min-height:42px;padding:9px 11px;
+ border-radius:7px;color:#332930;
+ font-size:13px;font-weight:600;line-height:1.55;
+ text-decoration:none;overflow-wrap:anywhere;
+}
+.ica-header-v20 .ica-menu-group a:hover,
+.ica-header-v20 .ica-menu-group a:focus-visible{
+ color:#ba001b;background:#fff3f5;
+}
+.ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ color:#b0001c;background:#fff0f2;
+ font-weight:850;box-shadow:inset 3px 0 0 #e3001b;
+}
+.ica-site[dir="rtl"] .ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ box-shadow:inset -3px 0 0 #e3001b;
+}
+.ica-header-v20 .ica-menu-toggle:focus-visible,
+.ica-header-v20 .ica-menu-group a:focus-visible,
+.ica-header-v20 .ica-topicline-scroll:focus-visible{
+ outline:2px solid #e3001b;outline-offset:2px;
+}
+.ica-site[lang="ar"] .ica-header-v20 .ica-menu-group,
+.ica-site[lang="ckb"] .ica-header-v20 .ica-menu-group{line-height:1.75}
+@media(max-width:1360px){
+ .ica-header-v20 .ica-nav-links{display:none}
+ .ica-header-v20 .ica-menu-toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:12px;min-height:43px;min-width:43px;
+  padding:7px 11px;background:#fff;border:1px solid #e4dbdf;
+  border-radius:7px;color:#362832;font-size:12px;font-weight:750;
+ }
+ .ica-header-v20 .ica-menu-toggle[aria-expanded="true"]{
+  background:#fff3f5;border-color:#e3001b;color:#b0001b;
+ }
+ .ica-header-v20 .ica-menu-toggle-lines{
+  display:flex;flex-direction:column;gap:4px;align-items:center;
+  justify-content:center;min-height:18px;width:22px;
+ }
+ .ica-header-v20 .ica-menu-toggle-lines i{
+  display:block;width:21px;height:2px;background:currentColor;
+  border-radius:4px;transition:transform .16s,opacity .16s;
+ }
+ .ica-header-v20 .ica-menu-toggle[aria-expanded="true"] .ica-menu-toggle-lines i:first-child{transform:translateY(6px) rotate(45deg)}
+ .ica-header-v20 .ica-menu-toggle[aria-expanded="true"] .ica-menu-toggle-lines i:nth-child(2){opacity:0}
+ .ica-header-v20 .ica-menu-toggle[aria-expanded="true"] .ica-menu-toggle-lines i:last-child{transform:translateY(-6px) rotate(-45deg)}
+ .ica-header-v20 .ica-nav{justify-content:space-between}
+}
+@media(max-width:900px){
+ .ica-header-v20 .ica-menu-drawer-groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ica-header-v20 .ica-menu-drawer-groups .ica-menu-group:last-child{grid-column:1/-1}
+ .ica-header-v20 .ica-menu-drawer-groups .ica-menu-group:last-child nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 14px}
+ .ica-header-v20 .ica-header-topicline{padding-inline:20px}
+}
+@media(max-width:700px){
+ .ica-header-v20 .ica-topline{padding-inline:16px;height:25px;font-size:9px}
+ .ica-header-v20 .ica-topline>span:last-child{display:none}
+ .ica-header-v20 .ica-nav{height:70px;padding-inline:15px;gap:8px}
+ .ica-header-v20 .ica-brand{gap:9px}
+ .ica-header-v20 .ica-brand .ica-symbol{width:45px;height:45px;min-width:45px;border-radius:9px}
+ .ica-header-v20 .ica-brand .ica-symbol b{font-size:17px}
+ .ica-header-v20 .ica-brand .ica-symbol i{width:17px;inset:auto auto 9px 14px}
+ .ica-header-v20 .ica-brand-name strong{font-size:clamp(10px,2.65vw,12px)}
+ .ica-header-v20 .ica-brand-name small{font-size:8px}
+ .ica-header-v20 .ica-nav-contact{display:none}
+ .ica-header-v20 .ica-nav-actions{gap:7px}
+ .ica-header-v20 .ica-language select{min-width:54px;max-width:82px;padding-inline:5px;font-size:11px;min-height:42px}
+ .ica-header-v20 .ica-menu-toggle{padding:7px 10px;min-width:44px;min-height:44px}
+ .ica-header-v20 .ica-menu-toggle-text{display:none}
+ .ica-header-v20 .ica-header-topicline{min-height:36px;padding:4px 15px;gap:10px}
+ .ica-header-v20 .ica-header-topicline>span{display:none}
+ .ica-header-v20 .ica-topicline-scroll{gap:17px}
+ .ica-header-v20 .ica-menu-drawer{
+  padding-inline:16px;max-height:min(calc(100dvh - 131px),650px);
+ }
+ .ica-header-v20 .ica-menu-drawer-groups{
+  grid-template-columns:minmax(0,1fr);gap:24px;padding-top:17px;
+ }
+ .ica-header-v20 .ica-menu-drawer-groups .ica-menu-group:last-child{grid-column:auto}
+ .ica-header-v20 .ica-menu-drawer-groups .ica-menu-group:last-child nav{grid-template-columns:1fr}
+ .ica-header-v20 .ica-menu-group nav{grid-template-columns:1fr}
+ .ica-header-v20 .ica-menu-group a{min-height:46px;padding:11px 13px;font-size:13px}
+}
+@media(max-width:370px){
+ .ica-header-v20 .ica-nav{padding-inline:10px}
+ .ica-header-v20 .ica-brand-name small{display:none}
+ .ica-header-v20 .ica-brand-name strong{font-size:10px}
+ .ica-header-v20 .ica-language select{max-width:70px}
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-header-v20 .ica-menu-toggle-lines i,
+ .ica-header-v20 .ica-nav-links a,
+ .ica-header-v20 .ica-nav-contact{transition:none}
+ .ica-header-v20 .ica-topicline-scroll{scroll-behavior:auto}
+}
+
+
+/* The same ICA monogram stays consistent in the global footer. */
+.ica-footer .ica-brand{direction:ltr;text-align:left;gap:12px}
+.ica-footer .ica-brand .ica-symbol{clip-path:none;border-radius:11px;width:53px;height:53px}
+.ica-footer .ica-brand .ica-symbol b{font-size:20px;letter-spacing:-.08em;margin:0 3px 4px 0}
+.ica-footer .ica-brand .ica-symbol i{width:21px;height:3px;inset:auto auto 11px 16px;transform:none;border-radius:2px}
+.ica-footer .ica-brand-name strong{font-size:14px;letter-spacing:.04em;line-height:1.12}
+.ica-footer .ica-brand-name strong span{display:block}
+.ica-footer .ica-brand-name small{font-family:Tahoma,Arial,sans-serif;direction:rtl;font-size:9px}
+
+
+/* ICA International v21 — compact, editorial-responsive proportional system.
+   Public ICA only: the Quanta/Tailwind global rem/spacing scale stays intact.
+   Widths and heights are opt-in tokens, not browser zoom or transform scaling.
+   Touch controls remain >=44 CSS px even as visual whitespace is compressed. */
+.ica-site {
+  --ica-container:1200px;
+  --ica-gutter:clamp(14px,2.25vw,28px);
+  --ica-section-space:clamp(30px,4vw,54px);
+  --ica-grid-gap:clamp(12px,1.5vw,18px);
+  --ica-card-pad:clamp(14px,1.5vw,20px);
+  --ica-radius:7px;
+  --ica-type-body:14px;
+  --ica-type-small:12px;
+  --ica-type-card:clamp(16px,1.45vw,20px);
+  --ica-type-heading:clamp(26px,3vw,43px);
+  --ica-type-hero:clamp(33px,4.7vw,59px);
+  font-size:var(--ica-type-body);
+  line-height:1.52;
+  overflow-x:clip;
+  overflow-y:visible;
+  min-width:0;
+}
+.ica-site :is(main,section,article,aside,nav,footer,.ica-content,.ica-page-content){
+  min-width:0;
+}
+.ica-site :is(h1,h2,h3,h4){text-wrap:balance;overflow-wrap:break-word;}
+.ica-site :is(p,li){text-wrap:pretty;overflow-wrap:break-word;}
+.ica-site :is(button,input,select,textarea){font-family:inherit;}
+.ica-site :is(button,[type=submit],select){cursor:pointer;}
+.ica-site :is(input,select,textarea){max-width:100%;min-width:0;}
+/* Media heights remain owned by their aspect-ratio/video components. */
+.ica-site .ica-content,.ica-site .ica-page-content,.ica-site .ica-admin,
+.ica-site .ica-footer-upper,.ica-site .ica-footer-lower{
+ width:100%;max-width:var(--ica-container);margin-inline:auto;
+ padding-inline:var(--ica-gutter);
+}
+.ica-site .ica-content:has(> .ica-intl-hero){max-width:var(--ica-container);}
+.ica-site .ica-header-v20 .ica-topline{
+ height:24px;padding-inline:var(--ica-gutter);font-size:9px;letter-spacing:.055em;
+}
+.ica-site .ica-header-v20 .ica-nav{
+ height:68px;max-width:var(--ica-container);
+ padding-inline:var(--ica-gutter);gap:clamp(8px,1vw,15px);
+}
+.ica-site .ica-header-v20 .ica-brand{gap:9px;}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol{
+ width:42px;height:42px;min-width:42px;border-radius:8px;
+}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:16px;}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol i{
+ width:17px;inset:auto auto 8px 13px;height:2px;
+}
+.ica-site .ica-header-v20 .ica-brand-name strong{font-size:11px;line-height:1.18;}
+.ica-site .ica-header-v20 .ica-brand-name small{font-size:8px;}
+.ica-site .ica-header-v20 .ica-nav-links{gap:clamp(8px,1vw,16px);}
+.ica-site .ica-header-v20 .ica-nav-links a{font-size:11px;min-height:38px;}
+.ica-site .ica-header-v20 .ica-language select{
+ min-height:42px;font-size:11px;border-radius:var(--ica-radius);
+}
+.ica-site .ica-header-v20 .ica-nav-contact{
+ min-height:42px;padding:9px 12px;font-size:11px;border-radius:var(--ica-radius);
+}
+.ica-site .ica-header-v20 .ica-header-topicline{
+ min-height:33px;padding:3px var(--ica-gutter);gap:14px;
+}
+.ica-site .ica-header-v20 .ica-header-topicline a{font-size:10.5px;min-height:24px;}
+.ica-site .ica-header-v20 .ica-topicline-scroll{gap:16px;padding-block:3px;}
+.ica-site .ica-header-v20 .ica-menu-drawer{
+ max-height:min(calc(100dvh - 125px),560px);
+ padding-inline:var(--ica-gutter);padding-bottom:16px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-head{
+ min-height:50px;padding-block:7px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-groups{
+ padding-block:14px 10px;gap:clamp(12px,2vw,30px);
+}
+.ica-site .ica-header-v20 .ica-menu-group h2{font-size:11px;margin-bottom:7px;}
+.ica-site .ica-header-v20 .ica-menu-group a{
+ font-size:12.5px;padding:7px 10px;min-height:42px;
+ border-radius:var(--ica-radius);line-height:1.45;
+}
+/* Source ticker and editorial feature deck */
+.ica-site .ica-live-ticker,.ica-site .ica-news-sequence a,
+.ica-site .ica-ticker-key{min-height:38px;}
+.ica-site .ica-news-sequence a{font-size:11px;padding-inline:15px;gap:12px;}
+.ica-site .ica-ticker-key{padding:10px 13px;font-size:10px;}
+.ica-site .ica-intl-hero{padding:clamp(22px,3.2vw,39px) 0 clamp(25px,3.4vw,44px);}
+.ica-site .ica-intl-hero-title{gap:18px;margin-bottom:20px;align-items:end;}
+.ica-site .ica-intl-hero-title>div:first-child{max-width:790px;}
+.ica-site .ica-intl-hero h1{
+ font-size:var(--ica-type-hero);line-height:1.08;letter-spacing:-.048em;
+ margin:7px 0 9px;overflow-wrap:break-word;
+}
+.ica-site .ica-intl-hero-title p{font-size:13px;line-height:1.58;max-width:64ch;}
+.ica-site .ica-intl-edition{padding:5px 0 5px 14px;gap:3px;}
+.ica-site .ica-intl-edition strong{font-size:16px;}
+.ica-site .ica-intl-hero-grid{
+ grid-template-columns:minmax(0,1.4fr) minmax(0,.9fr) minmax(0,.75fr);
+ gap:var(--ica-grid-gap);padding-top:12px;
+ border-top-width:2px;
+}
+.ica-site .ica-wire-lead-art{min-height:175px;padding:20px;}
+.ica-site .ica-wire-lead-art strong{font-size:clamp(28px,3.4vw,49px);}
+.ica-site .ica-wire-story-lead .ica-wire-info{padding-top:14px;}
+.ica-site .ica-wire-story h3{
+ font-size:var(--ica-type-card);line-height:1.26;letter-spacing:-.024em;
+ margin:7px 0 8px;
+}
+.ica-site .ica-wire-story-lead h3{font-size:clamp(22px,2.3vw,34px);line-height:1.17;}
+.ica-site .ica-wire-story-compact h3{font-size:15px;}
+.ica-site .ica-wire-story p,.ica-site .ica-wire-story-lead p{
+ font-size:12px;line-height:1.52;margin-bottom:10px;
+}
+.ica-site .ica-wire-section{margin-top:8px;}
+.ica-site .ica-wire-story-foot{padding:7px 0 12px;gap:7px;flex-wrap:wrap;}
+.ica-site .ica-intl-hero-secondary{gap:11px;}
+.ica-site .ica-intl-hero-side{padding:14px;gap:10px;}
+.ica-site .ica-intl-side-title{padding-bottom:9px;}
+/* Dense trend cards and desks */
+.ica-site .ica-intl-trending{padding:24px 0 33px;}
+.ica-site .ica-intl-trending-top h2,.ica-site .ica-intl-section-heading h2{
+ font-size:var(--ica-type-heading);line-height:1.13;
+ letter-spacing:-.04em;margin-top:5px;
+}
+.ica-site .ica-intl-explain{font-size:12px;margin:9px 0 14px;}
+.ica-site .ica-intl-trending-rail{gap:10px;padding-block:5px 12px;}
+.ica-site .ica-trending-tile{
+ flex:0 0 clamp(205px,24vw,270px);min-width:205px;max-width:270px;
+ min-height:190px;padding:12px 14px;border-radius:var(--ica-radius);
+}
+.ica-site .ica-trending-number{font-size:25px;}
+.ica-site .ica-trending-topic{margin-top:8px;font-size:9px;}
+.ica-site .ica-trending-tile h3{font-size:16px;line-height:1.3;margin:7px 0 auto;}
+.ica-site .ica-trending-tile>div{padding-top:8px;margin-top:10px;gap:6px;}
+.ica-site .ica-intl-mosaic{padding:25px 0 45px;}
+.ica-site .ica-intl-section-heading{margin-bottom:18px;}
+.ica-site .ica-intl-mosaic-grid{gap:var(--ica-grid-gap);}
+.ica-site .ica-intl-desk-card{
+ min-height:265px;padding:var(--ica-card-pad);
+ border-radius:var(--ica-radius);
+}
+.ica-site .ica-intl-desk-header h3{
+ font-size:clamp(20px,2vw,28px);line-height:1.18;margin:5px 0;
+}
+.ica-site .ica-intl-desk-header>a{width:32px;height:32px;min-width:32px;}
+.ica-site .ica-intl-desk-card>p{min-height:0;margin:4px 0 9px;font-size:12px;line-height:1.52;}
+.ica-site .ica-intl-desk-list>a{padding:9px 0 8px;}
+.ica-site .ica-intl-desk-list>a strong{font-size:12px;line-height:1.4;}
+.ica-site .ica-intl-desk-list>a span{margin-top:4px;}
+.ica-site .ica-intl-desk-footer{margin-top:12px;padding-top:10px;font-size:11px;}
+.ica-site .ica-intl-market-strip{
+ min-height:210px;padding:clamp(17px,2.2vw,27px);
+ gap:var(--ica-grid-gap);margin-bottom:var(--ica-section-space);
+}
+.ica-site .ica-intl-market-strip h2{
+ font-size:clamp(24px,2.8vw,37px);line-height:1.18;margin:8px 0;
+}
+.ica-site .ica-intl-market-strip p{font-size:12px;line-height:1.55;margin-bottom:12px;}
+.ica-site .ica-intl-market-resources{gap:8px;}
+.ica-site .ica-intl-market-resources>a{padding:12px;gap:7px;}
+.ica-site .ica-intl-market-resources>a strong{font-size:13px;}
+/* Unified content, article, media, newsletter, cards */
+.ica-site .ica-news-section{padding:var(--ica-section-space) 0;}
+.ica-site .ica-section-heading{gap:15px;padding-bottom:13px;margin-bottom:18px;}
+.ica-site .ica-section-heading h2,.ica-site .ica-coverage-header h2{
+ font-size:var(--ica-type-heading);line-height:1.12;
+ letter-spacing:-.04em;margin-top:8px;
+}
+.ica-site .ica-story-grid{gap:var(--ica-grid-gap);}
+.ica-site .ica-story-image{aspect-ratio:16/10;overflow:hidden;}
+.ica-site .ica-story-image img{width:100%;height:100%;object-fit:cover;}
+.ica-site .ica-story-text{padding:11px 2px;}
+.ica-site .ica-story-text h3{
+ font-size:var(--ica-type-card);line-height:1.28;margin:8px 0 6px;
+}
+.ica-site .ica-story-feature .ica-story-text h3{font-size:clamp(19px,2.2vw,29px);}
+.ica-site .ica-story-text p{font-size:12px;line-height:1.5;margin-bottom:9px;}
+.ica-site .ica-story-read{gap:8px;font-size:11px;}
+.ica-site .ica-editorial-empty{padding:28px 16px;}
+.ica-site .ica-editorial-empty-icon{width:65px;height:65px;font-size:26px;}
+.ica-site .ica-editorial-empty h3{font-size:21px;margin:14px 0 6px;}
+.ica-site .ica-culture-spotlight{
+ min-height:0;grid-template-columns:1.04fr .96fr;
+ margin-bottom:var(--ica-section-space);
+}
+.ica-site .ica-culture-image{min-height:290px;}
+.ica-site .ica-culture-description{padding:clamp(22px,3.5vw,48px);}
+.ica-site .ica-culture-description h2,.ica-site .ica-video-stage h2{
+ font-size:clamp(26px,3.5vw,44px);line-height:1.14;
+ letter-spacing:-.044em;margin:11px 0;
+}
+.ica-site .ica-culture-description p,.ica-site .ica-video-stage p{
+ font-size:13px;line-height:1.63;max-width:54ch;
+}
+.ica-site .ica-culture-description a,.ica-site .ica-video-stage a{
+ margin-top:13px;gap:14px;padding-bottom:7px;
+}
+.ica-site .ica-video-stage{
+ grid-template-columns:.9fr 1.1fr;min-height:310px;
+ margin-bottom:var(--ica-section-space);
+}
+.ica-site .ica-video-stage>div{padding:clamp(22px,3vw,40px);}
+.ica-site .ica-feature-strip{
+ padding:18px max(var(--ica-gutter),calc((100% - var(--ica-container))/2));
+ gap:var(--ica-grid-gap);
+}
+.ica-site .ica-feature-strip strong{font-size:clamp(19px,2.4vw,28px);}
+.ica-site .ica-newsletter{
+ grid-template-columns:100px 1fr 1fr;gap:20px;
+ margin-bottom:var(--ica-section-space);padding:24px;
+}
+.ica-site .ica-newsletter-art{width:90px;height:90px;}
+.ica-site .ica-newsletter-art span{font-size:32px;}
+.ica-site .ica-newsletter-copy h2{
+ font-size:clamp(22px,2.6vw,34px);line-height:1.12;margin-bottom:8px;
+}
+.ica-site .ica-newsletter-entry{min-height:45px;}
+.ica-site .ica-newsletter-entry input{font-size:13px;padding:0 10px;}
+.ica-site .ica-footer-upper{
+ grid-template-columns:1.7fr .9fr .9fr 1fr;gap:clamp(16px,2.2vw,30px);
+ padding-block:44px 35px;
+}
+.ica-site .ica-footer h4{margin-bottom:13px;}
+.ica-site .ica-footer-upper>div:first-child>p{font-size:12px;margin-top:12px;}
+.ica-site .ica-footer-upper>div:not(:first-child)>a{font-size:12px;margin-bottom:9px;}
+.ica-site .ica-footer-lower{padding-block:15px;}
+/* Secondary pages, articles, atlas */
+.ica-site .ica-page-intro{
+ min-height:215px;padding:clamp(25px,4vw,46px);
+ margin:20px 0 38px;
+}
+.ica-site .ica-page-intro>div{max-width:740px;}
+.ica-site .ica-page-intro h1,.ica-site .ica-desk-intro h1{
+ font-size:var(--ica-type-hero);line-height:1.1;
+ letter-spacing:-.045em;margin:9px 0 11px;
+}
+.ica-site .ica-page-intro p,.ica-site .ica-desk-intro>p{
+ font-size:13px;line-height:1.6;max-width:66ch;
+}
+.ica-site .ica-coverage-list{padding-bottom:var(--ica-section-space);}
+.ica-site .ica-coverage-header{padding-bottom:12px;margin-bottom:14px;}
+.ica-site .ica-newsroom-top{gap:var(--ica-grid-gap);margin-bottom:var(--ica-section-space);}
+.ica-site .ica-newsroom-top article{padding:18px;}
+.ica-site .ica-newsroom-top h2{font-size:20px;}
+.ica-site .ica-newsroom-top p{font-size:12px;line-height:1.55;}
+.ica-site .ica-channel-strip{margin-bottom:25px;padding-bottom:12px;}
+.ica-site .ica-media-grid{gap:var(--ica-grid-gap);}
+.ica-site .ica-media-tile h3{font-size:17px;line-height:1.3;}
+.ica-site .ica-media-category{margin-top:10px;}
+.ica-site .ica-play-symbol{width:44px;height:44px;}
+.ica-site .ica-media-empty>div{padding:24px;}
+.ica-site .ica-media-empty h3{font-size:24px;}
+.ica-site .ica-about-layout{gap:clamp(18px,3vw,42px);padding:5px 0 var(--ica-section-space);}
+.ica-site .ica-about-manifesto h2{font-size:clamp(29px,3.3vw,46px);margin-bottom:17px;}
+.ica-site .ica-about-manifesto p{font-size:14px;line-height:1.7;}
+.ica-site .ica-values{gap:var(--ica-grid-gap);margin-bottom:var(--ica-section-space);}
+.ica-site .ica-values article{padding:15px;min-height:140px;}
+.ica-site .ica-values h3{font-size:17px;}
+.ica-site .ica-about-outro{padding:20px 0 var(--ica-section-space);}
+.ica-site .ica-about-outro h2{font-size:clamp(24px,3vw,36px);}
+.ica-site .ica-about-outro a{padding:12px 16px;font-size:12px;}
+.ica-site .ica-contact-layout{gap:clamp(18px,4vw,58px);padding:6px 0 var(--ica-section-space);}
+.ica-site .ica-contact-layout>div>h2{font-size:28px;}
+.ica-site .ica-contact-detail{padding:13px 0;}
+.ica-site .ica-contact-form{padding:20px;gap:14px;}
+.ica-site .ica-contact-form :is(input,textarea,select){
+ padding:10px 12px;min-height:44px;font-size:14px;
+}
+.ica-site .ica-contact-form>button{min-height:44px;padding:11px 18px;}
+.ica-site .ica-article{width:min(780px,calc(100% - 2 * var(--ica-gutter)));padding:25px 0 55px;}
+.ica-site .ica-article-head{padding:36px 0 24px;}
+.ica-site .ica-article-head h1{
+ font-size:clamp(32px,4.5vw,58px);line-height:1.13;margin:12px 0;
+}
+.ica-site .ica-article-head>p{font-size:clamp(15px,1.5vw,18px);}
+.ica-site .ica-article-content{
+ max-width:700px;margin:33px auto;font-size:16px;line-height:1.75;
+}
+.ica-site .ica-article-dam-cover img{max-height:440px;aspect-ratio:16/10;}
+.ica-site .ica-desk-intro{
+ margin:18px 0 16px;padding:clamp(25px,4vw,45px);
+}
+.ica-site .ica-desk-updated{margin-top:21px;padding-top:11px;}
+.ica-site .ica-desk-filter-header{margin:28px 0 15px;gap:14px;}
+.ica-site .ica-desk-filter-header h2{font-size:var(--ica-type-heading);}
+.ica-site .ica-desk-controls{gap:11px;}
+.ica-site .ica-desk-controls button{min-height:44px;padding:8px 12px;font-size:11px;}
+.ica-site .ica-desk-controls input{min-height:44px;padding:10px 12px;font-size:13px;}
+.ica-site .ica-desk-story-grid{gap:var(--ica-grid-gap);margin-bottom:var(--ica-section-space);}
+.ica-site .ica-desk-story-grid>.ica-wire-story{padding:14px 15px 5px;}
+.ica-site .ica-desk-story-grid .ica-wire-story h3{font-size:var(--ica-type-card);}
+.ica-site .ica-desk-verify{margin:22px 0 34px;padding:16px;}
+.ica-site .ica-intl-source-directory{
+ padding:20px 0 var(--ica-section-space);gap:var(--ica-grid-gap);
+}
+.ica-site .ica-intl-source-directory>div:first-child h2{font-size:27px;}
+.ica-site .ica-intl-source-directory>div:last-child>a{padding:12px;}
+.ica-site .ica-topics-home{padding:28px 0 20px;margin-bottom:var(--ica-section-space);}
+.ica-site .ica-topics-home-title{margin-bottom:18px;gap:16px;}
+.ica-site .ica-topics-home-title h2{font-size:var(--ica-type-heading);margin:8px 0;}
+.ica-site .ica-topics-home-title p{font-size:13px;line-height:1.55;}
+.ica-site .ica-topics-home-grid,.ica-site .ica-topic-directory-grid{gap:var(--ica-grid-gap);}
+.ica-site .ica-topic-card,.ica-site .ica-topic-directory-grid .ica-topic-card{
+ padding:var(--ica-card-pad);min-height:190px;border-radius:var(--ica-radius);
+}
+.ica-site .ica-topic-card-top{margin-bottom:11px;}
+.ica-site .ica-topic-card h3{font-size:clamp(17px,1.7vw,22px);margin-bottom:9px;}
+.ica-site .ica-topic-card>p{font-size:12px;line-height:1.53;margin-bottom:12px;}
+.ica-site .ica-topic-card-bottom{padding-top:10px;}
+.ica-site .ica-topic-stats>div{min-height:75px;padding:14px;}
+.ica-site .ica-topic-stats strong{font-size:26px;}
+.ica-site .ica-research-disclaimer{margin-bottom:24px;padding:13px 15px;}
+.ica-site .ica-topic-workbench-heading h2{font-size:var(--ica-type-heading);}
+.ica-site .ica-topic-workbench-heading{margin-bottom:13px;}
+.ica-site .ica-topic-search-row{margin-bottom:15px;}
+.ica-site .ica-topic-search-row :is(input,select){height:44px;padding-inline:12px;}
+.ica-site .ica-topic-desk-filter button{min-height:42px;padding:8px 10px;}
+.ica-site .ica-topic-results-count{padding:12px 0;margin-bottom:15px;}
+.ica-site .ica-topic-more{margin:22px 0 var(--ica-section-space);}
+.ica-site .ica-topic-more button{min-height:44px;padding:9px 15px;min-width:180px;}
+.ica-site .ica-source-notice{padding:20px 23px;margin:25px 0 var(--ica-section-space);}
+.ica-site .ica-source-notice h2{font-size:clamp(24px,2.7vw,32px);}
+.ica-site .ica-topic-detail{max-width:var(--ica-container);padding:24px var(--ica-gutter) 55px;}
+.ica-site .ica-topic-detail-hero{padding:34px 2% 30px;}
+.ica-site .ica-topic-detail-hero h1{font-size:clamp(31px,4.4vw,56px);line-height:1.12;letter-spacing:-.045em;margin:13px 0;}
+.ica-site .ica-topic-detail-hero>p{font-size:clamp(14px,1.3vw,17px);line-height:1.6;}
+.ica-site .ica-topic-detail-body{gap:clamp(22px,4vw,48px);padding:33px 2% 48px;}
+.ica-site .ica-topic-detail-body article h2{font-size:clamp(23px,2.6vw,34px);}
+.ica-site .ica-topic-detail-body article>p,.ica-site .ica-topic-detail-body li{font-size:14px;line-height:1.75;}
+.ica-site .ica-topic-source{padding:20px;}
+.ica-site .ica-topic-source h3{font-size:23px;margin:12px 0;}
+.ica-site .ica-topic-related{padding:28px 0 12px;}
+.ica-site .ica-topic-related h2{font-size:var(--ica-type-heading);}
+/* Immersive film retains its scroll-timing architecture; the copy/CTA are compact. */
+.ica-home .scroll-scrub__copy{width:min(35rem,47vw);}
+.ica-home .scroll-scrub__chapter-pin{padding:clamp(3rem,6vw,5rem) clamp(17px,4vw,60px);}
+.ica-home .scroll-scrub__title{font-size:clamp(34px,5vw,63px);line-height:1.02;}
+.ica-home .scroll-scrub__body{font-size:clamp(13px,1.2vw,16px);line-height:1.55;margin-top:12px;}
+.ica-home .scroll-scrub__kicker{font-size:11px;margin-bottom:9px;}
+.ica-home .scroll-scrub__tags{gap:7px;margin-top:12px;}
+.ica-home .scroll-scrub__tags li{padding:6px 9px;font-size:11px;}
+.ica-home .scroll-scrub__route-button{min-height:44px;font-size:11px;padding:8px 11px;}
+.ica-home .ica-film-intro .ica-film-cta{
+ padding:11px 15px;gap:12px;font-size:12px;box-shadow:0 5px 18px #0b000940;
+}
+/* Script-aware lower-case density: preserve Arabic/Sorani glyph breathing room. */
+.ica-site:is([lang="ar"],[lang="ckb"]){font-size:14.5px;line-height:1.67;}
+.ica-site[lang="zh"]{font-size:14px;line-height:1.67;}
+.ica-site:is([lang="ar"],[lang="ckb"],[lang="zh"]) :is(h1,h2,h3){
+ letter-spacing:normal;line-height:1.34;
+}
+.ica-site:is([lang="ar"],[lang="ckb"]) :is(.ica-intl-hero h1,.ica-desk-intro h1,.ica-page-intro h1){
+ font-size:clamp(31px,4.2vw,52px);line-height:1.36;
+}
+.ica-site[lang="zh"] :is(.ica-intl-hero h1,.ica-desk-intro h1,.ica-page-intro h1){
+ font-size:clamp(32px,4.1vw,54px);line-height:1.26;
+}
+.ica-site:is([lang="ar"],[lang="ckb"]) .ica-intl-hero-title p{
+ font-size:13.5px;line-height:1.75;
+}
+.ica-site[lang="zh"] :is(p,li){line-break:strict;word-break:normal;}
+.ica-site :is([lang="en"],[dir="ltr"]){unicode-bidi:isolate;}
+/* Grid controls, safe min widths, and mobile-first hierarchy. */
+@media(max-width:1100px){
+ .ica-site .ica-intl-hero-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);}
+ .ica-site .ica-intl-hero-side{grid-column:1/-1;display:flex;flex-direction:row;align-items:start;}
+ .ica-site .ica-intl-mosaic-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-newsletter{grid-template-columns:70px 1fr 1.15fr;}
+ .ica-site .ica-newsletter-art{width:66px;height:66px;}
+ .ica-site .ica-footer-upper{grid-template-columns:1.5fr 1fr 1fr;}
+ .ica-site .ica-footer-news{grid-column:1/-1;}
+}
+@media(max-width:850px){
+ .ica-site .ica-intl-hero-grid{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-intl-hero-side{grid-column:auto;display:block;}
+ .ica-site .ica-story-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-story-feature{grid-column:span 2;grid-row:auto;}
+ .ica-site .ica-intl-hero-title{align-items:start;}
+ .ica-site .ica-media-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-about-layout{gap:24px;}
+ .ica-site .ica-newsletter{grid-template-columns:1fr 1fr;}
+ .ica-site .ica-newsletter-art{display:none;}
+ .ica-site .ica-contact-layout{grid-template-columns:1fr;gap:18px;}
+ .ica-site .ica-topic-detail-body{grid-template-columns:1fr;}
+ .ica-site .ica-topic-source{position:static;}
+}
+@media(max-width:640px){
+ .ica-site{
+  --ica-gutter:14px;
+  --ica-section-space:31px;
+  --ica-grid-gap:11px;
+  --ica-card-pad:14px;
+  --ica-type-hero:clamp(30px,8vw,38px);
+  --ica-type-heading:clamp(25px,6.5vw,32px);
+  --ica-type-card:17px;
+ }
+ .ica-site .ica-header-v20 .ica-topline{height:21px;padding-inline:12px;}
+ .ica-site .ica-header-v20 .ica-nav{height:58px;padding-inline:12px;}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol{width:36px;height:36px;min-width:36px;}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:14px;}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol i{width:14px;inset:auto auto 7px 11px;}
+ .ica-site .ica-header-v20 .ica-brand-name strong{font-size:10px;}
+ .ica-site .ica-header-v20 .ica-header-topicline{min-height:31px;padding:3px 12px;}
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  max-height:calc(100dvh - 110px);padding-inline:14px;
+ }
+ .ica-site .ica-header-v20 .ica-menu-group nav{grid-template-columns:1fr;}
+ .ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:12px;padding-block:12px;}
+ .ica-site .ica-header-v20 .ica-menu-group a{min-height:44px;padding:7px 10px;font-size:12.5px;}
+ .ica-site .ica-intl-hero{padding:23px 0 27px;}
+ .ica-site .ica-intl-hero-title{margin-bottom:15px;}
+ .ica-site .ica-intl-hero-title p{font-size:12.5px;}
+ .ica-site .ica-wire-lead-art{min-height:145px;padding:15px;}
+ .ica-site .ica-wire-lead-art strong{font-size:34px;}
+ .ica-site .ica-wire-story-lead h3{font-size:23px;}
+ .ica-site .ica-intl-hero-secondary{grid-template-columns:1fr;gap:9px;}
+ .ica-site .ica-intl-trending{padding:23px 0;}
+ .ica-site .ica-trending-tile{flex-basis:210px;min-height:175px;padding:12px;}
+ .ica-site .ica-trending-tile h3{font-size:15px;}
+ .ica-site .ica-intl-mosaic{padding:22px 0 31px;}
+ .ica-site .ica-intl-mosaic-grid{grid-template-columns:1fr;}
+ .ica-site .ica-intl-desk-card{min-height:0;}
+ .ica-site .ica-intl-market-strip{grid-template-columns:1fr;padding:18px;margin-bottom:31px;}
+ .ica-site .ica-intl-market-strip h2{font-size:27px;}
+ .ica-site .ica-intl-market-resources{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-intl-market-resources>a{padding:10px;overflow-wrap:anywhere;}
+ .ica-site .ica-story-grid,.ica-site .ica-media-grid,
+ .ica-site .ica-topics-home-grid,.ica-site .ica-topic-directory-grid{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-story-feature{grid-column:auto;grid-row:auto;}
+ .ica-site .ica-culture-spotlight,.ica-site .ica-video-stage,
+ .ica-site .ica-media-empty{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-culture-image{min-height:190px;}
+ .ica-site .ica-culture-description{padding:21px;}
+ .ica-site .ica-culture-description h2,.ica-site .ica-video-stage h2{font-size:29px;}
+ .ica-site .ica-video-stage{min-height:0;}
+ .ica-site .ica-video-stage img{min-height:160px;max-height:220px;grid-row:1;object-fit:cover;}
+ .ica-site .ica-video-stage>div{padding:20px;}
+ .ica-site .ica-feature-strip{grid-template-columns:1fr;gap:5px;padding:15px var(--ica-gutter);}
+ .ica-site .ica-feature-strip strong{font-size:22px;}
+ .ica-site .ica-newsletter{grid-template-columns:minmax(0,1fr);gap:10px;padding:18px;}
+ .ica-site .ica-newsletter-entry{min-height:44px;}
+ .ica-site .ica-footer-upper{grid-template-columns:repeat(2,minmax(0,1fr));gap:19px;padding-block:30px 26px;}
+ .ica-site .ica-footer-upper>div:first-child{grid-column:1/-1;}
+ .ica-site .ica-page-intro{min-height:160px;padding:22px 19px;margin:14px 0 27px;}
+ .ica-site .ica-page-intro h1{font-size:var(--ica-type-hero);}
+ .ica-site .ica-newsroom-top{grid-template-columns:1fr;}
+ .ica-site .ica-newsroom-top article{padding:16px;}
+ .ica-site .ica-article{padding:18px 0 35px;}
+ .ica-site .ica-article-head{padding:25px 0 18px;}
+ .ica-site .ica-article-head h1{font-size:clamp(29px,7.4vw,38px);}
+ .ica-site .ica-article-content{font-size:15.5px;line-height:1.75;margin:20px auto;}
+ .ica-site .ica-desk-intro{padding:22px 19px;margin:12px 0;}
+ .ica-site .ica-desk-intro h1{font-size:var(--ica-type-hero);}
+ .ica-site .ica-desk-filter-header{margin:22px 0 12px;}
+ .ica-site .ica-desk-controls>div{grid-template-columns:repeat(3,minmax(0,1fr));}
+ .ica-site .ica-desk-controls button{padding:8px 6px;min-height:44px;font-size:11px;}
+ .ica-site .ica-desk-story-grid{grid-template-columns:1fr;}
+ .ica-site .ica-intl-source-directory>div:last-child{grid-template-columns:1fr;}
+ .ica-site .ica-topics-home{padding:19px 0 15px;}
+ .ica-site .ica-topics-home-title h2{font-size:var(--ica-type-heading);}
+ .ica-site .ica-topic-card,.ica-site .ica-topic-directory-grid .ica-topic-card{padding:14px;min-height:0;}
+ .ica-site .ica-topic-card h3{font-size:19px;}
+ .ica-site .ica-topic-detail{padding:16px var(--ica-gutter) 33px;}
+ .ica-site .ica-topic-detail-hero{padding:22px 0;}
+ .ica-site .ica-topic-detail-hero h1{font-size:clamp(30px,7.7vw,41px);}
+ .ica-site .ica-topic-detail-body{padding:23px 0 32px;gap:20px;}
+ .ica-site .ica-topic-detail-source{max-width:100%;}
+ .ica-home .scroll-scrub__copy{width:min(100%,34rem);}
+ .ica-home .scroll-scrub__chapter-pin{padding:4rem 17px 3.25rem;}
+ .ica-home .scroll-scrub__title{font-size:clamp(30px,8.5vw,43px);}
+ .ica-home .scroll-scrub__body{font-size:13px;line-height:1.5;}
+ .ica-home .ica-film-intro .ica-film-cta{inset-inline-start:14px;top:min(76vh,550px);padding:10px 12px;}
+}
+@media(max-width:640px){
+ /* iOS Safari otherwise zooms the viewport on focus when native input text <16px. */
+ .ica-site :is(input,textarea,select){font-size:16px;}
+ .ica-site .ica-contact-form :is(input,textarea,select),
+ .ica-site .ica-topic-search-row :is(input,select),
+ .ica-site .ica-desk-controls input{font-size:16px;}
+ .ica-site .ica-header-v20 .ica-language select{font-size:16px;}
+ .ica-site .ica-contact-layout,.ica-site .ica-contact-layout>*{min-width:0;}
+ .ica-site .ica-form-row{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .ica-site .ica-form-row>label{min-width:0;}
+}
+@media(max-width:365px){
+ .ica-site{--ica-gutter:12px;--ica-card-pad:12px;}
+ .ica-site .ica-header-v20 .ica-nav{padding-inline:9px;gap:5px;}
+ .ica-site .ica-header-v20 .ica-brand-name strong{font-size:9.5px;}
+ .ica-site .ica-header-v20 .ica-language select{min-width:50px;max-width:66px;font-size:10px;}
+ .ica-site .ica-header-v20 .ica-menu-toggle{min-width:44px;min-height:44px;}
+ .ica-site .ica-contact-form{padding:14px;}
+ .ica-site .ica-form-row{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-intl-market-resources{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-topic-search-row{flex-direction:column;}
+ .ica-site .ica-topic-search-row>label:nth-child(2){min-width:0;}
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site .ica-trending-tile:hover,.ica-site .ica-topic-card:hover{transform:none;}
+ .ica-site .ica-topicline-scroll{scroll-behavior:auto;}
+}
+
+
+/* ICA v21 anti-spam input: never inherit the visible field's full-width sizing.
+   The private honeypot remains part of the form submission but stays off the layout. */
+.ica-site .ica-contact-form,.ica-site .ica-newsletter-form{position:relative;}
+.ica-site input.ica-trap,
+.ica-site .ica-contact-form input.ica-trap,
+.ica-site .ica-newsletter-form input.ica-trap{
+ position:absolute!important;
+ width:1px!important;height:1px!important;
+ min-width:1px!important;max-width:1px!important;
+ padding:0!important;margin:0!important;border:0!important;
+ inset-inline-start:0;inset-block-start:0;
+ opacity:0;clip-path:inset(50%);overflow:hidden;pointer-events:none;
+}
+
+
+/* ICA v21 honeypot regression: the contact-form input 100% width must never
+   override the invisible anti-bot input, especially under RTL direction. */
+.ica-site .ica-contact-form,.ica-site .ica-newsletter-form{position:relative;}
+.ica-site .ica-trap{
+ position:absolute!important;
+ inset-block-start:0;
+ inset-inline-start:0;
+ width:1px!important;max-width:1px!important;min-width:0!important;
+ height:1px!important;max-height:1px!important;min-height:0!important;
+ margin:0!important;padding:0!important;border:0!important;
+ overflow:hidden!important;clip-path:inset(50%);
+ opacity:0;pointer-events:none;
+}
+
+
+/* ICA v22 — Emil Kowalski design-engineering/mobile-native review.
+   Static editorial content stays selectable; interaction is scoped to ICA only. */
+.ica-site {
+ --ica-ease-out:cubic-bezier(0.23,1,0.32,1);
+ --ica-press-time:120ms;
+ -webkit-tap-highlight-color:transparent;
+ -webkit-text-size-adjust:100%;
+}
+html:has(.ica-site){-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+.ica-site :is(a,button,[role="button"]){touch-action:manipulation}
+.ica-site :is(button,[role="button"],.ica-menu-toggle,.ica-trending-tile){
+ user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button,
+ .ica-nav-contact,.ica-contact-form>button,.ica-newsletter-form button,
+ .ica-desk-controls button,.ica-topic-more button,.ica-topic-desk-filter button,
+ .scroll-scrub__route-button){
+ transition:transform var(--ica-press-time) var(--ica-ease-out),
+ background-color 160ms var(--ica-ease-out);
+}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button,
+ .ica-nav-contact,.ica-contact-form>button,.ica-newsletter-form button,
+ .ica-desk-controls button,.ica-topic-more button,.ica-topic-desk-filter button,
+ .scroll-scrub__route-button):active:not(:focus-visible){
+ transform:scale(.97);
+}
+.ica-site :is(.ica-topic-card,.ica-trending-tile,.ica-managed-card){
+ transform:none;
+}
+/* Unambiguous mouse-only feedback. Touch never inherits sticky hover transforms. */
+@media (hover:hover) and (pointer:fine){
+ .ica-site .ica-story-image img{
+  transition:transform 200ms var(--ica-ease-out);
+ }
+ .ica-site .ica-story-link:hover .ica-story-image img{transform:scale(1.025)}
+ .ica-site .ica-topic-card:hover{box-shadow:0 9px 28px rgb(54 16 25 / 8%)}
+ .ica-site .ica-trending-tile:hover{box-shadow:0 8px 25px rgb(54 16 25 / 7%)}
+ .ica-site .ica-managed-card:hover{box-shadow:0 8px 25px rgb(54 16 25 / 7%)}
+ .ica-site .ica-topics-home-link:hover{color:#ac0016}
+ .ica-site .ica-film-intro .ica-film-cta:hover{background-color:#bc0018}
+ .ica-site .ica-header-v20 .ica-menu-group a:hover{
+  color:#ba001b;background:#fff3f5;
+ }
+}
+@media (hover:none),(pointer:coarse){
+ .ica-site :is(.ica-topic-card,.ica-trending-tile,.ica-managed-card){
+  box-shadow:none;
+ }
+ .ica-site .ica-header-v20 .ica-menu-group a:hover:not(:focus-visible):not([aria-current="page"]){
+  background:transparent;color:inherit;
+ }
+}
+/* Safe-area aware masthead and scrollable drawer without suppressing text zoom. */
+.ica-site .ica-header-v20 .ica-topline{
+ height:calc(24px + env(safe-area-inset-top,0px));
+ padding-top:env(safe-area-inset-top,0px);
+ padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+ padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+}
+.ica-site .ica-header-v20 .ica-nav,
+.ica-site .ica-header-v20 .ica-header-topicline{
+ padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+ padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+}
+.ica-site .ica-header-v20 .ica-menu-drawer{
+ max-height:min(560px,calc(100dvh - 125px - env(safe-area-inset-top,0px)));
+ padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+ padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+ overscroll-behavior:contain;
+}
+.ica-site :is(.ica-trending-rail,.ica-intl-trending-rail,
+ .ica-topicline-scroll,.ica-desk-nav,.ica-topic-desk-filter){
+ -webkit-overflow-scrolling:touch;
+ overscroll-behavior-inline:contain;
+}
+@media (pointer:coarse){
+ .ica-site :is(input:not(.ica-trap),textarea,select){font-size:max(16px,1em)}
+ .ica-site .ica-header-v20 .ica-language select{font-size:16px}
+ .ica-site :is(.ica-header-v20 .ica-menu-toggle,
+ .ica-header-v20 .ica-language select,.ica-contact-form>button){min-height:44px}
+}
+@media(max-width:640px){
+ .ica-site .ica-header-v20 .ica-topline{
+  height:calc(21px + env(safe-area-inset-top,0px));
+ }
+ .ica-site .ica-header-v20 .ica-nav,
+ .ica-site .ica-header-v20 .ica-header-topicline{
+  padding-inline-start:max(12px,env(safe-area-inset-left,0px));
+  padding-inline-end:max(12px,env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  max-height:calc(100dvh - 110px - env(safe-area-inset-top,0px));
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site :is(.ica-story-image img,.ica-topic-card,.ica-trending-tile,
+ .ica-managed-card,.ica-menu-toggle,.ica-menu-drawer-head button,
+ .ica-nav-contact,.ica-contact-form>button,.ica-newsletter-form button,
+ .ica-desk-controls button,.ica-topic-more button,.ica-topic-desk-filter button,
+ .scroll-scrub__route-button){transition:none;transform:none}
+ .ica-site .ica-story-link:hover .ica-story-image img{transform:none}
+ .ica-site .ica-header-v20 .ica-topicline-scroll{scroll-behavior:auto}
+}
+
+/* ICA v23 | Emil mobile-native + apple-design + animate.
+   Consistent editorial surfaces, restrained motion, no unrelated app/ERP changes. */
+.ica-site{
+ --ica-radius:11px;
+ --ica-ui-line:#e8e1e0;
+ --ica-ui-shadow:0 1px 2px rgb(39 19 27 / 5%),0 4px 16px rgb(39 19 27 / 3%);
+ --ica-ui-lift:0 3px 9px rgb(39 19 27 / 6%),0 12px 26px rgb(39 19 27 / 7%);
+ --ica-ui-fast:140ms;
+ --ica-ui-normal:200ms;
+ --ica-ui-ease:cubic-bezier(0.23,1,0.32,1);
+}
+/* Retain editorial red top borders and existing semantic backgrounds. */
+.ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+ .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+ .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article,
+ .ica-values article,.ica-managed-card){
+ border-radius:var(--ica-radius);
+ box-shadow:var(--ica-ui-shadow);
+ transition:box-shadow var(--ica-ui-normal) var(--ica-ui-ease),
+  border-color var(--ica-ui-normal) var(--ica-ui-ease),
+  transform var(--ica-ui-normal) var(--ica-ui-ease);
+}
+.ica-site :is(.ica-story-image,.ica-media-poster,.ica-article-dam-cover img,
+ .ica-dam-story-gallery img,.ica-culture-image){border-radius:var(--ica-radius)}
+.ica-site .ica-desk-story-grid>.ica-wire-story{
+ background:#fff;
+ border:1px solid var(--ica-ui-line);
+ border-top:2px solid var(--ica-red);
+ padding:14px 15px 5px;
+}
+.ica-site .ica-desk-story-grid>.ica-wire-story>a{height:100%}
+.ica-site .ica-intl-desk-header{align-items:start;gap:12px}
+.ica-site .ica-intl-desk-header>a{
+ display:grid;place-items:center;
+ width:40px;height:40px;min-width:40px;flex:0 0 40px;
+ border-radius:10px;font-size:17px;line-height:1;
+ transition:background-color var(--ica-ui-fast) var(--ica-ui-ease),
+  color var(--ica-ui-fast) var(--ica-ui-ease),
+  transform var(--ica-ui-fast) var(--ica-ui-ease);
+}
+.ica-site .ica-intl-desk-footer{
+ min-height:40px;display:flex;align-items:center;
+ justify-content:space-between;gap:9px;text-decoration:none;
+}
+.ica-site .ica-intl-desk-footer>span{flex:none;font-size:16px;line-height:1}
+.ica-site :is(.ica-trending-tile h3,.ica-wire-story h3,.ica-topic-card h3){
+ overflow-wrap:anywhere;
+}
+.ica-site .ica-intl-trending-rail{scroll-padding-inline:var(--ica-gutter)}
+.ica-site .ica-intl-market-resources>a{min-width:0}
+.ica-site .ica-intl-market-resources>a strong{line-height:1.35}
+/* Primary action system: squared-soft surfaces, consistent hit targets. */
+.ica-site :is(.ica-header-v20 .ica-nav-contact,.ica-native-cta,
+ .ica-contact-form>button,.ica-newsletter-entry button,
+ .ica-about-outro a,.ica-film-intro .ica-film-cta){
+ border-radius:9px;min-height:44px;
+ display:inline-flex;align-items:center;justify-content:center;gap:8px;
+ box-shadow:0 2px 7px rgb(47 13 24 / 9%);
+ transition:background-color var(--ica-ui-fast) var(--ica-ui-ease),
+  box-shadow var(--ica-ui-normal) var(--ica-ui-ease),
+  transform var(--ica-ui-fast) var(--ica-ui-ease);
+}
+/* Editorial links should stay links, not become attention-heavy buttons. */
+.ica-site :is(.ica-intl-trending-top>a,.ica-intl-section-heading>a,
+ .ica-section-action,.ica-topic-card-bottom>a,
+ .ica-intl-market-strip>div:first-child>a){
+ display:inline-flex;align-items:center;justify-content:center;
+ gap:8px;min-height:40px;text-underline-offset:4px;
+ transition:color var(--ica-ui-fast) var(--ica-ui-ease),
+  background-color var(--ica-ui-fast) var(--ica-ui-ease),
+  transform var(--ica-ui-fast) var(--ica-ui-ease);
+}
+.ica-site :is(.ica-desk-controls button,.ica-topic-desk-filter button,
+ .ica-topic-more button){
+ border-radius:9px;min-height:44px;
+ transition:color var(--ica-ui-fast) var(--ica-ui-ease),
+  background-color var(--ica-ui-fast) var(--ica-ui-ease),
+  border-color var(--ica-ui-fast) var(--ica-ui-ease),
+  transform var(--ica-ui-fast) var(--ica-ui-ease);
+}
+.ica-site :is(.ica-header-v20 .ica-menu-group a,
+ .ica-header-v20 .ica-topicline-scroll a,.ica-desk-nav a){
+ transition:color var(--ica-ui-fast) var(--ica-ui-ease),
+  background-color var(--ica-ui-fast) var(--ica-ui-ease);
+}
+.ica-site :is(.ica-intl-desk-header>a,.ica-trending-tile,
+ .ica-desk-story-grid>.ica-wire-story>a,.ica-intl-market-resources>a,
+ .ica-intl-source-directory>div:last-child>a,.ica-topic-card-bottom>a,
+ .ica-intl-desk-footer,.ica-section-action,.ica-intl-trending-top>a,
+ .ica-intl-section-heading>a){touch-action:manipulation}
+.ica-site :is(.ica-intl-desk-header>a,.ica-intl-desk-footer,
+ .ica-native-cta,.ica-section-action,.ica-intl-trending-top>a,
+ .ica-intl-section-heading>a){user-select:none;-webkit-user-select:none}
+.ica-site :is(.ica-intl-desk-header>a,.ica-native-cta,
+ .ica-intl-desk-footer,.ica-intl-trending-top>a,.ica-intl-section-heading>a,
+ .ica-section-action,.ica-intl-market-resources>a,
+ .ica-topic-card-bottom>a):active:not(:focus-visible){transform:scale(.98)}
+/* Hover applies only where the primary pointer can actually hover. */
+@media(hover:hover) and (pointer:fine){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article,
+  .ica-values article,.ica-managed-card):hover{
+  border-color:#d8cbd0;box-shadow:var(--ica-ui-lift);
+ }
+ .ica-site :is(.ica-trending-tile,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a):hover{transform:translateY(-2px)}
+ .ica-site .ica-intl-desk-header>a:hover{background:#efdde2}
+}
+@media(hover:none),(pointer:coarse){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+  .ica-managed-card):hover{transform:none;box-shadow:var(--ica-ui-shadow)}
+ .ica-site .ica-intl-desk-header>a{
+  width:44px;height:44px;min-width:44px;flex-basis:44px;
+ }
+ .ica-site :is(input:not(.ica-trap),textarea,select){font-size:max(16px,1em)}
+ .ica-site .ica-wire-story a:hover:not(:focus-visible) h3{color:inherit}
+}
+@media(max-width:640px){
+ .ica-site{--ica-radius:10px}
+ .ica-site :is(.ica-intl-mosaic-grid,.ica-desk-story-grid,
+  .ica-topic-directory-grid){gap:12px}
+ .ica-site .ica-intl-desk-card{padding:15px}
+ .ica-site .ica-desk-story-grid>.ica-wire-story{padding:14px 14px 5px}
+ .ica-site .ica-intl-trending-rail{
+  margin-inline:calc(-1 * var(--ica-gutter));
+  padding-inline:var(--ica-gutter);
+  scroll-padding-inline:var(--ica-gutter);
+  overscroll-behavior-inline:contain;
+ }
+ .ica-site .ica-trending-tile{
+  flex-basis:min(77vw,255px);min-width:0;max-width:255px;
+ }
+ .ica-site :is(.ica-intl-trending-top,.ica-intl-section-heading){gap:9px}
+ .ica-site .ica-intl-trending-top>a,
+ .ica-site .ica-intl-section-heading>a{align-self:flex-start}
+ .ica-site .ica-newsletter-entry{border-radius:9px;overflow:hidden}
+ .ica-site .ica-footer-upper{
+  padding-bottom:calc(26px + env(safe-area-inset-bottom,0px));
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article,
+  .ica-values article,.ica-managed-card,.ica-intl-desk-header>a,
+  .ica-intl-desk-footer,.ica-native-cta,.ica-contact-form>button,
+  .ica-newsletter-entry button,.ica-header-v20 .ica-nav-contact,
+  .ica-about-outro a,.ica-intl-trending-top>a,
+  .ica-intl-section-heading>a,.ica-section-action,
+  .ica-topic-card-bottom>a,.ica-desk-controls button,
+  .ica-topic-desk-filter button,.ica-topic-more button){transition:none}
+ .ica-site :is(.ica-trending-tile,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a):hover{transform:none}
+}
+
+/* ICA v24 — UI UX Pro Max editorial-system refinement.
+   Semantic surfaces and interaction tokens extend v21–v23, not a parallel UI. */
+.ica-site{
+ --ica-display:"Inter","Segoe UI","Helvetica Neue",Arial,sans-serif;
+ --ica-body:"Inter","Segoe UI","Helvetica Neue",Arial,sans-serif;
+ --ica-surface:#ffffff;
+ --ica-surface-soft:#f7f6f3;
+ --ica-surface-quiet:#f1f0ed;
+ --ica-ui-line:#e6e2df;
+ --ica-text-secondary:#615a5e;
+ --ica-ui-shadow:0 1px 2px rgb(39 19 27 / 3%),0 5px 16px rgb(39 19 27 / 4%);
+ --ica-ui-lift:0 4px 12px rgb(39 19 27 / 5%),0 12px 24px rgb(39 19 27 / 6%);
+ background:var(--ica-ivory);
+ color:var(--ica-ink);
+ font-family:var(--ica-body);
+ font-optical-sizing:auto;
+}
+html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
+.ica-site :is(.ica-page-content,.ica-content,.ica-global-content){min-width:0}
+.ica-site :is(.ica-intl-hero h1,.ica-intl-trending-top h2,.ica-intl-section-heading h2,
+ .ica-intl-desk-header h3,.ica-page-intro h1,.ica-desk-intro h1,
+ .ica-topic-card h3,.ica-article-head h1,.ica-managed-copy h2,.ica-managed-copy h3){
+ font-family:var(--ica-display);font-weight:800;text-wrap:balance;
+}
+.ica-site :is(.ica-wire-story h3,.ica-story-text h3,.ica-trending-tile h3,
+ .ica-intl-desk-list strong,.ica-managed-copy h2,.ica-managed-copy h3){
+ overflow-wrap:anywhere;
+}
+.ica-site :is(.ica-intl-hero-title p,.ica-intl-desk-card>p,.ica-wire-story p,
+ .ica-trending-tile>div,.ica-managed-summary,.ica-managed-body){
+ color:var(--ica-text-secondary);
+}
+.ica-site :is(.ica-intl-hero-side,.ica-intl-empty,.ica-desk-verify,
+ .ica-source-notice,.ica-research-disclaimer){
+ background:var(--ica-surface-soft);border-color:var(--ica-ui-line);
+ border-radius:var(--ica-radius);
+}
+.ica-site .ica-intl-empty{border-inline-start:3px solid var(--ica-red)}
+.ica-site .ica-desk-verify{border-inline-start:3px solid var(--ica-red)}
+.ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+ .ica-managed-card,.ica-desk-story-grid>.ica-wire-story,
+ .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article){
+ background:var(--ica-surface);border-color:var(--ica-ui-line);
+}
+.ica-site .ica-trending-tile{border-top:2px solid var(--ica-red)}
+.ica-site .ica-desk-story-grid>.ica-wire-story{border-top:2px solid var(--ica-red)}
+.ica-site .ica-intl-desk-card{isolation:isolate}
+.ica-site .ica-intl-desk-header>a{
+ background:var(--ica-surface-soft);border:1px solid var(--ica-ui-line);
+ border-radius:10px;color:var(--ica-red);
+}
+.ica-site .ica-intl-desk-footer{border-top-color:var(--ica-ui-line)}
+.ica-site .ica-intl-desk-list>a{border-top-color:var(--ica-ui-line)}
+.ica-site .ica-intl-desk-list>a strong{line-height:1.48}
+.ica-site .ica-intl-market-strip{background:var(--ica-wine);border-radius:var(--ica-radius)}
+.ica-site .ica-intl-market-resources>a{background:rgb(255 255 255 / 7%);border:1px solid rgb(255 255 255 / 17%)}
+.ica-site .ica-intl-market-resources>a strong{color:#ffffff}
+.ica-site .ica-newsletter{border-radius:var(--ica-radius);overflow:hidden}
+.ica-site .ica-header-topicline{background:var(--ica-surface-soft)}
+.ica-site .ica-desk-controls input,
+.ica-site .ica-topic-search-row :is(input,select),
+.ica-site .ica-contact-form :is(input,textarea,select){
+ background:var(--ica-surface);color:var(--ica-ink);
+ border:1px solid var(--ica-ui-line);border-radius:9px;
+}
+.ica-site :is(.ica-desk-controls input,.ica-topic-search-row input,
+ .ica-topic-search-row select,.ica-contact-form input,
+ .ica-contact-form textarea,.ica-contact-form select):focus-visible{
+ border-color:var(--ica-red);outline:2px solid var(--ica-red);
+ outline-offset:2px;
+}
+/* One optical icon grid for editorial actions and source-link affordances. */
+.ica-site .ica-action-icon{
+ inline-size:15px;block-size:15px;flex:0 0 15px;
+ stroke-width:1.9;vertical-align:-3px;display:inline-block;
+}
+.ica-site :is(.ica-wire-story-foot strong,.ica-intl-side-title>a,
+ .ica-intl-empty>a,.ica-intl-trending-top>a,.ica-intl-section-heading>a,
+ .ica-intl-desk-footer,.ica-intl-market-resources>a small,
+ .ica-intl-source-directory>div:last-child>a span:last-child){
+ display:inline-flex;align-items:center;gap:6px;
+}
+.ica-site .ica-wire-story-foot strong{white-space:normal;text-align:end}
+.ica-site .ica-intl-desk-header>a .ica-action-icon{inline-size:18px;block-size:18px;flex-basis:18px}
+.ica-site .ica-intl-source-directory>div:last-child>a .ica-action-icon{
+ position:absolute;inset-inline-end:10px;inset-block-start:10px;
+}
+.ica-site :is(.ica-intl-desk-footer,.ica-intl-desk-header>a,
+ .ica-native-cta,.ica-section-action,.ica-intl-trending-top>a,
+ .ica-intl-section-heading>a) .ica-action-icon{transition:transform var(--ica-ui-fast) var(--ica-ui-ease)}
+.ica-site[dir="rtl"] .ica-action-icon--forward{transform:scaleX(-1)}
+/* Controls: crisp backgrounds, consistent corner and focus geometry, no rays or gloss. */
+.ica-site :is(.ica-header-v20 .ica-nav-contact,.ica-desk-filter-header>button,
+ .ica-contact-form>button,.ica-newsletter-entry button,.ica-about-outro a){
+ background:var(--ica-red);background-image:none;
+ border:1px solid var(--ica-red);color:#ffffff;border-radius:9px;
+ box-shadow:none;min-height:44px;
+}
+.ica-site .ica-native-cta{
+ background:var(--ica-surface);background-image:none;
+ border:1px solid var(--ica-red);color:var(--ica-red);
+ border-radius:9px;box-shadow:none;padding:9px 13px;
+}
+.ica-site :is(.ica-desk-controls button,.ica-topic-desk-filter button,.ica-topic-more button){
+ border-color:var(--ica-ui-line);background:var(--ica-surface);
+ color:var(--ica-ink);box-shadow:none;
+}
+.ica-site :is(.ica-desk-controls button[aria-pressed="true"],
+ .ica-topic-desk-filter button[aria-pressed="true"]){
+ background:var(--ica-wine);border-color:var(--ica-wine);color:#fff;
+}
+.ica-site :is(a,button,select,input,textarea):focus-visible{
+ outline:2px solid var(--ica-red);outline-offset:3px;
+}
+.ica-site :is(button:disabled,[aria-disabled="true"]){cursor:not-allowed;opacity:.6}
+.ica-site:is([lang="ar"],[lang="ckb"]) :is(h1,h2,h3,p,li,button,a){
+ font-family:"Noto Sans Arabic","Rabar-004","Geeza Pro",Tahoma,Arial,sans-serif;
+ letter-spacing:normal;
+}
+.ica-site[lang="zh"] :is(h1,h2,h3,p,li,button,a){
+ font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+ letter-spacing:normal;
+}
+@media(hover:hover) and (pointer:fine){
+ .ica-site :is(.ica-header-v20 .ica-nav-contact,.ica-desk-filter-header>button,
+  .ica-contact-form>button,.ica-newsletter-entry button,.ica-about-outro a):hover:not(:disabled){
+  background:var(--ica-wine);border-color:var(--ica-wine);
+ }
+ .ica-site .ica-native-cta:hover{background:var(--ica-surface-soft)}
+ .ica-site .ica-intl-desk-header>a:hover{background:#efece8;border-color:#ded6d1}
+ .ica-site :is(.ica-intl-desk-footer,.ica-intl-desk-header>a,
+  .ica-intl-trending-top>a,.ica-intl-section-heading>a):hover .ica-action-icon{
+  transform:translate(2px,-2px);
+ }
+ .ica-site[dir="rtl"] .ica-intl-desk-footer:hover .ica-action-icon--forward{
+  transform:translate(-2px,0) scaleX(-1);
+ }
+}
+@media(max-width:640px){
+ .ica-site .ica-intl-empty{padding:17px}
+ .ica-site .ica-intl-hero-side{padding:16px}
+ .ica-site .ica-intl-desk-card{min-width:0}
+ .ica-site .ica-intl-hero-title h1{text-wrap:pretty}
+ .ica-site .ica-wire-story-foot{flex-wrap:wrap}
+ .ica-site .ica-trending-tile>div{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site :is(.ica-intl-desk-footer,.ica-intl-desk-header>a,
+  .ica-native-cta,.ica-section-action,.ica-intl-trending-top>a,
+  .ica-intl-section-heading>a) .ica-action-icon{transition:none;transform:none}
+ .ica-site[dir="rtl"] .ica-action-icon--forward{transform:scaleX(-1)}
+}
+
+
+/* Cohesive control family shared with CCC: quiet surfaces and 9px corners. */
+.ica-site{--ica-control-radius:9px}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button,.ica-nav-contact,
+ .ica-contact-form>button,.ica-newsletter-entry button,.ica-desk-controls button,
+ .ica-topic-desk-filter button,.ica-topic-more button,.ica-native-cta,.ica-about-outro a,
+ .scroll-scrub__route-button){
+ border-radius:var(--ica-control-radius);min-height:44px;box-shadow:none;
+ background-image:none;font-weight:650;line-height:1.4;
+ /* Keep responsive visibility (desktop toggle, mobile contact link) owned by header. */
+ align-items:center;justify-content:center;gap:8px;
+ transition:background-color 150ms ease,border-color 150ms ease,color 150ms ease;
+}
+.ica-site :is(.ica-menu-toggle,.ica-menu-drawer-head button){
+ border:1px solid var(--ica-ui-line);background:var(--ica-surface);color:var(--ica-ink);
+}
+.ica-site :is(.ica-contact-form input,.ica-contact-form textarea,.ica-contact-form select,
+ .ica-newsletter-entry input,.ica-desk-controls input,.ica-topic-search-row input,
+ .ica-topic-search-row select){border-radius:var(--ica-control-radius)}
+.ica-site .ica-action-icon{inline-size:16px;block-size:16px;flex:0 0 16px;stroke-width:1.8;pointer-events:none}
+.ica-site :is(a,button):hover .ica-action-icon{translate:none;transform:none}
+.ica-site[dir="rtl"] .ica-action-icon--forward{transform:scaleX(-1)}
+@media(prefers-reduced-motion:reduce){
+ .ica-site :is(button,a,input,select,textarea){transition:none!important}
+}
+
+/* ICA v26 — phone-native editorial geometry; Emil mobile-native + UI UX Pro Max.
+   Width and typography live in one public-only token layer, not in browser zoom. */
+@media(max-width:680px){
+ .ica-site{
+  --ica-gutter:clamp(8px,2.5vw,11px);
+  --ica-grid-gap:8px;
+  --ica-section-space:24px;
+  --ica-card-pad:clamp(10px,2.6vw,13px);
+  --ica-radius:6px;
+  --ica-control-radius:6px;
+  --ica-type-body:13px;
+  --ica-type-small:12px;
+  --ica-type-card:clamp(14px,3.65vw,16px);
+  --ica-type-heading:clamp(20px,5.05vw,26px);
+  --ica-type-hero:clamp(25px,6.4vw,32px);
+  line-height:1.53;
+ }
+ .ica-site .ica-header-v20 .ica-nav,
+ .ica-site .ica-header-v20 .ica-topline,
+ .ica-site .ica-header-v20 .ica-header-topicline{padding-inline:var(--ica-gutter)}
+ .ica-site .ica-intl-hero{padding:18px 0 23px}
+ .ica-site .ica-intl-hero-title{margin-bottom:12px;gap:10px}
+ .ica-site .ica-intl-hero h1{line-height:1.12;letter-spacing:-.038em;margin:6px 0 8px}
+ .ica-site .ica-intl-hero-title p{font-size:13px;line-height:1.52}
+ .ica-site .ica-intl-hero-grid{gap:8px;padding-top:10px}
+ .ica-site .ica-wire-lead-art{min-height:132px;padding:12px;border-radius:6px}
+ .ica-site .ica-wire-lead-art strong{font-size:clamp(24px,6vw,31px)}
+ .ica-site .ica-wire-story h3{font-size:var(--ica-type-card);line-height:1.3;margin:6px 0}
+ .ica-site .ica-wire-story-lead h3{font-size:clamp(18px,4.8vw,21px)}
+ .ica-site .ica-wire-story p,.ica-site .ica-wire-story-lead p{font-size:12.5px}
+ .ica-site .ica-intl-hero-side{padding:11px;gap:8px}
+ .ica-site .ica-intl-trending{padding:19px 0}
+ .ica-site .ica-intl-trending-top h2,.ica-site .ica-intl-section-heading h2{
+  font-size:var(--ica-type-heading);line-height:1.22
+ }
+ .ica-site .ica-trending-tile{flex-basis:clamp(190px,55vw,225px);min-width:190px;min-height:150px;padding:10px}
+ .ica-site .ica-trending-tile h3{font-size:14px;line-height:1.32}
+ .ica-site .ica-intl-mosaic{padding:19px 0 26px}
+ .ica-site .ica-intl-section-heading{margin-bottom:11px}
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-newsroom-top article,.ica-desk-story,.ica-media-card,.ica-managed-card){
+  border-radius:var(--ica-radius);
+ }
+ .ica-site .ica-intl-desk-card{padding:var(--ica-card-pad);min-height:0}
+ .ica-site .ica-intl-desk-header h3{font-size:clamp(17px,4.45vw,21px);margin:4px 0}
+ .ica-site .ica-intl-desk-list>a{padding:7px 0}
+ .ica-site .ica-intl-market-strip{padding:12px;margin-bottom:24px;border-radius:6px}
+ .ica-site .ica-intl-market-strip h2{font-size:var(--ica-type-heading)}
+ .ica-site .ica-intl-market-resources>a{padding:10px}
+ .ica-site .ica-news-section{padding:var(--ica-section-space) 0}
+ .ica-site .ica-section-heading{margin-bottom:11px;padding-bottom:9px}
+ .ica-site .ica-story-grid,.ica-site .ica-media-grid,
+ .ica-site .ica-topics-home-grid,.ica-site .ica-topic-directory-grid{
+  gap:var(--ica-grid-gap);
+ }
+ .ica-site .ica-story-text{padding:9px 1px}
+ .ica-site .ica-story-text h3{font-size:var(--ica-type-card);line-height:1.33;margin:6px 0}
+ .ica-site .ica-story-feature .ica-story-text h3{font-size:clamp(16px,4.15vw,19px)}
+ .ica-site .ica-page-intro,.ica-site .ica-desk-intro{
+  padding:15px 12px;margin:9px 0 17px;border-radius:6px
+ }
+ .ica-site .ica-topic-card,.ica-site .ica-topic-directory-grid .ica-topic-card{
+  padding:var(--ica-card-pad);min-height:0
+ }
+ .ica-site .ica-topic-card h3{font-size:16px;line-height:1.3}
+ .ica-site .ica-article-head h1,.ica-site .ica-topic-detail-hero h1{
+  font-size:clamp(25px,6.5vw,32px);line-height:1.18
+ }
+ .ica-site .ica-contact-form,.ica-site .ica-newsletter{padding:var(--ica-card-pad)}
+ .ica-site :is(input,select,textarea){font-size:16px}
+ .ica-site :is(button,.ica-nav-contact,.ica-menu-toggle,.ica-native-cta){touch-action:manipulation}
+ .ica-site:is([lang="ar"],[lang="ckb"]){
+  --ica-type-body:14px;
+  --ica-type-card:clamp(15px,3.85vw,17px);
+  --ica-type-heading:clamp(21px,5.3vw,27px);
+  --ica-type-hero:clamp(26px,6.7vw,34px);
+ }
+ .ica-site:is([lang="ar"],[lang="ckb"]) :is(h1,h2,h3){letter-spacing:0;line-height:1.4}
+}
+@media(max-height:560px) and (max-width:950px) and (pointer:coarse){
+ .ica-site{
+  --ica-gutter:9px;--ica-grid-gap:8px;--ica-card-pad:11px;
+  --ica-radius:6px;--ica-type-card:15px;
+  --ica-type-heading:clamp(21px,3vw,26px);
+  --ica-type-hero:clamp(25px,4vw,34px);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-managed-card){border-radius:6px}
+}
+
+/* ICA v26 — wider mobile editorial canvas and quieter squared-soft cards.
+   Keeps native hit targets, dynamic text sizing and all RTL/Chinese pathways. */
+@media(max-width:767px){
+ .ica-site{
+  --ica-gutter:clamp(8px,2.25vw,12px);
+  --ica-section-space:clamp(20px,4.8vw,30px);
+  --ica-grid-gap:clamp(7px,2vw,10px);
+  --ica-card-pad:clamp(10px,2.7vw,14px);
+  --ica-radius:6px;
+  --ica-control-radius:6px;
+  --ica-type-body:13.5px;
+  --ica-type-card:clamp(14px,3.7vw,17px);
+  --ica-type-heading:clamp(20px,5.15vw,26px);
+  --ica-type-hero:clamp(27px,6.75vw,34px);
+  --ica-ui-shadow:0 1px 5px rgb(39 19 27 / 4%);
+  --ica-ui-lift:0 3px 12px rgb(39 19 27 / 6%);
+  font-size:var(--ica-type-body);
+ }
+ .ica-site :is(.ica-content,.ica-page-content,.ica-admin,
+  .ica-footer-upper,.ica-footer-lower,.ica-global-content){
+  max-width:100%;padding-inline:var(--ica-gutter);margin-inline:auto;
+ }
+ .ica-site .ica-header-v20 :is(.ica-nav,.ica-header-topicline,.ica-topline){
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site :is(.ica-intl-hero h1,.ica-page-intro h1,.ica-desk-intro h1,
+  .ica-topic-detail-hero h1,.ica-article-head h1,
+  .ica-home .scroll-scrub__title){
+  font-size:var(--ica-type-hero);line-height:1.19;letter-spacing:-.035em;
+ }
+ .ica-site :is(.ica-intl-trending-top h2,.ica-intl-section-heading h2,
+  .ica-section-heading h2,.ica-coverage-header h2,
+  .ica-topics-home-title h2,.ica-intl-market-strip h2,
+  .ica-culture-description h2,.ica-video-stage h2){
+  font-size:var(--ica-type-heading);line-height:1.24;letter-spacing:-.022em;
+ }
+ .ica-site :is(.ica-wire-story h3,.ica-wire-story-lead h3,
+  .ica-trending-tile h3,.ica-story-text h3,
+  .ica-intl-desk-header h3,.ica-topic-card h3,
+  .ica-managed-copy h3){
+  font-size:var(--ica-type-card);line-height:1.33;letter-spacing:-.012em;
+ }
+ .ica-site :is(.ica-intl-hero-title p,.ica-wire-story p,
+  .ica-trending-tile p,.ica-story-text p,.ica-intl-desk-card>p,
+  .ica-page-intro p,.ica-managed-summary,.ica-managed-body){
+  font-size:13px;line-height:1.5;
+ }
+ .ica-site :is(.ica-intl-hero,.ica-intl-trending,.ica-intl-mosaic,
+  .ica-news-section,.ica-topics-home){padding-block:var(--ica-section-space)}
+ .ica-site :is(.ica-intl-mosaic-grid,.ica-intl-hero-grid,
+  .ica-desk-story-grid,.ica-story-grid,.ica-topic-directory-grid,
+  .ica-topics-home-grid,.ica-media-grid,.ica-managed-card-grid){
+  gap:var(--ica-grid-gap);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-intl-market-resources>a,
+  .ica-intl-source-directory>div:last-child>a,.ica-newsroom-top article,
+  .ica-values article,.ica-managed-card,.ica-intl-hero-side,
+  .ica-page-intro,.ica-desk-intro,.ica-newsletter,.ica-culture-spotlight,
+  .ica-media-poster,.ica-story-image){
+  border-radius:var(--ica-radius);
+ }
+ .ica-site :is(.ica-intl-desk-card,.ica-topic-card,.ica-newsroom-top article,
+  .ica-managed-copy,.ica-trending-tile,.ica-intl-hero-side){
+  padding:var(--ica-card-pad);
+ }
+ .ica-site .ica-intl-desk-card{min-height:0}
+ .ica-site .ica-trending-tile{min-height:156px}
+ .ica-site .ica-trending-tile h3{margin-block:5px auto}
+ .ica-site .ica-intl-hero-title{margin-bottom:13px}
+ .ica-site .ica-intl-hero-grid{padding-top:10px}
+ .ica-site .ica-intl-desk-header h3{margin-block:3px}
+ .ica-site .ica-intl-desk-list>a{padding-block:8px}
+ .ica-site .ica-intl-market-strip{padding:14px}
+ .ica-site .ica-page-intro,.ica-site .ica-desk-intro{padding:18px var(--ica-card-pad)}
+ .ica-site .ica-header-v20 .ica-menu-toggle,
+ .ica-site .ica-header-v20 .ica-menu-drawer-head button{
+  border-radius:6px;
+ }
+ .ica-site :is(.ica-nav-contact,.ica-native-cta,.ica-contact-form>button,
+  .ica-newsletter-entry button,.ica-desk-controls button,
+  .ica-topic-desk-filter button,.ica-topic-more button,.ica-about-outro a){
+  border-radius:6px;min-height:44px;
+ }
+ .ica-site :is(input:not(.ica-trap),select,textarea){font-size:16px}
+}
+.ica-site:is([lang="ar"],[lang="ckb"]) :is(.ica-intl-hero h1,.ica-page-intro h1,
+ .ica-desk-intro h1,.ica-section-heading h2,.ica-topic-detail-hero h1){
+ letter-spacing:0;line-height:1.48;
+}
+
+/* ICA v27 — editorial header rhythm and lightweight 1px card boundaries.
+   Complements v26; retains menu visibility, locale handling, touch sizes and RTL. */
+.ica-site{
+ --ica27-card-border:#e8e9ec;
+ --ica27-chrome-border:#e9e9ec;
+ --ica27-surface:#fff;
+ --ica27-active:#e3001b;
+ --ica27-soft-active:#fff3f4;
+ --ica27-radius:6px;
+}
+.ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+ .ica-desk-story-grid>.ica-wire-story,.ica-intl-source-directory>div:last-child>a,
+ .ica-newsroom-top article,.ica-values article,.ica-managed-card,
+ .ica-desk-verify,.ica-intl-empty,.ica-media-tile){
+ border:1px solid var(--ica27-card-border)!important;
+ border-radius:var(--ica27-radius)!important;
+ box-shadow:0 1px 4px rgb(29 28 35 / 2%)!important;
+}
+.ica-site :is(.ica-trending-tile,.ica-desk-story-grid>.ica-wire-story){
+ border-block-start:1px solid var(--ica27-active)!important;
+}
+.ica-site .ica-newsroom-top article{
+ border-inline-start:1px solid var(--ica27-active)!important;
+}
+.ica-site .ica-managed-card{overflow:hidden}
+.ica-site .ica-intl-market-resources>a{
+ border:1px solid rgb(255 255 255 / 17%)!important;
+ border-radius:var(--ica27-radius)!important;
+ box-shadow:none!important;
+}
+@media(hover:hover) and (pointer:fine){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-desk-story-grid>.ica-wire-story,.ica-newsroom-top article,
+  .ica-intl-source-directory>div:last-child>a,.ica-managed-card):hover{
+  border-color:#d7dbe0!important;
+  box-shadow:0 2px 8px rgb(29 28 35 / 4%)!important;
+ }
+}
+.ica-site .ica-header-v20{
+ background:#fff;border-bottom:1px solid var(--ica27-chrome-border);
+ box-shadow:0 1px 3px rgb(29 28 35 / 3%);
+}
+.ica-site .ica-header-v20 .ica-topline{
+ height:23px;background:#2b171d;color:#f7eff1;
+ border-bottom:0;font-size:9px;letter-spacing:.03em;
+}
+.ica-site .ica-header-v20 .ica-nav{
+ height:62px;max-width:var(--ica-container);
+ gap:clamp(7px,1vw,14px);padding-inline:var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-brand{gap:8px}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol{
+ width:38px;height:38px;min-width:38px;
+ border-radius:7px;box-shadow:none!important;
+}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:15px}
+.ica-site .ica-header-v20 .ica-brand .ica-symbol i{
+ width:15px;height:2px;inset:auto auto 7px 11px;
+}
+.ica-site .ica-header-v20 .ica-brand-name strong{
+ font-size:11px;line-height:1.2;letter-spacing:.015em;
+}
+.ica-site .ica-header-v20 .ica-brand-name small{font-size:8px}
+.ica-site .ica-header-v20 .ica-nav-links{gap:clamp(7px,.85vw,13px)}
+.ica-site .ica-header-v20 .ica-nav-links a{
+ min-height:44px;font-size:11px;font-weight:650;
+ border-bottom:1px solid transparent;
+ transition:color 160ms ease,border-color 160ms ease;
+}
+.ica-site .ica-header-v20 .ica-nav-links a[aria-current="page"]{
+ border-bottom-color:var(--ica27-active);
+}
+.ica-site .ica-header-v20 .ica-nav-actions{gap:8px}
+.ica-site .ica-header-v20 .ica-language select{
+ min-height:44px;border:1px solid var(--ica27-chrome-border);
+ border-radius:6px;background:#fff;box-shadow:none;
+}
+.ica-site .ica-header-v20 .ica-nav-contact{
+ min-height:44px;padding:9px 12px;border-radius:6px;
+ background:#e3001b;color:#fff;box-shadow:none;
+}
+.ica-site .ica-header-v20 .ica-header-topicline{
+ min-height:35px;gap:12px;
+ background:#fff;color:#4f5057;
+ border-top:1px solid var(--ica27-chrome-border);
+ padding:3px var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-header-topicline>span{
+ font-size:9px;letter-spacing:.03em;font-weight:750;
+}
+.ica-site .ica-header-v20 .ica-topicline-scroll{
+ gap:13px;padding-block:1px;scroll-padding-inline:var(--ica-gutter);
+}
+.ica-site .ica-header-v20 .ica-header-topicline a{
+ min-height:32px;font-size:10px;font-weight:650;
+ border-bottom:1px solid transparent;
+}
+.ica-site .ica-header-v20 .ica-header-topicline a[aria-current="page"]{
+ border-bottom-color:var(--ica27-active);
+}
+.ica-site .ica-header-v20 .ica-menu-toggle,
+.ica-site .ica-header-v20 .ica-menu-drawer-head button{
+ min-height:44px;min-width:44px;
+ border:1px solid var(--ica27-chrome-border);
+ border-radius:6px;box-shadow:none;
+ background:#fff;color:#34373b;
+}
+.ica-site .ica-header-v20 .ica-menu-toggle[aria-expanded="true"]{
+ background:var(--ica27-soft-active);color:#b40024;
+ border-color:#f1d9de;
+}
+.ica-site .ica-header-v20 .ica-menu-toggle-lines i{
+ height:1.5px;border-radius:1px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer{
+ border-top:1px solid var(--ica27-chrome-border);
+ box-shadow:0 9px 24px rgb(29 28 35 / 9%);
+ background:#fff;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-head{
+ border-bottom:1px solid var(--ica27-chrome-border);
+ min-height:50px;
+}
+.ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:clamp(11px,2vw,24px)}
+.ica-site .ica-header-v20 .ica-menu-group a{
+ min-height:44px;border-radius:6px;font-weight:650;
+}
+.ica-site .ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ background:var(--ica27-soft-active);
+ box-shadow:inset 1px 0 0 var(--ica27-active);
+ color:#ad0020;
+}
+.ica-site[dir="rtl"] .ica-header-v20 .ica-menu-group a[aria-current="page"]{
+ box-shadow:inset -1px 0 0 var(--ica27-active);
+}
+@media(max-width:767px){
+ .ica-site .ica-header-v20 .ica-topline{
+  height:calc(21px + env(safe-area-inset-top,0px));
+  padding-top:env(safe-area-inset-top,0px);
+ }
+ .ica-site .ica-header-v20 .ica-nav{
+  height:55px;gap:6px;
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-brand{gap:6px}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol{
+  width:35px;height:35px;min-width:35px;border-radius:6px;
+ }
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:13px}
+ .ica-site .ica-header-v20 .ica-brand-name strong{font-size:10px}
+ .ica-site .ica-header-v20 .ica-nav-actions{gap:6px}
+ .ica-site .ica-header-v20 .ica-header-topicline{
+  min-height:39px;gap:9px;
+  /* Remove excess strip padding without shrinking the topic links or touch controls. */
+  padding-block:0;
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+ }
+ .ica-site .ica-header-v20 .ica-header-topicline a{min-height:36px}
+ .ica-site .ica-header-v20 .ica-topicline-scroll{gap:11px}
+ .ica-site .ica-header-v20 .ica-menu-drawer{
+  padding-inline-start:max(var(--ica-gutter),env(safe-area-inset-left,0px));
+  padding-inline-end:max(var(--ica-gutter),env(safe-area-inset-right,0px));
+  max-height:calc(100dvh - 110px - env(safe-area-inset-top,0px));
+  padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));
+ }
+ .ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:12px;padding-block:12px}
+ .ica-site .ica-header-v20 .ica-menu-group h2{margin-bottom:6px}
+ .ica-site .ica-header-v20 .ica-menu-group a{padding:8px 10px}
+}
+@media(hover:none),(pointer:coarse){
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,
+  .ica-managed-card,.ica-newsroom-top article):hover{
+  box-shadow:0 1px 4px rgb(29 28 35 / 2%)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .ica-site .ica-header-v20 :is(.ica-nav-links a,.ica-menu-toggle,.ica-menu-drawer){
+  transition:none!important;animation:none!important;
+ }
 }

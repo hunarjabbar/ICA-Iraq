@@ -1,0 +1,95 @@
+
+/* Independently reviewed managed ICA public content; follows existing ICA visual language. */
+.ica-managed-sections{width:min(100% - 2rem,1320px);margin:2.5rem auto 4rem;display:grid;gap:1.4rem;direction:inherit}
+.ica-managed-feature-list{display:grid;gap:1.2rem}
+.ica-managed-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem}
+.ica-managed-card{background:var(--ica-surface,#fff);color:var(--ica-text,#18202a);border:1px solid rgba(110,109,114,.2);border-radius:1rem;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 5px 25px rgba(0,0,0,.035)}
+.ica-managed-card.ica-managed-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);min-height:340px}
+.ica-managed-card.ica-managed-hero .ica-managed-image{order:2}
+.ica-managed-card.ica-managed-feature{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}
+.ica-managed-image{overflow:hidden;aspect-ratio:16 / 9;background:#f3f3f3}
+.ica-managed-image img{display:block;width:100%;height:100%;object-fit:cover}
+.ica-managed-copy{padding:clamp(1rem,2.4vw,2.2rem);display:flex;flex-direction:column;align-items:flex-start;gap:.65rem;min-width:0}
+.ica-managed-eyebrow{font-size:.72rem;font-weight:760;text-transform:uppercase;letter-spacing:.14em;color:#c22137}
+.ica-managed-copy h2{font-size:clamp(1.6rem,3.3vw,3.1rem);line-height:1.1;letter-spacing:-.035em;margin:0}
+.ica-managed-copy h3{font-size:clamp(1.05rem,1.8vw,1.4rem);line-height:1.27;letter-spacing:-.012em;margin:0}
+.ica-managed-copy p{margin:0}
+.ica-managed-summary{font-size:.96rem;line-height:1.65;opacity:.8}
+.ica-managed-body{white-space:pre-wrap;line-height:1.7;max-width:74ch;opacity:.85}
+.ica-managed-body p+p{margin-top:.7rem}
+.ica-managed-cta{margin-top:.6rem;display:inline-flex;align-items:center;gap:.3rem;color:#ad1930;font-weight:750;text-decoration:underline;text-underline-offset:4px}
+.ica-managed-cta:hover{text-decoration-thickness:2px}
+.ica-managed-cta:focus-visible{outline:3px solid #df3752;outline-offset:4px}
+@media(max-width:850px){.ica-managed-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ica-managed-card.ica-managed-hero,.ica-managed-card.ica-managed-feature{grid-template-columns:1fr}.ica-managed-card.ica-managed-hero .ica-managed-image{order:-1}}
+@media(max-width:560px){.ica-managed-sections{width:calc(100% - 1.3rem);margin:1.5rem auto 2.5rem}.ica-managed-card-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine){.ica-managed-card{transition:box-shadow 180ms cubic-bezier(0.23,1,0.32,1)}.ica-managed-card:hover{box-shadow:0 8px 25px rgba(54,16,25,.07)}}
+
+
+/* Native page and desk copy remain in original positions, with approved rich text. */
+.ica-native-body{max-width:74ch;line-height:1.7;font-size:.94rem;overflow-wrap:anywhere;margin:.6rem 0}
+.ica-native-body p{margin:.55rem 0;white-space:pre-line}
+.ica-native-body h2,.ica-native-body h3,.ica-native-body h4{line-height:1.32;margin:1rem 0 .4rem}
+.ica-native-body ul,.ica-native-body ol{padding-inline-start:1.5rem;margin:.65rem 0}
+.ica-native-body li+li{margin:.3rem 0}
+.ica-native-body blockquote{margin:.8rem 0;padding:.4rem 1rem;border-inline-start:3px solid var(--ica-red,#e3001b)}
+.ica-native-body a{color:var(--ica-red,#bf1b39);text-decoration:underline}
+.ica-native-cta{display:inline-flex;margin:.65rem 0;align-items:center;gap:.35rem;font-size:.9rem;font-weight:750;color:var(--ica-red,#c11b35);text-decoration:underline;text-underline-offset:.22em}
+.ica-native-cta:focus-visible{outline:3px solid var(--ica-red,#e3001b);outline-offset:4px}
+
+
+/* ICA compact-system v21: independently published CMS blocks match native cards. */
+.ica-site .ica-managed-sections{
+ width:min(calc(100% - 2 * var(--ica-gutter,18px)),var(--ica-container,1200px));
+ margin:clamp(20px,3vw,35px) auto clamp(28px,4vw,48px);
+ gap:var(--ica-grid-gap,16px);
+}
+.ica-site .ica-managed-feature-list{gap:var(--ica-grid-gap,16px);}
+.ica-site .ica-managed-card-grid{gap:var(--ica-grid-gap,16px);}
+.ica-site .ica-managed-card{
+ border-radius:var(--ica-radius,7px);
+ box-shadow:0 2px 12px rgba(0,0,0,.025);
+}
+.ica-site .ica-managed-card.ica-managed-hero{
+ min-height:230px;
+}
+.ica-site .ica-managed-image{aspect-ratio:16/10;}
+.ica-site .ica-managed-copy{
+ padding:var(--ica-card-pad,17px);gap:7px;
+}
+.ica-site .ica-managed-copy h2{
+ font-size:clamp(25px,2.9vw,40px);line-height:1.18;
+}
+.ica-site .ica-managed-copy h3{
+ font-size:clamp(17px,1.6vw,22px);line-height:1.3;
+}
+.ica-site .ica-managed-summary{font-size:13px;line-height:1.6;}
+.ica-site .ica-managed-body{font-size:13px;line-height:1.65;max-width:66ch;}
+.ica-site .ica-managed-cta{font-size:12px;margin-top:4px;min-height:40px;}
+.ica-site .ica-native-body{font-size:13px;max-width:66ch;}
+@media(max-width:850px){
+ .ica-site .ica-managed-card.ica-managed-hero,
+ .ica-site .ica-managed-card.ica-managed-feature{
+  grid-template-columns:minmax(0,1fr);min-height:0;
+ }
+}
+@media(max-width:560px){
+ .ica-site .ica-managed-card-grid{grid-template-columns:minmax(0,1fr);}
+ .ica-site .ica-managed-copy h2{font-size:clamp(22px,6vw,29px);}
+ .ica-site .ica-managed-sections{margin-block:18px 29px;}
+}
+
+/* ICA v26: CMS blocks obey the same narrow outer gutter and slim card geometry. */
+@media(max-width:680px){
+ .ica-site .ica-managed-sections{
+  width:min(calc(100% - 2 * var(--ica-gutter,10px)),var(--ica-container,1200px));
+  margin-block:17px 25px;gap:var(--ica-grid-gap,8px);
+ }
+ .ica-site .ica-managed-card-grid,.ica-site .ica-managed-feature-list{gap:var(--ica-grid-gap,8px)}
+ .ica-site .ica-managed-card{border-radius:var(--ica-radius,6px);box-shadow:0 1px 6px rgba(0,0,0,.03)}
+ .ica-site .ica-managed-copy{padding:var(--ica-card-pad,11px);gap:6px}
+ .ica-site .ica-managed-copy h2{font-size:clamp(19px,5vw,25px);line-height:1.25}
+ .ica-site .ica-managed-copy h3{font-size:clamp(14px,3.8vw,17px);line-height:1.33}
+ .ica-site .ica-managed-summary,.ica-site .ica-managed-body{font-size:13px;line-height:1.56}
+ .ica-site .ica-native-body{font-size:13px;line-height:1.58}
+ .ica-site .ica-managed-cta{min-height:44px;align-items:center}
+}

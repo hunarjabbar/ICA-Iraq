@@ -24,9 +24,9 @@ export function CoveragePage({type,stories=[]}:{type:string;stories?:ICAArticle[
  const c=configs[type]||configs.news
  return <Shell><main className="ica-page-content"><Intro {...c}/>
   {type==='newsroom'&&<div className="ica-newsroom-top">
-   <article><span>{L('pressFor')}</span><h2>{L('pressRelations')}</h2><p>{L('pressText')}</p><a href={path('/contact')}>{L('pressRequest')} ↗</a></article>
-   <article><span>{L('sourcesFor')}</span><h2>{L('submitTip')}</h2><p>{L('tipText')}</p><a href={path('/contact')}>{L('contactNewsroom')} ↗</a></article>
-   <article><span>{L('readersFor')}</span><h2>{L('correctionTitle')}</h2><p>{L('correctionText')}</p><a href={path('/contact')}>{L('requestCorrection')} ↗</a></article>
+   <article><span>{L('pressFor')}</span><h2>{L('pressRelations')}</h2><p>{L('pressText')}</p><a href={path('/contact')}>{L('pressRequest')}</a></article>
+   <article><span>{L('sourcesFor')}</span><h2>{L('submitTip')}</h2><p>{L('tipText')}</p><a href={path('/contact')}>{L('contactNewsroom')}</a></article>
+   <article><span>{L('readersFor')}</span><h2>{L('correctionTitle')}</h2><p>{L('correctionText')}</p><a href={path('/contact')}>{L('requestCorrection')}</a></article>
   </div>}
   {type==='newsroom'&&<section id="how-we-report" className="ica-newsroom-policy" aria-labelledby="ica-reporting-principles-title">
    <h2 id="ica-reporting-principles-title">{howWeReport[lang].title}</h2>
@@ -34,7 +34,7 @@ export function CoveragePage({type,stories=[]}:{type:string;stories?:ICAArticle[
    <div className="ica-newsroom-top">{howWeReport[lang].sections.map(([heading,body])=><article key={heading}>
     <h3>{heading}</h3><p>{body}</p>
    </article>)}</div>
-   <p><a href={path('/contact')}>{howWeReport[lang].contact} ↗</a></p>
+   <p><a href={path('/contact')}>{howWeReport[lang].contact}</a></p>
   </section>}
   <section className="ica-coverage-list"><div className="ica-coverage-header"><h2>{type==='culture'?L('culturalStories'):type==='entertainment'?L('artsScreen'):type==='newsroom'?L('pressReleases'):L('latestCoverage')}</h2>
    <div className="ica-coverage-filters">
@@ -60,7 +60,7 @@ export function AboutPage(){
   <Intro label={L('aboutAgency')} title={L('aboutTitle')} description={L('aboutDesc')}/>
   <section className="ica-about-layout"><div className="ica-about-manifesto"><h2>{L('twoSocieties')}</h2><p>{L('aboutFirst')}</p><p>{L('aboutSecond')}</p></div><div className="ica-about-photo"><img src="/assets/ica-cover-scene.png" alt="ICA editorial photography and cultural exchange"/></div></section>
   <div className="ica-values">{values.map(([heading,body],i)=><article key={heading}><strong>{String(i+1).padStart(2,'0')}</strong><h3>{L(heading)}</h3><p>{L(body)}</p></article>)}</div>
-  <div className="ica-about-outro"><h2>{L('tellMatters')}</h2><a href={path('/contact')}>{L('connectICA')} ↗</a></div>
+  <div className="ica-about-outro"><h2>{L('tellMatters')}</h2><a href={path('/contact')}>{L('connectICA')}</a></div>
  </main></Shell>
 }
 export function ContactPage(){
@@ -74,3 +74,4 @@ export function ContactPage(){
   </div><ContactForm/></div>
  </main></Shell>
 }
+

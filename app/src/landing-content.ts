@@ -2,23 +2,23 @@ import { parseLandingContent } from "@higgsfield/app-landing";
 
 const TEMPLATE_PREVIEW = "/assets/landing/template-preview.svg";
 
-// TEMPLATE DEMO CONTENT. Replace it from the product AppBrief together with
-// product-specific step UI and owned result/showcase media before shipping.
+// Legacy design-preview fixture, not the ICA public homepage. Keep all links on
+// established public routes; the retired /app staff template must stay HTTP 404.
 export const landingContent = parseLandingContent({
   hero: {
     eyebrow: "Your focused workspace",
     title: "Turn complex work into a clear, repeatable flow",
     description:
       "Organize the important work, keep progress visible and move from idea to done without losing context.",
-    primaryCta: { label: "Open app", href: "/app" },
+    primaryCta: { label: "Explore newsroom", href: "/newsroom" },
     secondaryCta: { label: "See how it works", href: "#how-it-works" },
   },
   preview: {
     kind: "route",
-    title: "Interactive app preview",
-    src: "/app?preview=1",
-    openHref: "/app",
-    openLabel: "Open full app",
+    title: "Public newsroom preview",
+    src: "/newsroom",
+    openHref: "/newsroom",
+    openLabel: "Explore newsroom",
   },
   steps: {
     title: "Move forward in 3 easy steps",
@@ -39,7 +39,7 @@ export const landingContent = parseLandingContent({
         description: "Organize priorities and choose the controls that fit your process.",
         preview: {
           kind: "action",
-          label: "Open app",
+          label: "Explore newsroom",
         },
       },
       {
@@ -94,7 +94,7 @@ export const landingContent = parseLandingContent({
   },
   finalCta: {
     title: "Ready to move your work forward?",
-    description: "Open the full workspace and start with the task that matters most.",
-    action: { label: "Open app", href: "/app" },
+    description: "Discover ICA International reporting and research from the public newsroom.",
+    action: { label: "Explore newsroom", href: "/newsroom" },
   },
 });
