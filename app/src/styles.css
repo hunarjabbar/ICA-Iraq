@@ -2670,3 +2670,39 @@ html:has(.ica-site){background:var(--ica-ivory);color-scheme:light}
   transition:none!important;animation:none!important;
  }
 }
+
+
+/* ICA v28: global mobile desktop-density refinement; desktop rules untouched. */
+@media(max-width:767px){
+ .ica-site{--ica-gutter:10px;--ica-card-radius:7px;--ica-section-gap:24px;font-size:13px;line-height:1.48;overflow-x:clip}
+ .ica-site :is(.ica-container,.ica-shell,.ica-page-container,.ica-content-container){max-width:none;width:calc(100% - 20px);margin-inline:auto}
+ .ica-site :is(.ica-hero,.ica-page-hero,.ica-section,.ica-newsroom-section){padding-block:22px}
+ .ica-site :is(h1,.ica-hero-title,.ica-page-title){font-size:clamp(25px,6.8vw,34px);line-height:1.17;letter-spacing:-.035em}
+ .ica-site :is(h2,.ica-section-title){font-size:clamp(19px,5vw,25px);line-height:1.25;letter-spacing:-.025em}
+ .ica-site :is(.ica-hero-lead,.ica-section-lead,.ica-page-description){font-size:12.5px;line-height:1.55}
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,.ica-managed-card,.ica-newsroom-top article,.ica-news-card,.ica-service-card,.ica-feature-card){padding:11px!important;border-radius:7px!important;border-width:1px!important;box-shadow:0 1px 5px rgb(20 25 30 / 3%)!important;min-width:0}
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,.ica-managed-card,.ica-news-card,.ica-service-card) :is(h2,h3){font-size:14px;line-height:1.3}
+ .ica-site :is(.ica-intl-desk-card,.ica-trending-tile,.ica-topic-card,.ica-managed-card,.ica-news-card,.ica-service-card) :is(p,small){font-size:11.5px;line-height:1.5}
+ .ica-site :is(.ica-grid,.ica-card-grid,.ica-topics-grid,.ica-news-grid,.ica-intl-desk-grid){gap:9px}
+ .ica-site :is(.ica-btn,.ica-button,.ica-cta,.ica-chip){font-size:11px;min-height:38px;padding:7px 10px;border-radius:6px}
+ .ica-site .ica-header-v20{box-shadow:none!important}
+ .ica-site .ica-header-v20 :is(.ica-header-main,.ica-header-inner,.ica-nav-main){min-height:52px!important;padding-block:3px;gap:6px}
+ .ica-site .ica-header-v20 .ica-brand{gap:6px;min-width:0}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol{width:31px;height:31px;min-width:31px;border-radius:6px}
+ .ica-site .ica-header-v20 .ica-brand .ica-symbol b{font-size:12px}
+ .ica-site .ica-header-v20 .ica-brand-name strong{font-size:10px;line-height:1.2}
+ .ica-site .ica-header-v20 .ica-nav-actions{gap:4px}
+ .ica-site .ica-header-v20 .ica-header-topicline{min-height:32px;gap:6px;padding-inline-start:max(10px,env(safe-area-inset-left,0px));padding-inline-end:max(10px,env(safe-area-inset-right,0px))}
+ .ica-site .ica-header-v20 .ica-header-topicline a{min-height:32px;font-size:10px}
+ .ica-site .ica-header-v20 .ica-topicline-scroll{gap:9px}
+ .ica-site .ica-header-v20 .ica-menu-drawer{padding-inline-start:max(10px,env(safe-area-inset-left,0px));padding-inline-end:max(10px,env(safe-area-inset-right,0px))}
+ .ica-site .ica-header-v20 .ica-menu-drawer-groups{gap:9px;padding-block:9px}
+ .ica-site .ica-header-v20 .ica-menu-group a{padding:7px 9px;font-size:11px}
+ .ica-site :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:16px;max-width:100%;min-width:0}
+ .ica-site :is(button,a,input,textarea,select){touch-action:manipulation}
+}
+@media(max-width:359px){
+ .ica-site{--ica-gutter:8px}
+ .ica-site :is(.ica-container,.ica-shell,.ica-page-container,.ica-content-container){width:calc(100% - 16px)}
+}
+@media(prefers-reduced-motion:reduce){.ica-site :is(.ica-btn,.ica-button,.ica-topic-card,.ica-managed-card){transition:none!important;animation:none!important}}
