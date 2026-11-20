@@ -63,14 +63,14 @@ export function AboutPage(){
   <div className="ica-about-outro"><h2>{L('tellMatters')}</h2><a href={path('/contact')}>{L('connectICA')}</a></div>
  </main></Shell>
 }
-export const cccServiceLinks={
+const cccServiceLinks={
  en:['CCC service enquiries','Open a CCC service enquiry','Track a CCC enquiry and download PDFs','Use your CCC reference and private receipt on the CCC portal.'],
  zh:['CCC 服务咨询','提交 CCC 服务咨询','查询 CCC 咨询并下载 PDF','请在 CCC 门户使用案件编号和私密回执。'],
  ar:['استفسارات خدمات CCC','قدّم استفساراً عن خدمات CCC','تابع استفسار CCC ونزّل ملفات PDF','استخدم مرجع CCC والإيصال الخاص في بوابة CCC.'],
  ckb:['پرسیارەکانی خزمەتگوزاریی CCC','پرسیارێک بۆ خزمەتگوزاریی CCC بنێرە','بەدواداچوونی پرسیاری CCC و داگرتنی PDF','ژمارەی کەیس و پسوولەی تایبەت لە پۆرتاڵی CCC بەکاربهێنە.'],
 } as const
 
-function ContactPage(){
+export function ContactPage(){
  const {L,lang}=useICA()
  const [serviceTitle,start,track,description]=cccServiceLinks[lang]
  const cccOrigin='https://ccc-iraq-cultural-centre.vercel.app'
