@@ -12,17 +12,13 @@ permissions:
   deployments: read
 jobs:
   browser-preview:
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-noble
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Install Bun archive prerequisite
-        run: apt-get update -qq && apt-get install -y unzip
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
         with:
           bun-version: '1.4.4'
@@ -32,7 +28,9 @@ jobs:
           bun install --frozen-lockfile
           bun run build
       - name: Install matching Playwright runtime
-        run: npm install --no-save playwright@1.58.2
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install chromium
       # Verify the built client contains the final public design layer.
       # Cloudflare-aware SSR requires Vercel platform bindings and cannot be
       # smoke-served through raw Vite dev; the immutable preview gate follows.

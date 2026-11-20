@@ -63,8 +63,17 @@ export function AboutPage(){
   <div className="ica-about-outro"><h2>{L('tellMatters')}</h2><a href={path('/contact')}>{L('connectICA')}</a></div>
  </main></Shell>
 }
+const cccServiceLinks={
+ en:['CCC service enquiries','Open a CCC service enquiry','Track a CCC enquiry and download PDFs','Use your CCC reference and private receipt on the CCC portal.'],
+ zh:['CCC 服务咨询','提交 CCC 服务咨询','查询 CCC 咨询并下载 PDF','请在 CCC 门户使用案件编号和私密回执。'],
+ ar:['استفسارات خدمات CCC','قدّم استفساراً عن خدمات CCC','تابع استفسار CCC ونزّل ملفات PDF','استخدم مرجع CCC والإيصال الخاص في بوابة CCC.'],
+ ckb:['پرسیارەکانی خزمەتگوزاریی CCC','پرسیارێک بۆ خزمەتگوزاریی CCC بنێرە','بەدواداچوونی پرسیاری CCC و داگرتنی PDF','ژمارەی کەیس و پسوولەی تایبەت لە پۆرتاڵی CCC بەکاربهێنە.'],
+} as const
+
 export function ContactPage(){
- const {L}=useICA()
+ const {L,lang}=useICA()
+ const [serviceTitle,start,track,description]=cccServiceLinks[lang]
+ const cccOrigin='https://ccc-iraq-cultural-centre.vercel.app'
  return <Shell><main className="ica-page-content">
   <Intro label={L('contactLabel')} title={L('contactTitle')} description={L('contactDesc')}/>
   <div className="ica-contact-layout"><div><h2>{L('getInTouch')}</h2><p>{L('contactInstructions')}</p>
@@ -72,6 +81,14 @@ export function ContactPage(){
    <div className="ica-contact-detail"><strong>{L('location')}</strong><span>{L('locationValue')}</span></div>
    <div className="ica-contact-detail"><strong>{L('editorialNotice')}</strong><span>{L('editorialNoticeText')}</span></div>
   </div><ContactForm/></div>
+  <section className="ica-contact-detail" aria-labelledby="ccc-service-title">
+   <h2 id="ccc-service-title">{serviceTitle}</h2>
+   <p>{description}</p>
+   <ul>
+    <li><a href={`${cccOrigin}/contact?lang=${lang}&interest=ica`}>{start}</a></li>
+    <li><a href={`${cccOrigin}/enquiries/track?lang=${lang}`}>{track}</a></li>
+   </ul>
+  </section>
  </main></Shell>
 }
 
